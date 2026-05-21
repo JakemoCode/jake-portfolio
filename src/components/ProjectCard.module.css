@@ -39,6 +39,7 @@
 }
 
 .mediaPhone {
+  aspect-ratio: 2 / 3;
   padding: var(--space-5);
 }
 
