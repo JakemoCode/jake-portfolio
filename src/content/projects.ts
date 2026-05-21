@@ -51,7 +51,7 @@ export const projects: Project[] = [
     slug: "baby-day-planner",
     name: "Baby Day Planner",
     summary:
-      "A Next.js + Firestore app that forecasts a baby's day, naps, bottles, bedtime, from what's actually happened so far, instead of dictating a fixed schedule.",
+      "A Next.js + Firestore app that forecasts a baby's day (naps, bottles, bedtime) from what's actually happened so far, instead of dictating a fixed schedule.",
     problem:
       "Real babies don't follow rigid schedules: wake windows shift, naps run short, bottles drift, and bedtime moves with everything else. Static planner apps either lock parents into a plan that's wrong by 9 AM or devolve into a logging tool with no forward view. Parents need a planner that re-projects the rest of the day every time reality changes.",
     built:
