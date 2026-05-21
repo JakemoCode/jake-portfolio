@@ -55,7 +55,7 @@ export const projects: Project[] = [
     problem:
       "Real babies don't follow rigid schedules: wake windows shift, naps run short, bottles drift, and bedtime moves with everything else. Static planner apps either lock parents into a plan that's wrong by 9 AM or devolve into a logging tool with no forward view. Parents need a planner that re-projects the rest of the day every time reality changes.",
     built:
-      "A V3 rules engine that takes recorded events as ground truth and re-projects naps, wake windows, bottles, and bedtime forward through midnight on every tick. The cascade is sequential; each nap's end anchors the next wake window, each wake window's end anchors the next nap, and bottles chain at interval inside the no-feed regions naps carve out. Recorded events are protected (\"reality wins\"); projections fill the gaps. UI is a dashboard + timeline + tomorrow view, with FAB-driven event entry. Multi-parent ownership, day templates, history, and tomorrow-rollover round it out.",
+      "A V3 rules engine that takes recorded events as ground truth and re-projects naps, wake windows, bottles, and bedtime forward through midnight on every tick. The cascade is sequential; each nap's end anchors the next wake window, each wake window's end anchors the next nap, and bottles chain at interval inside the no-feed regions naps carve out. Recorded events are protected, projections fill the gaps. The fundamental assumption is \"reality wins.\" UI is a dashboard + timeline + tomorrow view, with FAB-driven event entry. Multi-parent ownership, day templates, history, and tomorrow-rollover round it out.",
     tech: [
       "Next.js 16",
       "React 19",
