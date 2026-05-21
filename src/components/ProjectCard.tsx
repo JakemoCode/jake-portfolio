@@ -1,25 +1,44 @@
 import styles from "./ProjectCard.module.css";
-import type { Project } from "../content/projects";
+import type { Project, Screenshot } from "../content/projects";
 
 type Props = {
   project: Project;
 };
 
+function renderScreenshot(screenshot: Screenshot) {
+  if (screenshot.orientation === "phone") {
+    return (
+      <div className={styles.phoneFrame}>
+        <img src={screenshot.src} alt={screenshot.alt} className={styles.phoneImage} />
+      </div>
+    );
+  }
+  return <img src={screenshot.src} alt={screenshot.alt} className={styles.landscapeImage} />;
+}
+
 export function ProjectCard({ project }: Props) {
   const isComingSoon = project.status === "coming-soon";
+  const { screenshot } = project;
+  const mediaClass = [styles.media, screenshot?.orientation === "phone" && styles.mediaPhone]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <article className={styles.card}>
-      <div className={styles.media} aria-hidden="true">
-        <span className={styles.mediaLabel}>Screenshot</span>
+      <div className={mediaClass}>
+        {screenshot ? (
+          renderScreenshot(screenshot)
+        ) : (
+          <span className={styles.mediaLabel} aria-hidden="true">
+            Screenshot
+          </span>
+        )}
       </div>
 
       <div className={styles.body}>
         <div className={styles.header}>
           <h2 className={styles.name}>{project.name}</h2>
-          {isComingSoon && (
-            <span className={styles.badge}>Coming soon</span>
-          )}
+          {isComingSoon && <span className={styles.badge}>Coming soon</span>}
         </div>
 
         <p className={styles.summary}>{project.summary}</p>

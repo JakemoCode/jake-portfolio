@@ -1,3 +1,9 @@
+export type Screenshot = {
+  src: string;
+  alt: string;
+  orientation: "landscape" | "phone";
+};
+
 export type Project = {
   slug: string;
   name: string;
@@ -9,6 +15,7 @@ export type Project = {
   liveLabel?: string;
   repoUrl: string;
   status?: "live" | "coming-soon";
+  screenshot?: Screenshot;
 };
 
 export const projects: Project[] = [
@@ -67,3 +74,29 @@ export const projects: Project[] = [
     status: "coming-soon",
   },
 ];
+
+const screenshotModules = import.meta.glob<{ default: string }>(
+  "../assets/*.{png,jpg,jpeg,webp,gif}",
+  { eager: true },
+);
+
+const screenshotOrientations: Record<string, Screenshot["orientation"]> = {
+  "coffee-roast-tracker": "landscape",
+  "baby-day-planner": "phone",
+};
+
+function resolveScreenshot(slug: string, name: string): Screenshot | undefined {
+  const orientation = screenshotOrientations[slug];
+  if (!orientation) return undefined;
+
+  const entry = Object.entries(screenshotModules).find(([path]) =>
+    path.includes(`/${slug}.`),
+  );
+  if (!entry) return undefined;
+
+  return { src: entry[1].default, alt: `${name} screenshot`, orientation };
+}
+
+for (const project of projects) {
+  project.screenshot = resolveScreenshot(project.slug, project.name);
+}
