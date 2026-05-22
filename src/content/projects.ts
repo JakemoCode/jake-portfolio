@@ -68,10 +68,9 @@ export const projects: Project[] = [
       "Playwright",
       "Vercel",
     ],
-    liveUrl: null,
-    liveLabel: "Live demo coming soon",
+    liveUrl: "https://baby-day-planner.vercel.app",
     repoUrl: "https://github.com/JakemoCode/baby-day-planner",
-    status: "coming-soon",
+    status: "live",
   },
 ];
 
