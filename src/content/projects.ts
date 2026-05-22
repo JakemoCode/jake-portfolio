@@ -25,9 +25,9 @@ export const projects: Project[] = [
     summary:
       "A web app for home coffee roasters to import, annotate, analyze, and share their Kaffelogic roast logs.",
     problem:
-      "Home roasters using Kaffelogic machines accumulate .klog profile files but have no good way to organize them, compare phase timings across beans, track bean inventory through roast history, or share roast profiles with other roasters; the data lives trapped in per-batch files on disk.",
+      "Kaffelogic roasters end up with a folder full of .klog files and no real way to use them. Comparing phase timings across beans means opening files side by side. Bean inventory and roast history live in separate worlds. Sharing a profile with another roaster means emailing a binary file with no context. The data isn't lost, but it isn't usable either.",
     built:
-      "A full-stack roast tracker that ingests Kaffelogic .klog (JSON) and CSV exports, parses temperature curves and phase markers (drying / Maillard / development), associates each roast with a bean in the user's inventory, computes DTR% and phase comparisons, and exposes public roast pages with optional .kpro profile downloads so roasters can share recipes. Auth-scoped writes, public reads, Celsius-native storage with per-user °C/°F preference.",
+      "A full-stack roast tracker built around the Kaffelogic export formats. Drop a .klog or CSV in, and the app pulls temperature curves and phase markers (drying, Maillard, development), ties the roast back to a bean in your inventory, and computes DTR% and per-phase comparisons against your other roasts of the same bean. Public roast pages let other roasters download the .kpro profile and replicate the recipe on their own machine. Writes are auth-scoped, reads are public; storage is Celsius-native with a per-user °C/°F display preference.",
     tech: [
       "React 19",
       "TypeScript",
@@ -53,9 +53,9 @@ export const projects: Project[] = [
     summary:
       "A Next.js + Firestore app that forecasts a baby's day (naps, bottles, bedtime) from what's actually happened so far, instead of dictating a fixed schedule.",
     problem:
-      "Real babies don't follow rigid schedules: wake windows shift, naps run short, bottles drift, and bedtime moves with everything else. Static planner apps either lock parents into a plan that's wrong by 9 AM or devolve into a logging tool with no forward view. Parents need a planner that re-projects the rest of the day every time reality changes.",
+      "Real babies don't follow rigid schedules. A baby who was supposed to wake at 9 might wake at 8:35; a 90-minute nap turns into 40; the bottle that was due in an hour gets pulled forward; suddenly bedtime is a moving target. Static planner apps either lock parents into a plan that's wrong by 9 AM or devolve into a logging tool with no forward view. What's actually needed is a planner that re-projects the rest of the day every time reality changes.",
     built:
-      "A V3 rules engine that takes recorded events as ground truth and re-projects naps, wake windows, bottles, and bedtime forward through midnight on every tick. The cascade is sequential; each nap's end anchors the next wake window, each wake window's end anchors the next nap, and bottles chain at interval inside the no-feed regions naps carve out. Recorded events are protected, projections fill the gaps. The fundamental assumption is \"reality wins.\" UI is a dashboard + timeline + tomorrow view, with FAB-driven event entry. Multi-parent ownership, day templates, history, and tomorrow-rollover round it out.",
+      "A V3 rules engine that takes recorded events as ground truth and re-projects naps, wake windows, bottles, and bedtime forward through midnight on every tick. The cascade is sequential; each nap's end anchors the next wake window, each wake window's end anchors the next nap, and bottles chain at interval inside the no-feed regions naps carve out. Recorded events are protected, projections fill the gaps. The fundamental assumption is \"reality wins.\" UI is a dashboard + timeline + tomorrow view, with FAB-driven event entry. Multi-parent ownership lets both parents log to the same baby. Day templates save common schedules to reuse, history makes past days searchable, and you can prepare for tomorrow with a plan that automatically rolls over at midnight.",
     tech: [
       "Next.js 16",
       "React 19",
