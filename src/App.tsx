@@ -1,6 +1,7 @@
 import styles from "./App.module.css";
 import { Hero } from "./components/Hero";
 import { ProjectCard } from "./components/ProjectCard";
+import { Testimonials } from "./components/Testimonials";
 import { ContactLinks } from "./components/ContactLinks";
 import { ThemeToggle } from "./components/ThemeToggle";
 import { projects } from "./content/projects";
@@ -26,6 +27,8 @@ export function App() {
             <ProjectCard key={project.slug} project={project} />
           ))}
         </section>
+
+        <Testimonials />
 
         <ContactLinks
           github="https://github.com/JakemoCode"

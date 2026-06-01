@@ -9,3 +9,4 @@ dist-ssr
 .vercel
 *.log
 *.tsbuildinfo
+docs/design-audit-screenshots/
