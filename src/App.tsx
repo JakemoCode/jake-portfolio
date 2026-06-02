@@ -33,7 +33,7 @@ export function App() {
         <ContactLinks
           github="https://github.com/JakemoCode"
           linkedin="https://www.linkedin.com/in/the-real-jake-mosher/"
-          email="jake136@yahoo.com"
+          email="jake@jakemosher.dev"
         />
       </main>
     </div>
