@@ -1,10 +1,6 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import "@fontsource-variable/bricolage-grotesque";
-import "@fontsource-variable/fraunces";
-import "@fontsource-variable/inter";
-import "@fontsource/jetbrains-mono/400.css";
-import "@fontsource/jetbrains-mono/500.css";
+import "./styles/fonts.css";
 import "./styles/tokens.css";
 import "./styles/global.css";
 import { App } from "./App";
