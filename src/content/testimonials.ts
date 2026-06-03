@@ -20,6 +20,6 @@ export const testimonials: Testimonial[] = [
     quote:
       "For months with our new baby, I spent a ton of time every day manually creating and updating a google doc with our baby's projected schedule for the day. Jake saved me hours every week by creating an app that does all this work for me, while also significantly improving upon the manual process. The timeline view makes it so easy to visualize the day, the ability to add custom activities helps us plan around our other life events, and the ownership feature eliminated lengthy conversations about division of labor.",
     name: "Kelly Mosher",
-    role: "Wife",
+    role: "Wife, Key Stakeholder in Baby Day Planner",
   },
 ];
