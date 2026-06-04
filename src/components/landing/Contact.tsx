@@ -1,8 +1,21 @@
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import meHeadshot from "../../assets/me-headshot.jpg";
 import styles from "./Contact.module.css";
 
 const EMAIL = "jake@jakemosher.dev";
+const DRAFT_KEY = "jm-contact-draft";
+
+const BLANK: Fields = { name: "", email: "", message: "" };
+
+function loadDraft(): Fields {
+  try {
+    const saved = localStorage.getItem(DRAFT_KEY);
+    if (saved) return { ...BLANK, ...JSON.parse(saved) };
+  } catch {
+    // localStorage may be unavailable (private mode); fall back to blank.
+  }
+  return BLANK;
+}
 
 // Formspree endpoint (free hosted form handler). Submissions POST here and land
 // in Jake's inbox; the visitor never leaves the page.
@@ -22,9 +35,18 @@ function validate(f: Fields): Errors {
 }
 
 export function Contact() {
-  const [fields, setFields] = useState<Fields>({ name: "", email: "", message: "" });
+  const [fields, setFields] = useState<Fields>(loadDraft);
   const [errors, setErrors] = useState<Errors>({});
   const [status, setStatus] = useState<Status>("idle");
+
+  // Persist a draft so a distracted/interrupted visitor doesn't lose their message.
+  useEffect(() => {
+    try {
+      localStorage.setItem(DRAFT_KEY, JSON.stringify(fields));
+    } catch {
+      // ignore unavailable storage
+    }
+  }, [fields]);
 
   function update(key: keyof Fields) {
     return (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
@@ -46,6 +68,11 @@ export function Contact() {
       });
       if (!res.ok) throw new Error(`Request failed: ${res.status}`);
       setStatus("success");
+      try {
+        localStorage.removeItem(DRAFT_KEY);
+      } catch {
+        // ignore unavailable storage
+      }
     } catch {
       setStatus("error");
     }
