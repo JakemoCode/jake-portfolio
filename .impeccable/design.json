@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-04T00:00:00Z",
+  "title": "Design System: Jake Mosher — Client Landing",
+  "extensions": {
+    "colorMeta": {
+      "jewel-teal": { "role": "primary", "displayName": "Jewel Teal", "canonical": "#14b8a6", "tonalRamp": ["#04201d", "#063029", "#0a4d44", "#0f6b5f", "#13957f", "#14b8a6", "#5ed0c2", "#a6e7df"] },
+      "pine": { "role": "primary", "displayName": "Pine (text-safe teal)", "canonical": "#0f5e54", "tonalRamp": ["#04201d", "#073229", "#0a4339", "#0f5e54", "#13836f", "#19a88c", "#5ccab4", "#aee5da"] },
+      "rust": { "role": "secondary", "displayName": "Rust", "canonical": "#c2622e", "tonalRamp": ["#2e1408", "#4a2110", "#6e3217", "#a64f22", "#c2622e", "#d7884f", "#e6ab84", "#f2d2bd"] },
+      "paper": { "role": "neutral", "displayName": "Paper", "canonical": "#f6f5f3", "tonalRamp": ["#1b201d", "#3a3f3b", "#5c625d", "#878d88", "#b3b8b3", "#d6d2ca", "#efece7", "#f6f5f3"] },
+      "ink": { "role": "neutral", "displayName": "Ink", "canonical": "#1b201d", "tonalRamp": ["#0c100e", "#1b201d", "#2f3531", "#45514b", "#6c766f", "#9aa39c", "#c7ccc7", "#eef0ee"] },
+      "dark": { "role": "neutral", "displayName": "Dark Band", "canonical": "#13201c", "tonalRamp": ["#0a130f", "#13201c", "#1b2a25", "#2c413a", "#456056", "#6f8c81", "#9fb3aa", "#ece4d6"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero headline only; two stacked clauses." },
+      "headline": { "displayName": "Headline", "purpose": "Section titles; color keyed to the band." },
+      "title": { "displayName": "Title", "purpose": "Sub-section heads: offer items, process steps, project names." },
+      "body": { "displayName": "Body", "purpose": "Switzer prose, ~46ch measure." },
+      "label": { "displayName": "Label", "purpose": "Availability chip and small inline labels; sentence case." }
+    },
+    "shadows": [
+      { "name": "framed-media", "value": "0 24px 50px -32px rgba(19,32,28,0.35)", "purpose": "Lifts project screenshots and the About photo off the page." },
+      { "name": "button-rest", "value": "0 8px 22px -14px color-mix(in oklab, #c2622e 70%, transparent)", "purpose": "Resting lift under the primary CTA." },
+      { "name": "button-hover", "value": "0 16px 30px -14px color-mix(in oklab, #a64f22 75%, transparent)", "purpose": "Grown lift on CTA hover." },
+      { "name": "dark-band-glow", "value": "radial-gradient(60% 55% at 82% 8%, color-mix(in oklab, #14b8a6 26%, transparent), transparent 60%)", "purpose": "Atmospheric teal glow on the dark proof band (not a box shadow)." }
+    ],
+    "motion": [
+      { "name": "ease-out-quint", "value": "cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "Default easing for reveals and lifts." },
+      { "name": "reveal", "value": "opacity + translateY(16-30px), animation-timeline: view(), range entry 8% cover 34%", "purpose": "Section scroll-reveal; visible by default, gated behind prefers-reduced-motion." },
+      { "name": "facet-drift", "value": "translateY(24% -> -24%), named view-timeline --scroll-over, range cover", "purpose": "Foreground facet plane; leads the page." },
+      { "name": "stone-drift", "value": "translateY(-25% -> 25%), named view-timeline --scroll-over, range cover", "purpose": "Background stone plane; lags slower than the page." }
+    ],
+    "breakpoints": [
+      { "name": "stack", "value": "760px", "purpose": "Two-column sections collapse to one." },
+      { "name": "nav-compact", "value": "560px", "purpose": "Nav drops the Work link, keeps the CTA." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one CTA. Resting rust-soft with ink text; hover deepens to rust with white text and a small lift.",
+      "html": "<a class=\"ds-btn-primary\" href=\"#contact\">Start a project</a>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; background: #ce6c36; color: #1b201d; font-family: Switzer, system-ui, sans-serif; font-weight: 600; font-size: 1.05rem; padding: 0.9rem 1.6rem; border-radius: 12px; text-decoration: none; box-shadow: 0 8px 22px -14px rgba(194,98,46,0.7); transition: background-color 220ms ease, color 220ms ease, transform 160ms cubic-bezier(0.22,1,0.36,1), box-shadow 220ms ease; } .ds-btn-primary:hover { background: #a64f22; color: #fff; transform: translateY(-2px); box-shadow: 0 16px 30px -14px rgba(166,79,34,0.75); } .ds-btn-primary:focus-visible { outline: 2px solid #a64f22; outline-offset: 3px; }"
+    },
+    {
+      "name": "Ghost Link",
+      "kind": "button",
+      "refersTo": "link-ghost",
+      "description": "Secondary action: pine text with a teal-tinted underline that brightens on hover.",
+      "html": "<a class=\"ds-link-ghost\" href=\"#work\">See recent work</a>",
+      "css": ".ds-link-ghost { color: #0f5e54; font-weight: 600; font-size: 1.05rem; text-decoration: none; border-bottom: 2px solid rgba(20,184,166,0.4); padding-bottom: 2px; transition: color 160ms ease, border-color 160ms ease; } .ds-link-ghost:hover { color: #0f8c7e; border-bottom-color: #14b8a6; }"
+    },
+    {
+      "name": "Nav CTA",
+      "kind": "nav",
+      "refersTo": "nav-cta",
+      "description": "Hairline pine pill in the top nav.",
+      "html": "<a class=\"ds-nav-cta\" href=\"#contact\">Start a project</a>",
+      "css": ".ds-nav-cta { color: #0f5e54; font-weight: 600; text-decoration: none; border: 1px solid rgba(15,94,84,0.35); padding: 0.5rem 1rem; border-radius: 999px; transition: background-color 160ms ease, border-color 160ms ease; } .ds-nav-cta:hover { background: rgba(20,184,166,0.12); border-color: rgba(15,94,84,0.55); }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Contact field: paper-raised fill, hairline border, teal focus glow.",
+      "html": "<label class=\"ds-field\"><span>Your name</span><input type=\"text\" /></label>",
+      "css": ".ds-field { display: flex; flex-direction: column; gap: 0.4rem; } .ds-field span { font-weight: 600; font-size: 0.95rem; color: #1b201d; } .ds-field input { font-family: Switzer, system-ui, sans-serif; font-size: 1rem; color: #1b201d; background: #fff; border: 1px solid #d6d2ca; border-radius: 10px; padding: 0.75rem 0.9rem; transition: border-color 140ms ease, box-shadow 140ms ease; } .ds-field input:focus-visible { outline: none; border-color: #0f8c7e; box-shadow: 0 0 0 3px rgba(20,184,166,0.22); }"
+    },
+    {
+      "name": "Faceted-Stone Banner",
+      "kind": "custom",
+      "refersTo": "facet-banner",
+      "description": "Signature between-section motif: small textured triangles scattered asymmetrically over a pale stone field, a few bleeding past the edges. On scroll the facets drift faster than the page and the stone drifts slower (three planes). Static under reduced motion.",
+      "html": "<div class=\"ds-banner\"><div class=\"ds-banner-stone\"></div><div class=\"ds-banner-facets\"><span class=\"ds-f ds-f-up\" style=\"left:8%;top:34%;width:120px;background:#14b8a6\"></span><span class=\"ds-f ds-f-down\" style=\"left:40%;top:18%;width:96px;background:#0f5e54\"></span><span class=\"ds-f ds-f-up\" style=\"left:64%;top:36%;width:72px;background:#c2622e\"></span><span class=\"ds-f ds-f-down\" style=\"left:84%;top:22%;width:84px;background:#0f8c7e\"></span></div></div>",
+      "css": ".ds-banner { position: relative; width: 100%; height: clamp(240px, 32vh, 360px); background: #efece7; border-block: 1px solid #e4e1db; overflow: visible; } .ds-banner-stone { position: absolute; inset: 0; background-image: url('/src/assets/textures/stone-1.jpg'); background-size: 480px; mix-blend-mode: multiply; opacity: 0.45; } .ds-banner-facets { position: absolute; inset: 0; } .ds-f { position: absolute; aspect-ratio: 1; } .ds-f-up { clip-path: polygon(50% 0, 100% 100%, 0 100%); } .ds-f-down { clip-path: polygon(0 0, 100% 0, 50% 100%); } .ds-f::after { content: ''; position: absolute; inset: 0; background-image: url('/src/assets/textures/stone-2.jpg'); background-size: cover; mix-blend-mode: multiply; opacity: 0.14; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Polished Facet",
+    "overview": "A jewel of teal, cut and set into a slab of warm, textured stone. The surface is quiet near-white paper with a whisper of real grain; the color is committed vibrant teal carrying the page while a single burnt rust does the asking. Geometry is the signature: small triangular facets filled with genuine stone texture, scattered asymmetrically and breaking their frame. Friendly, vibrant, and confident for a non-technical client who wants a great site without the headache. Warmth comes from the rust accent and stone texture, never a warm-cream body background. Depth is built from tonal bands and a stone field that drifts slower than the page, not from drop shadows.",
+    "keyCharacteristics": [
+      "Committed jewel-teal lead; rust as a rare, warm accent.",
+      "Crisp near-white paper base (never warm cream), warmed by texture and accent.",
+      "Faceted-stone geometry as the signature motif, asymmetric and frame-breaking.",
+      "Tactile but calm: soft lifts, real texture, generous type, nothing noisy.",
+      "Bricolage Grotesque + Switzer; no Inter, no Fraunces, no mono."
+    ],
+    "rules": [
+      { "name": "The Teal-Leads Rule", "body": "Teal carries the surface; rust is a minority accent on roughly the CTA and small highlights only. They never co-lead.", "section": "colors" },
+      { "name": "The Pine-for-Text Rule", "body": "Bright teal and teal-deep are fills, never small text (both fail AA on light). Any teal-colored text uses Pine (#0f5e54). On the dark band, bright teal is fine.", "section": "colors" },
+      { "name": "The Texture-Carries-Warmth Rule", "body": "Warmth lives in the rust accent and the stone grain, never in the body background. The base stays a crisp off-white.", "section": "colors" },
+      { "name": "The Two-Tone Headline Rule", "body": "The hero splits across the you/me divide: 'You bring the idea.' in ink, 'I bring the craft.' in pine.", "section": "typography" },
+      { "name": "The Band-Keyed Heading Rule", "body": "Section-heading color signals the band: ink on paper, pine on tinted surface, cream on the dark band.", "section": "typography" },
+      { "name": "The No-Default-Fonts Rule", "body": "Never reach for Inter, Fraunces, or a mono 'for technical flavor.' This is a client surface, not a dev tool.", "section": "typography" },
+      { "name": "The Tonal-Band Rule", "body": "Depth comes from the paper/surface/dark band rhythm and the slower-drifting stone, not from drop shadows on cards.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do let teal lead and keep rust a minority accent (CTA + small highlights only).",
+      "Do use pine for any teal-colored text; bright teal and teal-deep are fills.",
+      "Do carry warmth through the rust accent and stone texture, on a crisp off-white base.",
+      "Do key section-heading color to the band (ink on paper, pine on surface, cream on dark).",
+      "Do keep copy warm and contracted, client-language, no jargon.",
+      "Do gate every entrance/parallax behind prefers-reduced-motion: no-preference and keep content visible by default.",
+      "Do let facets break their frame; the bleed is intentional."
+    ],
+    "donts": [
+      "Don't use a warm cream / sand / beige body background; the base is crisp near-white.",
+      "Don't ship the generic-AI look: no gradient text, glassmorphism, hero-metric template, identical icon-card grids, or eyebrow-on-every-section.",
+      "Don't drift cold-corporate (navy-and-gradient SaaS) or loud-flashy (over-animated agency, counter-rotating banners).",
+      "Don't go synthwave / neon-grid, and don't do the mint-green 'fresh startup' template.",
+      "Don't add visual noise; the facets are sparse and asymmetric on purpose.",
+      "Don't reach for Inter, Fraunces, or mono.",
+      "Don't put bright teal or teal-deep on small text (both fail WCAG AA on light).",
+      "Don't separate elements with drop-shadowed cards; use a tonal band or hairline."
+    ]
+  }
+}
