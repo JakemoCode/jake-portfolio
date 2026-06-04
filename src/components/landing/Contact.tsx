@@ -1,82 +1,10 @@
-import { useEffect, useState, type ChangeEvent, type FormEvent } from "react";
 import meHeadshot from "../../assets/me-headshot.jpg";
+import { CONTACT_EMAIL } from "./contactForm";
+import { useContactForm } from "./useContactForm";
 import styles from "./Contact.module.css";
 
-const EMAIL = "jake@jakemosher.dev";
-const DRAFT_KEY = "jm-contact-draft";
-
-const BLANK: Fields = { name: "", email: "", message: "" };
-
-function loadDraft(): Fields {
-  try {
-    const saved = localStorage.getItem(DRAFT_KEY);
-    if (saved) return { ...BLANK, ...JSON.parse(saved) };
-  } catch {
-    // localStorage may be unavailable (private mode); fall back to blank.
-  }
-  return BLANK;
-}
-
-// Formspree endpoint (free hosted form handler). Submissions POST here and land
-// in Jake's inbox; the visitor never leaves the page.
-const FORM_ENDPOINT = "https://formspree.io/f/mqeoaawe";
-
-type Fields = { name: string; email: string; message: string };
-type Errors = Partial<Record<keyof Fields, string>>;
-type Status = "idle" | "submitting" | "success" | "error";
-
-function validate(f: Fields): Errors {
-  const errors: Errors = {};
-  if (!f.name.trim()) errors.name = "Let me know who you are.";
-  if (!f.email.trim()) errors.email = "I'll need an email to reply to.";
-  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.email)) errors.email = "That email looks off.";
-  if (!f.message.trim()) errors.message = "Tell me a little about what you need.";
-  return errors;
-}
-
 export function Contact() {
-  const [fields, setFields] = useState<Fields>(loadDraft);
-  const [errors, setErrors] = useState<Errors>({});
-  const [status, setStatus] = useState<Status>("idle");
-
-  // Persist a draft so a distracted/interrupted visitor doesn't lose their message.
-  useEffect(() => {
-    try {
-      localStorage.setItem(DRAFT_KEY, JSON.stringify(fields));
-    } catch {
-      // ignore unavailable storage
-    }
-  }, [fields]);
-
-  function update(key: keyof Fields) {
-    return (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
-      setFields((prev) => ({ ...prev, [key]: e.target.value }));
-  }
-
-  async function onSubmit(e: FormEvent) {
-    e.preventDefault();
-    const found = validate(fields);
-    setErrors(found);
-    if (Object.keys(found).length > 0) return;
-
-    setStatus("submitting");
-    try {
-      const res = await fetch(FORM_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(fields),
-      });
-      if (!res.ok) throw new Error(`Request failed: ${res.status}`);
-      setStatus("success");
-      try {
-        localStorage.removeItem(DRAFT_KEY);
-      } catch {
-        // ignore unavailable storage
-      }
-    } catch {
-      setStatus("error");
-    }
-  }
+  const { fields, errors, status, setField, submit } = useContactForm();
 
   return (
     <section className={styles.section} id="contact" aria-labelledby="contact-title">
@@ -100,8 +28,8 @@ export function Contact() {
           </p>
           <p className={styles.direct}>
             Prefer email?{" "}
-            <a className={styles.email} href={`mailto:${EMAIL}`}>
-              {EMAIL}
+            <a className={styles.email} href={`mailto:${CONTACT_EMAIL}`}>
+              {CONTACT_EMAIL}
             </a>
           </p>
         </div>
@@ -112,7 +40,14 @@ export function Contact() {
             <p>Your message is on its way. I&rsquo;ll reply within a day or two.</p>
           </div>
         ) : (
-          <form className={`${styles.form} r-up`} onSubmit={onSubmit} noValidate>
+          <form
+            className={`${styles.form} r-up`}
+            onSubmit={(e) => {
+              e.preventDefault();
+              void submit();
+            }}
+            noValidate
+          >
             <div className={styles.field}>
               <label htmlFor="cf-name">Your name</label>
               <input
@@ -120,7 +55,7 @@ export function Contact() {
                 name="name"
                 type="text"
                 value={fields.name}
-                onChange={update("name")}
+                onChange={(e) => setField("name", e.target.value)}
                 aria-invalid={Boolean(errors.name)}
                 aria-describedby={errors.name ? "cf-name-err" : undefined}
               />
@@ -138,7 +73,7 @@ export function Contact() {
                 name="email"
                 type="email"
                 value={fields.email}
-                onChange={update("email")}
+                onChange={(e) => setField("email", e.target.value)}
                 aria-invalid={Boolean(errors.email)}
                 aria-describedby={errors.email ? "cf-email-err" : undefined}
               />
@@ -156,7 +91,7 @@ export function Contact() {
                 name="message"
                 rows={5}
                 value={fields.message}
-                onChange={update("message")}
+                onChange={(e) => setField("message", e.target.value)}
                 aria-invalid={Boolean(errors.message)}
                 aria-describedby={errors.message ? "cf-message-err" : undefined}
               />
@@ -170,8 +105,8 @@ export function Contact() {
             {status === "error" && (
               <p className={styles.formError} role="alert">
                 Something went wrong sending that. Email me directly at{" "}
-                <a className={styles.email} href={`mailto:${EMAIL}`}>
-                  {EMAIL}
+                <a className={styles.email} href={`mailto:${CONTACT_EMAIL}`}>
+                  {CONTACT_EMAIL}
                 </a>
                 .
               </p>

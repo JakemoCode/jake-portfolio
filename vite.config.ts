@@ -1,3 +1,4 @@
+/// <reference types="vitest/config" />
 import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 
@@ -43,4 +44,7 @@ function preloadHeroFont(): Plugin {
 
 export default defineConfig({
   plugins: [react(), preloadHeroFont()],
+  test: {
+    environment: "jsdom",
+  },
 });
