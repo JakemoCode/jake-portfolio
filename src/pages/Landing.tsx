@@ -23,7 +23,7 @@ export function Landing() {
         <nav className={styles.navLinks} aria-label="Primary">
           <a href="#work">Work</a>
           <a className={styles.navCta} href="#contact">
-            Start a project
+            Get in touch
           </a>
         </nav>
       </header>
