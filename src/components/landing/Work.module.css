@@ -61,6 +61,7 @@
 }
 
 .phone {
+  aspect-ratio: 780 / 1688;
   max-width: 280px;
   margin-inline: auto;
 }
