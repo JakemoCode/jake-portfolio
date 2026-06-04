@@ -18,17 +18,6 @@
   }
 }
 
-.avatar {
-  width: clamp(88px, 12vw, 116px);
-  aspect-ratio: 1;
-  object-fit: cover;
-  object-position: 50% 14%;
-  border-radius: 50%;
-  border: 3px solid var(--paper-raised);
-  box-shadow: 0 10px 28px -16px rgba(19, 32, 28, 0.4);
-  margin-bottom: 1.5rem;
-}
-
 .title {
   font-family: var(--font-display);
   font-weight: 700;

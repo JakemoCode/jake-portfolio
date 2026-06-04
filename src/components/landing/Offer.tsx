@@ -21,7 +21,7 @@ export function Offer() {
             <ul className={styles.list}>
               <li>Designed and built start to finish</li>
               <li>Looks right on phones, tablets, and laptops</li>
-              <li>Easy for you to edit yourself</li>
+              <li>Quick updates whenever you need them</li>
             </ul>
           </article>
 

@@ -15,7 +15,7 @@
   font-weight: 700;
   font-size: clamp(1.9rem, 3.5vw, 2.75rem);
   letter-spacing: -0.025em;
-  color: var(--ink);
+  color: var(--pine);
 }
 
 .steps {

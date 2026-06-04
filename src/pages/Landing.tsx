@@ -4,6 +4,7 @@ import { Offer } from "../components/landing/Offer";
 import { Process } from "../components/landing/Process";
 import { Proof } from "../components/landing/Proof";
 import { Work } from "../components/landing/Work";
+import { About } from "../components/landing/About";
 import { Contact } from "../components/landing/Contact";
 import { SiteFooter } from "../components/landing/SiteFooter";
 import styles from "./Landing.module.css";
@@ -32,6 +33,7 @@ export function Landing() {
         <Process />
         <Proof />
         <Work />
+        <About />
         <Contact />
       </main>
 
