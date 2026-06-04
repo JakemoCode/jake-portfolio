@@ -1,4 +1,5 @@
 import { useState, type ChangeEvent, type FormEvent } from "react";
+import meHeadshot from "../../assets/me-headshot.jpg";
 import styles from "./Contact.module.css";
 
 const EMAIL = "jake@jakemosher.dev";
@@ -54,6 +55,15 @@ export function Contact() {
     <section className={styles.section} id="contact" aria-labelledby="contact-title">
       <div className={styles.inner}>
         <div className={`${styles.intro} r-up`}>
+          <img
+            className={styles.avatar}
+            src={meHeadshot}
+            alt="Jake Mosher"
+            width={120}
+            height={120}
+            loading="lazy"
+            decoding="async"
+          />
           <h2 id="contact-title" className={styles.title}>
             Let&rsquo;s build something.
           </h2>
