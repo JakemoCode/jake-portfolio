@@ -1,0 +1,64 @@
+<!doctype html>
+<!--
+  Source for public/og-card.png (the Open Graph / link-preview card).
+  Lives outside public/ so it is not deployed as a route. Regenerate after edits:
+
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
+      --hide-scrollbars --force-device-scale-factor=1 --window-size=1200,630 \
+      --virtual-time-budget=4000 --screenshot=public/og-card.png \
+      "file://$PWD/og-card.source.html"
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://api.fontshare.com" />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet" />
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@400,500&display=swap" rel="stylesheet" />
+<style>
+  * { margin: 0; box-sizing: border-box; }
+  html, body { width: 1200px; height: 630px; }
+  .card {
+    width: 1200px; height: 630px; position: relative; overflow: hidden;
+    background: #f6f5f3; display: flex; align-items: center;
+    font-family: "Switzer", system-ui, sans-serif;
+  }
+  .copy { padding: 0 0 0 90px; max-width: 760px; position: relative; z-index: 2; }
+  .name {
+    font-family: "Switzer", sans-serif; font-weight: 600; font-size: 24px;
+    letter-spacing: 0.01em; color: #0f5e54; margin-bottom: 22px;
+    display: inline-flex; align-items: center; gap: 12px;
+  }
+  .dot { width: 11px; height: 11px; border-radius: 999px; background: #14b8a6; box-shadow: 0 0 0 5px rgba(20,184,166,0.2); }
+  h1 {
+    font-family: "Bricolage Grotesque", sans-serif; font-weight: 700;
+    font-size: 86px; line-height: 0.98; letter-spacing: -0.035em; color: #1b201d;
+  }
+  h1 .em { color: #0f5e54; }
+  p { margin-top: 26px; font-size: 30px; line-height: 1.4; color: #45514b; max-width: 19ch; }
+  .facets { position: absolute; inset: 0 0 0 auto; width: 420px; height: 100%; }
+  .f { position: absolute; aspect-ratio: 1; }
+  .up { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+  .down { clip-path: polygon(0 0, 100% 0, 50% 100%); }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="copy">
+      <div class="name"><span class="dot"></span>Jake Mosher</div>
+      <h1>Websites, built<br />and <span class="em">fixed.</span></h1>
+      <p>Modern, fast, and yours to keep.</p>
+    </div>
+    <div class="facets" aria-hidden="true">
+      <span class="f up" style="left:36%;top:8%;width:150px;background:#0f5e54"></span>
+      <span class="f down" style="left:70%;top:2%;width:110px;background:#14b8a6"></span>
+      <span class="f up" style="left:8%;top:42%;width:120px;background:#14b8a6"></span>
+      <span class="f down" style="left:48%;top:46%;width:170px;background:#0f8c7e"></span>
+      <span class="f up" style="left:78%;top:40%;width:130px;background:#c2622e"></span>
+      <span class="f down" style="left:20%;top:74%;width:100px;background:#b3ac9d"></span>
+      <span class="f up" style="left:58%;top:74%;width:140px;background:#0f5e54"></span>
+    </div>
+  </div>
+</body>
+</html>
