@@ -38,6 +38,7 @@ export function Offer() {
               <li>Track down bugs and broken links</li>
               <li>Refresh the look without a full rebuild</li>
               <li>Add what&rsquo;s missing, like a contact form or booking</li>
+              <li>Happy to work with WordPress, Squarespace, or whatever you&rsquo;re on</li>
             </ul>
           </article>
         </div>

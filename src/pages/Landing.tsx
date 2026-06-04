@@ -2,6 +2,7 @@ import { Hero } from "../components/landing/Hero";
 import { FacetBanner } from "../components/landing/FacetBanner";
 import { Offer } from "../components/landing/Offer";
 import { Process } from "../components/landing/Process";
+import { Pricing } from "../components/landing/Pricing";
 import { Proof } from "../components/landing/Proof";
 import { Work } from "../components/landing/Work";
 import { About } from "../components/landing/About";
@@ -31,6 +32,7 @@ export function Landing() {
         <FacetBanner />
         <Offer />
         <Process />
+        <Pricing />
         <Proof />
         <Work />
         <About />
