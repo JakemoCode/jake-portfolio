@@ -7,17 +7,17 @@ import styles from "./FacetBanner.module.css";
  * Between-section "moment": small geometric facets scattered over a pale stone
  * field, deliberately asymmetric (denser left, sparser right) with mixed sizes
  * and orientations. A few facets straddle the top/bottom edge and bleed out of
- * frame into the cream above/below. Two scroll-driven layers move at different
- * speeds: the facets outrun the page (foreground), the stone lags (background).
- * The stone is clipped to the band; the facet layer is not, so it can spill.
- * Static when motion is reduced or scroll-timeline is unsupported.
+ * frame into the cream above/below.
+ *
+ * Parallax (FacetBanner.module.css): the banner declares a named view-timeline
+ * (--scroll-over); the facet layer leads and the stone field lags against it
+ * over the `cover` range. Static under reduced motion / where unsupported.
  */
 
 type Role = "teal" | "pine" | "tealDeep" | "rust" | "stoneDark";
 type Shape = "up" | "down" | "left" | "right";
 
 const FACETS: { x: number; y: number; w: string; role: Role; shape: Shape }[] = [
-  // dense left cluster, varied sizes
   { x: 1, y: 36, w: "clamp(64px, 10vw, 158px)", role: "teal", shape: "up" },
   { x: 9, y: 8, w: "clamp(30px, 4vw, 62px)", role: "pine", shape: "down" },
   { x: 13, y: 64, w: "clamp(40px, 5.5vw, 92px)", role: "tealDeep", shape: "right" },
@@ -25,10 +25,8 @@ const FACETS: { x: number; y: number; w: string; role: Role; shape: Shape }[] = 
   { x: 25, y: 56, w: "clamp(28px, 3.5vw, 56px)", role: "teal", shape: "up" },
   { x: 6, y: 60, w: "clamp(22px, 3vw, 46px)", role: "teal", shape: "up" },
   { x: 30, y: 14, w: "clamp(18px, 2.6vw, 38px)", role: "tealDeep", shape: "down" },
-  // lone larger facet across the gap
   { x: 39, y: 20, w: "clamp(48px, 7vw, 116px)", role: "pine", shape: "up" },
   { x: 48, y: 58, w: "clamp(20px, 2.6vw, 40px)", role: "teal", shape: "left" },
-  // looser right group
   { x: 64, y: 34, w: "clamp(38px, 5vw, 84px)", role: "teal", shape: "down" },
   { x: 70, y: 10, w: "clamp(26px, 3.4vw, 52px)", role: "tealDeep", shape: "up" },
   { x: 77, y: 30, w: "clamp(24px, 3.2vw, 50px)", role: "pine", shape: "up" },
