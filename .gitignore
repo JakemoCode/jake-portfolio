@@ -10,3 +10,7 @@ dist-ssr
 *.log
 *.tsbuildinfo
 docs/design-audit-screenshots/
+
+# impeccable live-mode local state, but keep the design-system sidecar
+.impeccable/*
+!.impeccable/design.json

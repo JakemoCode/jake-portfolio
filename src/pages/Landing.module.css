@@ -1,0 +1,149 @@
+.page {
+  /* Surface */
+  --paper: #f6f5f3;
+  --paper-raised: #ffffff;
+  --surface: #efece7;
+  --border: #e4e1db;
+  --border-strong: #d6d2ca;
+
+  /* Ink (green-tinted neutrals, all AA on paper) */
+  --ink: #1b201d;
+  --ink-soft: #45514b;
+  --ink-mute: #6c766f;
+
+  /* Brand */
+  --teal: #14b8a6;
+  --teal-deep: #0f8c7e;
+  --teal-bright: #4fd6c4; /* brightened teal for hover on the dark band */
+  --pine: #0f5e54;
+  --facet-stone: #b3ac9d; /* neutral stone facet on the banner */
+  --rust: #c2622e;
+  --rust-deep: #a64f22;
+  /* Darkest rust that still clears AA (~4.6:1) for ink text on the button. */
+  --rust-soft: #ce6c36;
+
+  /* Dark band */
+  --dark: #13201c;
+  --dark-2: #1b2a25;
+  --dark-ink: #ece4d6;
+  --dark-soft: #9fb3aa;
+
+  --font-display: "Bricolage Grotesque Variable", system-ui, sans-serif;
+  --font-body: "Switzer", system-ui, -apple-system, sans-serif;
+
+  --maxw: 1140px;
+  --gutter: clamp(1.25rem, 5vw, 3rem);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+
+  position: relative;
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  overflow-x: clip;
+}
+
+/* Procedural paper grain (feTurbulence), kept whisper-low so the near-white
+   stays crisp. Fixed so it reads as a property of the surface, not the scroll. */
+.page::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.4;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 160 160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+.page > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Low-specificity reset so the portfolio's terracotta `a` color doesn't leak
+   onto the landing, while any component link class still wins. */
+:where(.page) a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 0.75rem 1.25rem;
+  border-radius: 0 0 10px 0;
+  z-index: 10;
+}
+.skip:focus {
+  left: 0;
+}
+
+.nav {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 1.5rem var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.navLinks {
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2.5vw, 2rem);
+  font-weight: 500;
+}
+
+.navLinks > a {
+  color: var(--ink-soft);
+  transition: color 140ms ease;
+}
+.navLinks > a:hover {
+  color: var(--ink);
+}
+
+.navCta {
+  color: var(--pine) !important;
+  font-weight: 600;
+  border: 1px solid color-mix(in oklab, var(--pine) 35%, transparent);
+  padding: 0.5rem 1rem;
+  border-radius: 999px;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+.navCta:hover {
+  background: color-mix(in oklab, var(--teal) 12%, transparent);
+  border-color: color-mix(in oklab, var(--pine) 55%, transparent);
+}
+
+.navLinks a:focus-visible {
+  outline: 2px solid var(--pine);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Full width; each section owns its own max-width + gutter so full-bleed
+   bands (the facet banner, the dark proof band) can break out cleanly. */
+.main {
+  width: 100%;
+}
+
+@media (max-width: 560px) {
+  .navLinks > a:first-child {
+    display: none;
+  }
+}

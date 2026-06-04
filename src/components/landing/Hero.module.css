@@ -1,0 +1,133 @@
+.hero {
+  width: 100%;
+}
+
+.inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: clamp(3rem, 10vh, 7rem) var(--gutter) clamp(2.5rem, 7vh, 5rem);
+}
+
+.avail {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--pine);
+  margin-bottom: 1.75rem;
+}
+
+.dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--teal);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--teal) 22%, transparent);
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2.75rem, 7vw, 5rem);
+  line-height: 1.0;
+  letter-spacing: -0.035em;
+  color: var(--ink);
+  margin: 0;
+}
+
+.heading span {
+  display: block;
+}
+
+.em {
+  color: var(--pine);
+}
+
+.sub {
+  margin-top: 1.75rem;
+  max-width: 46ch;
+  font-size: clamp(1.1rem, 1.6vw, 1.35rem);
+  line-height: 1.55;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+.actions {
+  margin-top: 2.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* Default: ink on light rust. Hover: white on deep rust. Both pass AA. */
+.primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--rust-soft);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: 0.9rem 1.6rem;
+  border-radius: 12px;
+  transition:
+    background-color 220ms ease,
+    color 220ms ease,
+    transform 160ms var(--ease-out-quint),
+    box-shadow 220ms ease;
+  box-shadow: 0 8px 22px -14px color-mix(in oklab, var(--rust) 70%, transparent);
+}
+
+.primary:hover {
+  background: var(--rust-deep);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 16px 30px -14px color-mix(in oklab, var(--rust-deep) 75%, transparent);
+}
+
+.primary:focus-visible {
+  outline: 2px solid var(--rust-deep);
+  outline-offset: 3px;
+}
+
+.ghost {
+  color: var(--pine);
+  font-weight: 600;
+  font-size: 1.05rem;
+  border-bottom: 2px solid color-mix(in oklab, var(--teal) 40%, transparent);
+  padding-bottom: 2px;
+  transition: border-color 160ms ease, color 160ms ease;
+}
+
+.ghost:hover {
+  color: var(--teal-deep);
+  border-bottom-color: var(--teal);
+}
+
+.ghost:focus-visible {
+  outline: 2px solid var(--teal-deep);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .reveal {
+    opacity: 0;
+    transform: translateY(14px);
+    animation: rise 0.7s var(--ease-out-quint) forwards;
+  }
+  .d0 { animation-delay: 0.02s; }
+  .d1 { animation-delay: 0.1s; }
+  .d2 { animation-delay: 0.2s; }
+  .d3 { animation-delay: 0.3s; }
+}
+
+@keyframes rise {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

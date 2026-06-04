@@ -1,0 +1,96 @@
+.section {
+  padding-block: clamp(3.5rem, 9vh, 6.5rem);
+}
+
+.inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.9rem, 3.5vw, 2.75rem);
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+
+.lede {
+  margin-top: 0.85rem;
+  max-width: 58ch;
+  font-size: 1.1rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+.grid {
+  margin-top: clamp(2rem, 4vw, 3rem);
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 760px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.colHead {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.25rem;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin-bottom: 1.25rem;
+}
+
+.tri {
+  width: 0.85rem;
+  height: 0.85rem;
+  flex: none;
+  background: var(--teal);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+}
+
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding-block: 0.55rem;
+  border-top: 1px solid var(--border-strong);
+}
+
+.label {
+  color: var(--ink-soft);
+}
+
+.price {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: -0.01em;
+  color: var(--pine);
+  white-space: nowrap;
+}
+
+.from {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  margin-right: 0.15rem;
+}
+
+.priceNote {
+  margin-top: 0.85rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}

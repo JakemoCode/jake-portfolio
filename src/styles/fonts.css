@@ -52,6 +52,39 @@
     U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
+/* Switzer — body face for the client landing page (/). Self-hosted from
+   Fontshare (woff2, latin subset). Not used on /portfolio, which keeps its
+   own Inter/Fraunces stack. font-display: swap so body copy is never
+   invisible; the files are tiny (~17KB) and local, so the swap is unnoticeable. */
+@font-face {
+  font-family: "Switzer";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(../assets/fonts/switzer/switzer-400.woff2) format("woff2");
+}
+@font-face {
+  font-family: "Switzer";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(../assets/fonts/switzer/switzer-500.woff2) format("woff2");
+}
+@font-face {
+  font-family: "Switzer";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(../assets/fonts/switzer/switzer-600.woff2) format("woff2");
+}
+@font-face {
+  font-family: "Switzer";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url(../assets/fonts/switzer/switzer-700.woff2) format("woff2");
+}
+
 @font-face {
   font-family: "JetBrains Mono";
   font-style: normal;

@@ -1,0 +1,99 @@
+.banner {
+  position: relative;
+  width: 100%;
+  height: clamp(240px, 32vh, 360px);
+  background-color: var(--surface);
+  border-block: 1px solid var(--border);
+  /* no overflow clip: facets are allowed to bleed past the edges */
+  /* Named scroll timeline the layers parallax against. The banner is the
+     correct subject (anonymous view() on the oversized layers mis-ranged). */
+  view-timeline-name: --scroll-over;
+  view-timeline-axis: block;
+}
+
+/* Clip ONLY the stone to the banner, so its oversized drift stays contained and
+   its tile seam never leaks. The facets live outside this clip and bleed freely. */
+.stoneClip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* Background plane: a pale stone field that drifts slower than the page so it
+   reads as depth, not a slab fighting the scroll. Oversized enough to cover the
+   ±25% drift without exposing an edge, and `cover` (no tile) so there's no seam. */
+.stoneLayer {
+  position: absolute;
+  inset: -56% 0;
+  background-image: var(--stone-1);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  mix-blend-mode: multiply;
+  opacity: 0.45;
+  will-change: transform;
+}
+
+/* Foreground plane: the facets. Banner-sized but not clipped, so edge facets
+   spill into the cream above/below. Leads the page on scroll. */
+.facetLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  will-change: transform;
+}
+
+.facet {
+  position: absolute;
+  aspect-ratio: 1;
+}
+
+.facet::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--stone-2);
+  background-size: cover;
+  mix-blend-mode: multiply;
+  opacity: 0.14;
+}
+
+.up { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.down { clip-path: polygon(0 0, 100% 0, 50% 100%); }
+.left { clip-path: polygon(100% 0, 100% 100%, 0 50%); }
+.right { clip-path: polygon(0 0, 0 100%, 100% 50%); }
+
+.teal { background-color: var(--teal); }
+.pine { background-color: var(--pine); }
+.tealDeep { background-color: var(--teal-deep); }
+.rust { background-color: var(--rust); }
+.stoneDark { background-color: var(--facet-stone); }
+
+/* Parallax against the banner's named timeline: facets lead, stone lags, over
+   the full `cover` range. Gated so reduced-motion / unsupported browsers stay
+   static. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .facetLayer {
+      animation: facetDrift linear both;
+      animation-timeline: --scroll-over;
+      animation-range: cover;
+    }
+    .stoneLayer {
+      animation: stoneDrift linear both;
+      animation-timeline: --scroll-over;
+      animation-range: cover;
+    }
+  }
+}
+
+@keyframes facetDrift {
+  from { transform: translateY(24%); }
+  to { transform: translateY(-24%); }
+}
+
+/* Lag direction: stone eases down as the page scrolls up, so it trails the page. */
+@keyframes stoneDrift {
+  from { transform: translateY(-25%); }
+  to { transform: translateY(25%); }
+}

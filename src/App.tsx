@@ -1,41 +1,15 @@
-import styles from "./App.module.css";
-import { Hero } from "./components/Hero";
-import { ProjectCard } from "./components/ProjectCard";
-import { Testimonials } from "./components/Testimonials";
-import { ContactLinks } from "./components/ContactLinks";
-import { ThemeToggle } from "./components/ThemeToggle";
-import { projects } from "./content/projects";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Landing } from "./pages/Landing";
+import { Portfolio } from "./pages/Portfolio";
 
 export function App() {
   return (
-    <div className={styles.page}>
-      <ThemeToggle />
-      <main className={styles.main}>
-        <Hero
-          name="Jake Mosher"
-          tagline={
-            <>
-              UI/UX engineer building calm, opinionated product software.
-              <br />
-              Full-stack when it matters, frontend by default.
-            </>
-          }
-        />
-
-        <section className={styles.projects} aria-label="Projects">
-          {projects.map((project) => (
-            <ProjectCard key={project.slug} project={project} />
-          ))}
-        </section>
-
-        <Testimonials />
-
-        <ContactLinks
-          github="https://github.com/JakemoCode"
-          linkedin="https://www.linkedin.com/in/the-real-jake-mosher/"
-          email="jake@jakemosher.dev"
-        />
-      </main>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Landing />} />
+        <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
