@@ -1,0 +1,84 @@
+.banner {
+  position: relative;
+  width: 100%;
+  height: clamp(240px, 32vh, 360px);
+  background-color: var(--surface);
+  border-block: 1px solid var(--border);
+  /* no overflow clip: facets are allowed to bleed past the edges */
+}
+
+/* Clip ONLY the stone field so its texture never leaks past the band. */
+.stoneClip {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* Background plane: pale stone field. Oversized so its slow drift never
+   exposes a bare edge. Lags behind the page on scroll. */
+.stoneLayer {
+  position: absolute;
+  inset: -16% 0;
+  background-image: var(--stone-1);
+  background-size: 480px;
+  mix-blend-mode: multiply;
+  opacity: 0.45;
+}
+
+/* Foreground plane: the facets. Banner-sized but not clipped, so edge facets
+   spill into the cream above/below. Outruns the page on scroll. */
+.facetLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.facet {
+  position: absolute;
+  aspect-ratio: 1;
+}
+
+.facet::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--stone-2);
+  background-size: cover;
+  mix-blend-mode: multiply;
+  opacity: 0.14;
+}
+
+.up { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.down { clip-path: polygon(0 0, 100% 0, 50% 100%); }
+.left { clip-path: polygon(100% 0, 100% 100%, 0 50%); }
+.right { clip-path: polygon(0 0, 0 100%, 100% 50%); }
+
+.teal { background-color: var(--teal); }
+.pine { background-color: var(--pine); }
+.tealDeep { background-color: var(--teal-deep); }
+.rust { background-color: var(--rust); }
+.stoneDark { background-color: var(--facet-stone); }
+
+/* Differential parallax: facets outrun the page, stone lags. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .facetLayer {
+      animation: facetDrift linear both;
+      animation-timeline: view();
+    }
+    .stoneLayer {
+      animation: stoneDrift linear both;
+      animation-timeline: view();
+    }
+  }
+}
+
+@keyframes facetDrift {
+  from { transform: translateY(20%); }
+  to { transform: translateY(-20%); }
+}
+
+@keyframes stoneDrift {
+  from { transform: translateY(-9%); }
+  to { transform: translateY(9%); }
+}

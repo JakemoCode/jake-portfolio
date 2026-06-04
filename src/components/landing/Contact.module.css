@@ -1,0 +1,185 @@
+.section {
+  padding-block: clamp(3.5rem, 9vh, 6.5rem);
+}
+
+.inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+  display: grid;
+  gap: clamp(2rem, 5vw, 4rem);
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+@media (min-width: 820px) {
+  .inner {
+    grid-template-columns: 0.9fr 1.1fr;
+  }
+}
+
+.avatar {
+  width: clamp(88px, 12vw, 116px);
+  aspect-ratio: 1;
+  object-fit: cover;
+  object-position: 50% 14%;
+  border-radius: 50%;
+  border: 3px solid var(--paper-raised);
+  box-shadow: 0 10px 28px -16px rgba(19, 32, 28, 0.4);
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+.lede {
+  margin-top: 1rem;
+  max-width: 38ch;
+  color: var(--ink-soft);
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.direct {
+  margin-top: 1.5rem;
+  color: var(--ink-soft);
+}
+
+.email {
+  font-weight: 600;
+  color: var(--pine);
+  border-bottom: 2px solid color-mix(in oklab, var(--teal) 40%, transparent);
+  padding-bottom: 1px;
+  transition: color 160ms ease, border-color 160ms ease;
+}
+
+.email:hover {
+  color: var(--teal-deep);
+  border-bottom-color: var(--teal);
+}
+
+.email:focus-visible {
+  outline: 2px solid var(--teal-deep);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.field label {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--ink);
+}
+
+.field input,
+.field textarea {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--ink);
+  background: var(--paper-raised);
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  padding: 0.75rem 0.9rem;
+  transition: border-color 140ms ease, box-shadow 140ms ease;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 7rem;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--ink-mute);
+}
+
+.field input:focus-visible,
+.field textarea:focus-visible {
+  outline: none;
+  border-color: var(--teal-deep);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--teal) 22%, transparent);
+}
+
+.field input[aria-invalid="true"],
+.field textarea[aria-invalid="true"] {
+  border-color: var(--rust-deep);
+}
+
+.err {
+  color: var(--rust-deep);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.submit {
+  align-self: start;
+  margin-top: 0.5rem;
+  background: var(--rust-soft);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: 0.85rem 1.6rem;
+  border-radius: 12px;
+  transition:
+    background-color 220ms ease,
+    color 220ms ease,
+    transform 160ms var(--ease-out-quint);
+}
+
+.submit:hover {
+  background: var(--rust-deep);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.submit:focus-visible {
+  outline: 2px solid var(--rust-deep);
+  outline-offset: 3px;
+}
+
+.submit:disabled {
+  opacity: 0.65;
+  cursor: progress;
+  transform: none;
+}
+
+.formError {
+  color: var(--rust-deep);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.success {
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: 14px;
+  padding: clamp(1.5rem, 4vw, 2.25rem);
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.successTitle {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
