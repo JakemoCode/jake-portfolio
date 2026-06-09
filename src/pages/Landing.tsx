@@ -3,6 +3,7 @@ import { FacetBanner } from "../components/landing/FacetBanner";
 import { Offer } from "../components/landing/Offer";
 import { Process } from "../components/landing/Process";
 import { Pricing } from "../components/landing/Pricing";
+import { FoundingNote } from "../components/landing/FoundingNote";
 import { Proof } from "../components/landing/Proof";
 import { Work } from "../components/landing/Work";
 import { CtaBand } from "../components/landing/CtaBand";
@@ -34,6 +35,7 @@ export function Landing() {
         <Offer />
         <Process />
         <Pricing />
+        <FoundingNote />
         <Proof />
         <CtaBand />
         <Work />
