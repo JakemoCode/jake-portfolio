@@ -1,17 +1,17 @@
 /* Scroll-reveal utilities for the landing page.
 
-   Content is fully visible by DEFAULT. The entrance only layers on when the
-   browser supports scroll-driven animations AND the visitor welcomes motion.
-   Reduced-motion, unsupported browsers, hidden tabs, and headless/SEO renders
-   all see the finished section, never a blank one. Each element rides its own
-   view() timeline, so content reveals organically as it scrolls into frame
-   (a natural cascade when stacked, in unison when laid out in a row). */
+   Content is ALWAYS fully opaque. The entrance only adds a transform offset
+   (a small upward drift that resolves as the element scrolls into frame).
+   Visibility is never gated on the animation running, so reduced-motion,
+   unsupported browsers, hidden tabs, and headless/SEO renders that never
+   advance a view() timeline see readable content (at worst an element sitting
+   a few px low), never a blank section. Each element rides its own view()
+   timeline (a natural cascade when stacked, in unison when laid out in a row). */
 
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
     .r-up,
     .r-rise {
-      opacity: 0;
       animation: r-reveal linear both;
       animation-timeline: view();
       animation-range: entry 8% cover 34%;
@@ -29,7 +29,6 @@
 
 @keyframes r-reveal {
   to {
-    opacity: 1;
     transform: none;
   }
 }
