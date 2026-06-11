@@ -74,4 +74,29 @@
   padding-inline: var(--gutter);
   font-size: 0.85rem;
   color: var(--dark-soft);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+}
+
+.legalLinks {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.legalLinks a {
+  color: var(--dark-ink);
+  transition: color 140ms ease;
+}
+
+.legalLinks a:hover {
+  color: var(--teal);
+}
+
+.legalLinks a:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 3px;
+  border-radius: 4px;
 }

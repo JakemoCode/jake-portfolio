@@ -1,0 +1,124 @@
+.page {
+  /* Match the landing surface: paper bg, green-tinted ink, Switzer body /
+     Bricolage display, pine/teal accents. (Mirrors Landing.module.css .page.) */
+  --paper: #f6f5f3;
+  --ink: #1b201d;
+  --ink-soft: #45514b;
+  --ink-mute: #6c766f;
+  --border: #e4e1db;
+  --pine: #0f5e54;
+  --teal: #14b8a6;
+  --teal-deep: #0f8c7e;
+  --font-display: "Bricolage Grotesque Variable", system-ui, sans-serif;
+  --font-body: "Switzer", system-ui, -apple-system, sans-serif;
+
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1.25rem, 5vw, 3rem) clamp(3.5rem, 8vw, 6rem);
+}
+
+.home {
+  display: inline-block;
+  color: var(--ink-mute);
+  font-size: 0.95rem;
+  transition: color 160ms ease;
+}
+
+.home:hover {
+  color: var(--pine);
+}
+
+.home:focus-visible {
+  outline: 2px solid var(--teal-deep);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+.main {
+  max-width: 760px;
+  margin: clamp(2rem, 5vw, 3rem) auto 0;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 4vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+
+.effective {
+  margin-top: 0.5rem;
+  color: var(--ink-mute);
+  font-size: 0.95rem;
+}
+
+.intro {
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+.section {
+  margin-top: clamp(2rem, 5vw, 3rem);
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+}
+
+.para {
+  margin-top: 0.75rem;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+.list {
+  margin: 0.75rem 0 0;
+  padding-left: 1.25rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.list li {
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.list li::marker {
+  color: var(--teal);
+}
+
+.foot {
+  max-width: 760px;
+  margin: clamp(3.5rem, 8vw, 5rem) auto 0;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  font-size: 0.92rem;
+}
+
+.foot a {
+  color: var(--ink-mute);
+  transition: color 160ms ease;
+}
+
+.foot a:hover {
+  color: var(--pine);
+}
+
+.foot a:focus-visible {
+  outline: 2px solid var(--teal-deep);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
