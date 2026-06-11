@@ -129,6 +129,22 @@
   }
 }
 
+/* Magnetic wrapper: follows the cursor via --mx/--my (set by useMagnetic), eases
+   back on release. The button keeps its own hover lift (nested transform). */
+.magnet {
+  display: inline-flex;
+  transform: translate(var(--mx, 0px), var(--my, 0px));
+  transition: transform 0.35s var(--ease-out-quint);
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .magnet {
+    transform: none;
+    transition: none;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .reveal {
     opacity: 0;
