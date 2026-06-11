@@ -121,13 +121,29 @@
   border-radius: 4px;
 }
 
-/* Facet-triangle marker (points up); rotates to point down when open. */
+/* Grow the toggle's tap target to 44px on touch (Fitts's) without shifting layout. */
+@media (pointer: coarse), (max-width: 640px) {
+  .summary {
+    position: relative;
+  }
+  .summary::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 44px;
+  }
+}
+
+/* Facet-triangle marker — points down ("expand"); rotates up when open. */
 .tri {
   width: 0.7rem;
   height: 0.7rem;
   flex: none;
   background: var(--teal);
-  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
   transition: transform 220ms var(--ease-out-quint);
 }
 
