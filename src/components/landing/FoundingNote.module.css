@@ -31,12 +31,24 @@
 }
 
 .dot {
+  position: relative;
   flex: none;
   width: 9px;
   height: 9px;
   border-radius: 999px;
   background: var(--teal);
   box-shadow: 0 0 0 4px color-mix(in oklab, var(--teal) 18%, transparent);
+}
+
+/* Sonar ping ring, expanding outward over the dot's static ring. */
+.dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: 0 0 0 0 color-mix(in oklab, var(--teal) 50%, transparent);
+  opacity: 0;
+  pointer-events: none;
 }
 
 .text strong {
@@ -62,4 +74,37 @@
   outline: 2px solid var(--teal-deep);
   outline-offset: 3px;
   border-radius: 3px;
+}
+
+/* Soft breathing glow on the note + a periodic ping on the bullet, to gently
+   flag the founding-client offer. Static under reduced motion. LEVERS: glow
+   intensity/blur in foundingGlow; ping reach/speed in dotPing. */
+@media (prefers-reduced-motion: no-preference) {
+  .note {
+    animation: foundingGlow 3.6s ease-in-out infinite;
+  }
+  .dot::after {
+    animation: dotPing 2.6s ease-out infinite;
+  }
+}
+
+@keyframes foundingGlow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--teal) 0%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 26px 1px color-mix(in oklab, var(--teal) 26%, transparent);
+  }
+}
+
+@keyframes dotPing {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--teal) 50%, transparent);
+    opacity: 0.9;
+  }
+  100% {
+    box-shadow: 0 0 0 10px color-mix(in oklab, var(--teal) 0%, transparent);
+    opacity: 0;
+  }
 }
