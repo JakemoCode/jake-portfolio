@@ -1,19 +1,24 @@
 import { Link } from "react-router-dom";
 import styles from "./Portfolio.module.css";
-import { Hero } from "../components/Hero";
-import { ProjectCard } from "../components/ProjectCard";
-import { Testimonials } from "../components/Testimonials";
-import { ContactLinks } from "../components/ContactLinks";
-import { ThemeToggle } from "../components/ThemeToggle";
+import { Hero } from "../components/portfolio/Hero";
+import { ProjectCard } from "../components/portfolio/ProjectCard";
+import { Testimonials } from "../components/portfolio/Testimonials";
+import { ContactLinks } from "../components/portfolio/ContactLinks";
+import { ThemeToggle } from "../components/portfolio/ThemeToggle";
 import { projects } from "../content/projects";
 
 export function Portfolio() {
   return (
     <div className={styles.page}>
-      <Link to="/" className={styles.home} aria-label="Jake Mosher — home">
-        <span aria-hidden="true">&#10022;</span>
-      </Link>
-      <ThemeToggle />
+      {/* Fixed utility controls, wrapped in a banner landmark so all content
+          lives inside a landmark (a11y: axe "region"). The children are
+          position:fixed, so the header itself takes no layout space. */}
+      <header>
+        <Link to="/" className={styles.home} aria-label="Jake Mosher — home">
+          <span aria-hidden="true">&#10022;</span>
+        </Link>
+        <ThemeToggle />
+      </header>
       <main className={styles.main}>
         <Hero
           name="Jake Mosher"

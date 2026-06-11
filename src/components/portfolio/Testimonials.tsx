@@ -1,5 +1,5 @@
 import styles from "./Testimonials.module.css";
-import { testimonials } from "../content/testimonials";
+import { testimonials } from "../../content/testimonials";
 
 export function Testimonials() {
   if (testimonials.length === 0) return null;
