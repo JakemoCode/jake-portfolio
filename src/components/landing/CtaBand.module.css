@@ -54,3 +54,8 @@
   outline: 2px solid var(--rust-deep);
   outline-offset: 3px;
 }
+
+/* Tactile press: springs inward on tap/click. */
+.button:active {
+  transform: scale(0.96);
+}
