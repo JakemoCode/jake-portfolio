@@ -185,3 +185,21 @@
   cursor: not-allowed;
   font-style: italic;
 }
+
+/* Grow tap targets to 44px on touch without altering the visual (Fitts's). */
+@media (pointer: coarse), (max-width: 640px) {
+  .linkPrimary,
+  .linkSecondary {
+    position: relative;
+  }
+  .linkPrimary::after,
+  .linkSecondary::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 44px;
+  }
+}

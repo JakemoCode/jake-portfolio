@@ -52,6 +52,22 @@
   border-radius: 4px;
 }
 
+/* Grow footer link tap targets to 44px on touch without altering the visual. */
+@media (pointer: coarse), (max-width: 640px) {
+  .links a {
+    position: relative;
+  }
+  .links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 44px;
+  }
+}
+
 .fine {
   max-width: var(--maxw);
   margin: 2rem auto 0;

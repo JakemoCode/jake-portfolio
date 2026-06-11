@@ -113,6 +113,22 @@
   border-radius: 3px;
 }
 
+/* Grow the tap target to 44px on touch without altering the visual (Fitts's). */
+@media (pointer: coarse), (max-width: 640px) {
+  .ghost {
+    position: relative;
+  }
+  .ghost::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 44px;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .reveal {
     opacity: 0;
