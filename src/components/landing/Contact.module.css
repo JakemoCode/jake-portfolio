@@ -155,6 +155,11 @@
   outline-offset: 3px;
 }
 
+/* Tactile press: springs inward on tap/click. */
+.submit:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
 .submit:disabled {
   opacity: 0.65;
   cursor: progress;

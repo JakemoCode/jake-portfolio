@@ -1,6 +1,9 @@
 import styles from "./Hero.module.css";
+import { useMagnetic } from "./useMagnetic";
 
 export function Hero() {
+  const magnetRef = useMagnetic<HTMLSpanElement>({ strength: 0.01, radius: 150, max: 5 });
+
   return (
     <section className={styles.hero} aria-labelledby="hero-heading">
       <div className={styles.inner}>
@@ -20,9 +23,11 @@ export function Hero() {
         </p>
 
         <div className={`${styles.actions} ${styles.reveal} ${styles.d3}`}>
-          <a className={styles.primary} href="#contact">
-            Start a project
-          </a>
+          <span ref={magnetRef} className={styles.magnet}>
+            <a className={styles.primary} href="#contact">
+              Start a project
+            </a>
+          </span>
           <a className={styles.ghost} href="#work">
             See recent work
           </a>

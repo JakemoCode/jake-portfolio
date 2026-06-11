@@ -114,3 +114,14 @@
   from { transform: translateY(-25%); }
   to { transform: translateY(25%); }
 }
+
+/* Facets catch a little light on hover (pointer devices only; filter doesn't
+   collide with the scroll drift's transform). */
+@media (hover: hover) {
+  .facet {
+    transition: filter 0.3s ease;
+  }
+  .facet:hover {
+    filter: brightness(1.2) saturate(1.1);
+  }
+}
