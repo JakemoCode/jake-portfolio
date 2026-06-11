@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import styles from "./Portfolio.module.css";
-import { Hero } from "../components/Hero";
-import { ProjectCard } from "../components/ProjectCard";
-import { Testimonials } from "../components/Testimonials";
-import { ContactLinks } from "../components/ContactLinks";
-import { ThemeToggle } from "../components/ThemeToggle";
+import { Hero } from "../components/portfolio/Hero";
+import { ProjectCard } from "../components/portfolio/ProjectCard";
+import { Testimonials } from "../components/portfolio/Testimonials";
+import { ContactLinks } from "../components/portfolio/ContactLinks";
+import { ThemeToggle } from "../components/portfolio/ThemeToggle";
 import { projects } from "../content/projects";
 
 export function Portfolio() {

@@ -1,5 +1,5 @@
 import styles from "./ProjectCard.module.css";
-import type { Project, Screenshot } from "../content/projects";
+import type { Project, Screenshot } from "../../content/projects";
 
 type Props = {
   project: Project;
