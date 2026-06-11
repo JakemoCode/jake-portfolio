@@ -10,10 +10,15 @@ import { projects } from "../content/projects";
 export function Portfolio() {
   return (
     <div className={styles.page}>
-      <Link to="/" className={styles.home} aria-label="Jake Mosher — home">
-        <span aria-hidden="true">&#10022;</span>
-      </Link>
-      <ThemeToggle />
+      {/* Fixed utility controls, wrapped in a banner landmark so all content
+          lives inside a landmark (a11y: axe "region"). The children are
+          position:fixed, so the header itself takes no layout space. */}
+      <header>
+        <Link to="/" className={styles.home} aria-label="Jake Mosher — home">
+          <span aria-hidden="true">&#10022;</span>
+        </Link>
+        <ThemeToggle />
+      </header>
       <main className={styles.main}>
         <Hero
           name="Jake Mosher"
