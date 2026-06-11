@@ -2,7 +2,7 @@ import styles from "./Hero.module.css";
 import { useMagnetic } from "./useMagnetic";
 
 export function Hero() {
-  const magnetRef = useMagnetic<HTMLSpanElement>({ strength: 0.2, radius: 90, max: 22 });
+  const magnetRef = useMagnetic<HTMLSpanElement>({ strength: 0.01, radius: 150, max: 5 });
 
   return (
     <section className={styles.hero} aria-labelledby="hero-heading">
