@@ -17,14 +17,16 @@ import styles from "./FacetBanner.module.css";
 type Role = "teal" | "pine" | "tealDeep" | "rust" | "stoneDark";
 type Shape = "up" | "down" | "left" | "right";
 
-const FACETS: { x: number; y: number; w: string; role: Role; shape: Shape }[] = [
+type Facet = { x: number; y: number; w: string; role: Role; shape: Shape };
+
+const FACETS: Facet[] = [
   { x: 1, y: 36, w: "clamp(64px, 10vw, 158px)", role: "teal", shape: "up" },
   { x: 9, y: 8, w: "clamp(30px, 4vw, 62px)", role: "pine", shape: "down" },
-  { x: 13, y: 64, w: "clamp(40px, 5.5vw, 92px)", role: "tealDeep", shape: "right" },
+  { x: 3, y: 74, w: "clamp(40px, 5.5vw, 92px)", role: "tealDeep", shape: "right" },
   { x: 20, y: 30, w: "clamp(22px, 3vw, 44px)", role: "rust", shape: "down" },
   { x: 25, y: 56, w: "clamp(28px, 3.5vw, 56px)", role: "teal", shape: "up" },
-  { x: 6, y: 60, w: "clamp(22px, 3vw, 46px)", role: "teal", shape: "up" },
-  { x: 30, y: 14, w: "clamp(18px, 2.6vw, 38px)", role: "tealDeep", shape: "down" },
+  { x: 56, y: 30, w: "clamp(22px, 3vw, 46px)", role: "teal", shape: "up" },
+  { x: 30, y: 70, w: "clamp(18px, 2.6vw, 38px)", role: "tealDeep", shape: "down" },
   { x: 39, y: 20, w: "clamp(48px, 7vw, 116px)", role: "pine", shape: "up" },
   { x: 48, y: 58, w: "clamp(20px, 2.6vw, 40px)", role: "teal", shape: "left" },
   { x: 64, y: 34, w: "clamp(38px, 5vw, 84px)", role: "teal", shape: "down" },
@@ -35,7 +37,7 @@ const FACETS: { x: number; y: number; w: string; role: Role; shape: Shape }[] = 
   // edge-straddlers: bleed out of the band into the cream above/below
   { x: 34, y: -11, w: "clamp(40px, 5.5vw, 92px)", role: "teal", shape: "down" },
   { x: 17, y: 82, w: "clamp(34px, 4.5vw, 72px)", role: "tealDeep", shape: "up" },
-  { x: 60, y: 78, w: "clamp(50px, 7vw, 112px)", role: "pine", shape: "up" },
+  { x: 70, y: 92, w: "clamp(50px, 7vw, 112px)", role: "pine", shape: "up" },
 ];
 
 export function FacetBanner() {

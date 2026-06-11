@@ -4,21 +4,54 @@
   color: var(--dark-ink);
   padding-block: clamp(4rem, 11vh, 8rem);
   overflow: hidden;
+  /* the scroll timeline the living gradient rides */
+  view-timeline-name: --proof-scroll;
+  view-timeline-axis: block;
 }
 
 /* soft teal glow against the near-black, the "dark moment" lift */
 .proof::before {
   content: "";
   position: absolute;
-  inset: 0;
+  top: 0;
+  bottom: 0;
+  /* oversized horizontally so the sideways sweep never exposes a hard edge */
+  left: -40%;
+  right: -40%;
+  z-index: 0;
+  /* LEVER: glow colors/intensity = the color-mix percentages. */
   background:
-    radial-gradient(60% 55% at 82% 8%, color-mix(in oklab, var(--teal) 26%, transparent), transparent 60%),
-    radial-gradient(55% 50% at 8% 100%, color-mix(in oklab, var(--pine) 40%, transparent), transparent 60%);
+    radial-gradient(40% 52% at 64% 32%, color-mix(in oklab, var(--teal) 38%, transparent), transparent 62%),
+    radial-gradient(42% 36% at 30% 70%, color-mix(in oklab, var(--pine) 52%, transparent), transparent 62%);
   pointer-events: none;
+  will-change: transform;
+}
+
+/* Living gradient: the glow layer sweeps as the section scrolls past.
+   Transform-driven (like the facets) so it's reliable and GPU-cheap. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .proof::before {
+      animation: proofGlow linear both;
+      animation-timeline: --proof-scroll;
+      animation-range: cover;
+    }
+  }
+}
+
+/* LEVER: translate range = how far the glows sweep sideways. */
+@keyframes proofGlow {
+  from {
+    transform: translateX(-22%);
+  }
+  to {
+    transform: translateX(22%);
+  }
 }
 
 .inner {
   position: relative;
+  z-index: 1;
   max-width: var(--maxw);
   margin: 0 auto;
   padding-inline: var(--gutter);
