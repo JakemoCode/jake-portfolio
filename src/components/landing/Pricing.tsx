@@ -35,7 +35,6 @@ const PACKAGES: Package[] = [
     includes: [
       "Everything in the one-page site, across all your pages",
       "Starting at 5 custom-designed pages",
-      "Custom design in your colors and style",
       "A cohesive design carried across your whole site",
       "Real navigation that works on every page",
       "Three rounds of changes, plus 90 days of tweaks after launch",
