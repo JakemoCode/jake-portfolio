@@ -26,7 +26,13 @@ export function SiteFooter() {
         </nav>
       </div>
 
-      <p className={styles.fine}>&copy; {new Date().getFullYear()} Jake Mosher</p>
+      <div className={styles.fine}>
+        <span>&copy; {new Date().getFullYear()} Jake Mosher</span>
+        <span className={styles.legalLinks}>
+          <Link to="/privacy">Privacy</Link>
+          <Link to="/terms">Terms</Link>
+        </span>
+      </div>
     </footer>
   );
 }
