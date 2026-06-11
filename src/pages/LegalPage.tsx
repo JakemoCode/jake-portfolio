@@ -9,11 +9,9 @@ export function LegalPage({ doc }: { doc: LegalDoc }) {
   }, [doc.title]);
 
   return (
-    // Forced light so legal pages stay consistent with the (always-light)
-    // landing, regardless of the visitor's OS theme.
-    <div className={styles.page} data-theme="light">
+    <div className={styles.page}>
       <Link to="/" className={styles.home}>
-        ← Jake Mosher
+        ← Back
       </Link>
 
       <main className={styles.main}>
