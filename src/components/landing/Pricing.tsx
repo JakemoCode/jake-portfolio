@@ -1,5 +1,50 @@
 import styles from "./Pricing.module.css";
 
+type Package = {
+  name: string;
+  price: string;
+  from?: boolean;
+  pitch: string;
+  includes: string[];
+};
+
+// Public pricing copy — source of truth is the "Canonical Pricing Structure"
+// doc (Notion / Freelance HQ), section 10. Keep the internal per-page formula
+// and premium multipliers OUT of here.
+const PACKAGES: Package[] = [
+  {
+    name: "One-page website",
+    price: "$1,200",
+    pitch:
+      "Your whole story on one beautiful, scrolling page. Perfect if you need a strong, simple online home that gets people to reach out.",
+    includes: [
+      "Custom design in your colors and style",
+      "Up to 6 sections (intro, about, services, gallery, testimonials, contact)",
+      "Looks great on every device",
+      "Contact form, click-to-call, email, and social links",
+      "Set up so Google can find you",
+      "Three rounds of changes, plus 90 days of tweaks after launch",
+    ],
+  },
+  {
+    name: "Multi-page website",
+    price: "$3,000",
+    from: true,
+    pitch:
+      "A complete website with room to grow. Several custom pages and real navigation, for when one page isn't enough.",
+    includes: [
+      "Everything in the one-page site, across all your pages",
+      "Starting at 5 custom-designed pages",
+      "A cohesive design carried across your whole site",
+      "Real navigation that works on every page",
+      "Three rounds of changes, plus 90 days of tweaks after launch",
+    ],
+  },
+];
+
+const OWNERSHIP =
+  "You provide the words, visual inspiration, and photos. You own it outright, no monthly platform rent.";
+
 export function Pricing() {
   return (
     <section className={styles.section} aria-labelledby="pricing-title">
@@ -14,40 +59,49 @@ export function Pricing() {
         </p>
 
         <div className={styles.grid}>
-          <div className={`${styles.col} r-up`}>
-            <h3 className={styles.colHead}>
-              <span className={styles.tri} aria-hidden="true" />
-              Build something new
-            </h3>
-            <p className={styles.priceRow}>
-              <span className={styles.label}>One-page site</span>
-              <span className={styles.price}>
-                <span className={styles.from}>from</span> $1,200
-              </span>
-            </p>
-            <p className={styles.priceRow}>
-              <span className={styles.label}>Full multi-page site</span>
-              <span className={styles.price}>
-                <span className={styles.from}>from</span> $3,000
-              </span>
-            </p>
-          </div>
+          {PACKAGES.map((pkg) => (
+            <article key={pkg.name} className={`${styles.card} r-up`}>
+              <div className={styles.cardHead}>
+                <h3 className={styles.name}>{pkg.name}</h3>
+                <p className={styles.price}>
+                  {pkg.from && <span className={styles.from}>from</span>}
+                  {pkg.price}
+                </p>
+              </div>
+              <p className={styles.pitch}>{pkg.pitch}</p>
 
-          <div className={`${styles.col} r-up`}>
-            <h3 className={styles.colHead}>
-              <span className={styles.tri} aria-hidden="true" />
-              Fix what&rsquo;s there
-            </h3>
-            <p className={styles.priceRow}>
-              <span className={styles.label}>Repairs and refreshes</span>
-              <span className={styles.price}>
-                <span className={styles.from}>from</span> $500
-              </span>
-            </p>
-            <p className={styles.priceNote}>
-              I&rsquo;ll take a look, then quote one flat price to make it right.
-            </p>
-          </div>
+              <details className={styles.details}>
+                <summary className={styles.summary}>
+                  <span className={styles.tri} aria-hidden="true" />
+                  See what&rsquo;s included
+                </summary>
+                <ul className={styles.includes}>
+                  {pkg.includes.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+                <p className={styles.owns}>{OWNERSHIP}</p>
+              </details>
+            </article>
+          ))}
+        </div>
+
+        <div className={`${styles.rest} r-up`}>
+          <p>
+            <strong>Not sure which fits?</strong> Most people start with the
+            one-page site and grow into more pages later. Either way, I&rsquo;ll
+            point you to the right one, no upsell.
+          </p>
+          <p>
+            <strong>Bigger or more custom?</strong> Things like online booking, a
+            store, or rebuilding an existing site are quoted to fit.
+            Let&rsquo;s talk.
+          </p>
+          <p>
+            <strong>Already have a Squarespace or WordPress site?</strong> I can
+            refresh or rebuild it so it finally looks the way you want. Tell me
+            what&rsquo;s bugging you and I&rsquo;ll take a look.
+          </p>
         </div>
       </div>
     </section>
