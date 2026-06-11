@@ -28,8 +28,9 @@
 .grid {
   margin-top: clamp(2rem, 4vw, 3rem);
   display: grid;
-  gap: clamp(2rem, 5vw, 4rem);
+  gap: clamp(1.25rem, 3vw, 2rem);
   grid-template-columns: 1fr;
+  align-items: start;
 }
 
 @media (min-width: 760px) {
@@ -38,43 +39,33 @@
   }
 }
 
-.colHead {
+.card {
+  background: var(--paper-raised);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: clamp(1.5rem, 3vw, 2rem);
+}
+
+.cardHead {
   display: flex;
-  align-items: center;
-  gap: 0.7rem;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.name {
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 1.25rem;
+  font-size: 1.3rem;
   letter-spacing: -0.01em;
   color: var(--ink);
-  margin-bottom: 1.25rem;
-}
-
-.tri {
-  width: 0.85rem;
-  height: 0.85rem;
-  flex: none;
-  background: var(--teal);
-  clip-path: polygon(50% 0, 100% 100%, 0 100%);
-}
-
-.priceRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 1rem;
-  padding-block: 0.55rem;
-  border-top: 1px solid var(--border-strong);
-}
-
-.label {
-  color: var(--ink-soft);
 }
 
 .price {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size: 1.6rem;
   letter-spacing: -0.01em;
   color: var(--pine);
   white-space: nowrap;
@@ -85,12 +76,134 @@
   font-weight: 500;
   font-size: 0.8rem;
   color: var(--ink-soft);
-  margin-right: 0.15rem;
+  margin-right: 0.3rem;
 }
 
-.priceNote {
+.pitch {
   margin-top: 0.85rem;
-  font-size: 0.95rem;
+  max-width: 42ch;
+  font-size: 1.02rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+.details {
+  margin-top: 1.25rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1rem;
+  /* enables the panel to transition to/from its intrinsic (auto) height */
+  interpolate-size: allow-keywords;
+}
+
+.summary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--pine);
+  list-style: none;
+  user-select: none;
+  transition: color 160ms ease;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary:hover {
+  color: var(--teal-deep);
+}
+
+.summary:focus-visible {
+  outline: 2px solid var(--teal-deep);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Facet-triangle marker (points up); rotates to point down when open. */
+.tri {
+  width: 0.7rem;
+  height: 0.7rem;
+  flex: none;
+  background: var(--teal);
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  transition: transform 220ms var(--ease-out-quint);
+}
+
+.details[open] .tri {
+  transform: rotate(180deg);
+}
+
+.includes {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.includes li {
+  position: relative;
+  padding-left: 1.5rem;
+  font-size: 0.98rem;
   line-height: 1.5;
   color: var(--ink-soft);
+}
+
+.includes li::before {
+  content: "\2713"; /* check */
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--pine);
+  font-weight: 700;
+}
+
+.owns {
+  margin-top: 1rem;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--ink-mute);
+}
+
+.rest {
+  margin-top: clamp(2rem, 4vw, 3rem);
+  display: grid;
+  gap: 0.85rem;
+  max-width: 64ch;
+}
+
+.rest p {
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+.rest strong {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* Soft-open: slide the panel's height open and fade it in (instead of an
+   instant pop). Uses ::details-content + interpolate-size; browsers without
+   support fall back to the native instant toggle, which is fine. */
+@media (prefers-reduced-motion: no-preference) {
+  .details::details-content {
+    block-size: 0;
+    opacity: 0;
+    overflow: clip;
+    /* flow-root contains the children's margins so the box collapses fully to 0
+       — otherwise the first child's top margin escapes and leaves a gap that
+       pops away when content-visibility flips at the end of the close. */
+    display: flow-root;
+    transition:
+      block-size 300ms var(--ease-out-quint),
+      opacity 260ms ease,
+      content-visibility 300ms allow-discrete;
+  }
+  .details[open]::details-content {
+    block-size: auto;
+    opacity: 1;
+  }
 }
