@@ -30,7 +30,7 @@ export const privacyPolicy: LegalDoc = {
           type: "ul",
           items: [
             "Information you give me. When you use the contact form or email me, I receive your name, email address, and whatever you include in your message.",
-            "Basic technical information. Like most websites, the site's hosting provider may automatically process basic technical information needed to load and secure the site, such as your IP address, browser/device information, and request logs.",
+            "Limited technical information. My hosting provider may automatically process limited technical information such as IP address, browser type, device type, and request logs for security and site operation.",
           ],
         },
         {
@@ -67,7 +67,7 @@ export const privacyPolicy: LegalDoc = {
       blocks: [
         {
           type: "p",
-          text: "I don't sell your information. I may share it with trusted service providers who help me run the site, such as hosting, email, form-processing, or business software providers, only as needed. I may also disclose information if required by law.",
+          text: "I do not sell your information. I may share it with service providers I use to run the site and respond to messages, such as my hosting and email provider, only as needed. I may also disclose information if required by law.",
         },
       ],
     },
@@ -76,7 +76,7 @@ export const privacyPolicy: LegalDoc = {
       blocks: [
         {
           type: "p",
-          text: "The site may link to other websites. Their privacy practices are their own, and this policy doesn't cover them.",
+          text: "The site may link to other websites. Their privacy practices are their own, and this policy does not cover them.",
         },
       ],
     },
@@ -94,7 +94,7 @@ export const privacyPolicy: LegalDoc = {
       blocks: [
         {
           type: "p",
-          text: "You can ask me to access, correct, or delete the personal information I have about you by emailing jake@jakemosher.dev. Depending on where you live, you may have additional rights, including rights to know what data is collected, request deletion or correction, or opt out of certain uses. I do not sell your personal information.",
+          text: "You can ask me to access, correct, or delete the personal information I have about you by emailing jake@jakemosher.dev.",
         },
       ],
     },
@@ -112,7 +112,7 @@ export const privacyPolicy: LegalDoc = {
       blocks: [
         {
           type: "p",
-          text: "This site isn't directed to children under 13, and I don't knowingly collect their personal information.",
+          text: "This site is not directed to children under 13, and I do not knowingly collect their personal information.",
         },
       ],
     },
@@ -127,7 +127,10 @@ export const privacyPolicy: LegalDoc = {
     },
     {
       heading: "Contact",
-      blocks: [{ type: "p", text: "Mosher Web Development, LLC - jake@jakemosher.dev" }],
+      blocks: [
+        { type: "p", text: "Mosher Web Development, LLC" },
+        { type: "p", text: "jake@jakemosher.dev" },
+      ],
     },
   ],
 };
@@ -213,7 +216,10 @@ export const termsOfUse: LegalDoc = {
     {
       heading: "9. Governing law",
       blocks: [
-        { type: "p", text: "These terms are governed by the laws of the State of Colorado." },
+        {
+          type: "p",
+          text: "These terms are governed by the laws of the State of Colorado. Any dispute arising from your use of the site will be brought exclusively in the state or federal courts located in Larimer County, Colorado.",
+        },
       ],
     },
     {
