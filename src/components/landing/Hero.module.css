@@ -154,17 +154,48 @@
   .reveal {
     opacity: 0;
     transform: translateY(14px);
-    animation: rise 0.7s var(--ease-out-quint) forwards;
+    animation: rise 0.8s var(--ease-out-quint) forwards;
   }
-  .d0 { animation-delay: 0.02s; }
-  .d1 { animation-delay: 0.1s; }
-  .d2 { animation-delay: 0.2s; }
-  .d3 { animation-delay: 0.3s; }
+  /* Sequential cascade — each element gets its own moment before the next:
+     line 1 → line 2 wipe → subheader → buttons + availability banner. */
+  .d2 { animation-delay: 1.8s; }
+  .d3 { animation-delay: 2.3s; }
+
+  .line1 { animation-delay: 0.15s; }
+
+  /* Line 2 rises as a block, then the pine sweeps in left-to-right. The text
+     fills with a gradient (pine → soft band → ink); sliding background-position
+     from 100% to 0% washes the green across while ink stays readable beneath. */
+  .line2 {
+    color: transparent;
+    background-image: linear-gradient(
+      100deg,
+      var(--pine) 0%,
+      var(--pine) 42%,
+      var(--ink) 58%,
+      var(--ink) 100%
+    );
+    background-size: 220% 100%;
+    background-position-x: 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    opacity: 0;
+    transform: translateY(14px);
+    animation:
+      rise 0.2s var(--ease-out-quint) 0.9s forwards,
+      sweep 1.2s linear 1s forwards;
+  }
 }
 
 @keyframes rise {
   to {
     opacity: 1;
     transform: none;
+  }
+}
+
+@keyframes sweep {
+  to {
+    background-position-x: 0%;
   }
 }
