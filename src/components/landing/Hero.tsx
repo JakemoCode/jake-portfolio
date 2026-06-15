@@ -7,14 +7,14 @@ export function Hero() {
   return (
     <section className={styles.hero} aria-labelledby="hero-heading">
       <div className={styles.inner}>
-        <p className={`${styles.avail} ${styles.reveal} ${styles.d0}`}>
+        <p className={`${styles.avail} ${styles.reveal} ${styles.d3}`}>
           <span className={styles.dot} aria-hidden="true" />
           Available for new projects
         </p>
 
-        <h1 id="hero-heading" className={`${styles.heading} ${styles.reveal} ${styles.d1}`}>
-          <span>You bring the idea.</span>
-          <span className={styles.em}>I bring the craft.</span>
+        <h1 id="hero-heading" className={styles.heading}>
+          <span className={`${styles.reveal} ${styles.line1}`}>You bring the idea.</span>
+          <span className={`${styles.em} ${styles.line2}`}>I bring the craft.</span>
         </h1>
 
         <p className={`${styles.sub} ${styles.reveal} ${styles.d2}`}>
