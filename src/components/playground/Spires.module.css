@@ -1,0 +1,28 @@
+/* Palette for the low-poly spires piece. Tuned to inspo/spires4.jpg; the
+   generated facet roles in spiresData.ts map to these via ROLE_VAR in Spires.tsx.
+   Tweak any hex here to re-tone the whole composition. */
+.spires {
+  --sp-ink: #14201c;
+  --sp-slate: #2c3e3d;
+  --sp-pine: #0f5e54;
+  --sp-teal-deep: #0f8c7e;
+  --sp-teal: #16b8a3;
+  --sp-grey-mid: #808b88;
+  --sp-grey: #bcc1be;
+  --sp-white: #eceeec;
+
+  display: block;
+  width: min(86vmin, 720px);
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 4px;
+  /* crispEdges leaves faint seams between facets; a hairline stroke via the
+     drop-shadow-free overlap is avoided — instead we let the polygons abut. */
+}
+
+/* Hairline shared-edge cleanup: a 0.5px same-color stroke closes sub-pixel gaps
+   the triangulation can leave between abutting facets. */
+.spires polygon {
+  stroke: inherit;
+  stroke-width: 0;
+}

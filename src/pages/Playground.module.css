@@ -1,0 +1,72 @@
+/* Self-contained sandbox page. Brings its own slice of the landing palette so
+   FacetBanner (which reads --surface/--border/--teal/--pine/--teal-deep/--rust/
+   --facet-stone) renders identically here, with no nav and no other sections. */
+.page {
+  --paper: #f6f5f3;
+  --surface: #efece7;
+  --border: #e4e1db;
+
+  --ink: #1b201d;
+  --ink-soft: #45514b;
+
+  --teal: #14b8a6;
+  --teal-deep: #0f8c7e;
+  --pine: #0f5e54;
+  --facet-stone: #b3ac9d;
+  --rust: #c2622e;
+
+  --font-display: "Bricolage Grotesque Variable", system-ui, sans-serif;
+  --font-body: "Switzer", system-ui, -apple-system, sans-serif;
+
+  --gutter: clamp(1.25rem, 5vw, 3rem);
+
+  position: relative;
+  min-height: 100vh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  overflow-x: clip;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem var(--gutter);
+}
+
+.label {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+}
+
+.home {
+  color: var(--pine);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-bottom: 2px solid color-mix(in oklab, var(--teal) 40%, transparent);
+  padding-bottom: 2px;
+  transition: border-color 160ms ease, color 160ms ease;
+}
+
+.home:hover {
+  color: var(--teal-deep);
+  border-bottom-color: var(--teal);
+}
+
+.home:focus-visible {
+  outline: 2px solid var(--teal-deep);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+.stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 4vh, 3rem) var(--gutter) clamp(3rem, 8vh, 5rem);
+}

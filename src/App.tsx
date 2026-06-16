@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-route
 import { Landing } from "./pages/Landing";
 import { Portfolio } from "./pages/Portfolio";
 import { LegalPage } from "./pages/LegalPage";
+import { Playground } from "./pages/Playground";
 import { privacyPolicy, termsOfUse } from "./content/legal";
 
 // <BrowserRouter> does not reset scroll on navigation (only the data-router
@@ -25,6 +26,7 @@ export function App() {
         <Route path="/portfolio" element={<Portfolio />} />
         <Route path="/privacy" element={<LegalPage doc={privacyPolicy} />} />
         <Route path="/terms" element={<LegalPage doc={termsOfUse} />} />
+        <Route path="/playground" element={<Playground />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
