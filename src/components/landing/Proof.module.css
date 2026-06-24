@@ -18,11 +18,21 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
+  /* One distinct blob per colour per tile, placed as halves at 0% and 100%
+     (same height) so each tile's edge blob pairs with the next tile's across
+     the boundary — seamless, no repeat line — while the tile interior stays a
+     gap so the blobs read as separate and their drift is visible. Teal and
+     pine tiles use different widths so the two never line up. Tile WIDTH is
+     tuned per breakpoint below to keep the blobs horizontal at any viewport. */
   background-image:
-    radial-gradient(35% 48% at 30% 32%, color-mix(in oklab, var(--teal) 40%, transparent), transparent 60%),
-    radial-gradient(38% 34% at 72% 70%, color-mix(in oklab, var(--pine) 55%, transparent), transparent 60%);
+    radial-gradient(54% 26% at 0% 36%, color-mix(in oklab, var(--teal) 38%, transparent), transparent 70%),
+    radial-gradient(54% 26% at 100% 36%, color-mix(in oklab, var(--teal) 38%, transparent), transparent 70%),
+    radial-gradient(56% 22% at 0% 66%, color-mix(in oklab, var(--pine) 50%, transparent), transparent 70%),
+    radial-gradient(56% 22% at 100% 66%, color-mix(in oklab, var(--pine) 50%, transparent), transparent 70%);
   background-repeat: repeat;
-  background-size: 64vw 100%;
+  background-size:
+    74vw 100%, 74vw 100%,
+    57vw 100%, 57vw 100%;
   background-position: var(--glow-x, 0) center;
   transition: background-position var(--swipe);
   will-change: background-position;
@@ -49,6 +59,46 @@
   color: var(--dark-soft);
   margin: 0 0 clamp(2rem, 5vw, 3rem);
   max-width: 48ch;
+}
+
+/* filmstrip row: scroll arrows flank the scrollable strip so mouse users
+   (no horizontal wheel) can page through the cards. */
+.filmRow {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1.4rem;
+}
+
+.scrollBtn {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid color-mix(in oklab, var(--dark-soft) 30%, transparent);
+  background: color-mix(in oklab, var(--dark) 55%, #000);
+  color: var(--dark-ink);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 160ms ease, color 160ms ease, opacity 160ms ease;
+}
+
+.scrollBtn:hover:not(:disabled) {
+  border-color: var(--teal);
+  color: var(--teal-bright);
+}
+
+.scrollBtn:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
+.scrollBtn:disabled {
+  opacity: 0.3;
+  cursor: default;
 }
 
 /* ---- film viewport + sliding track ---- */
@@ -178,15 +228,26 @@
   border-radius: 3px;
 }
 
-/* ---- filmstrip ---- */
+/* ---- filmstrip: a single horizontally-scrolling row (scales to any count) ---- */
 .film {
+  flex: 1 1 auto;
+  min-width: 0; /* let the flex child shrink so it actually scrolls */
   display: flex;
   gap: 0.9rem;
-  margin-top: 1.4rem;
-  flex-wrap: wrap;
+  /* room so the hover lift + focus ring aren't clipped by the scroll overflow */
+  padding: 6px 2px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+.film::-webkit-scrollbar {
+  display: none;
 }
 
 .thumb {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
   cursor: pointer;
   padding: 0;
   border-radius: 10px;
@@ -292,9 +353,25 @@
 
 /* Mobile compaction. Placed LAST so its overrides win over the base rules
    above (media queries add no specificity — source order decides ties). */
+/* tablet: a wider tile keeps the blobs horizontal as the viewport narrows */
+@media (max-width: 64em) {
+  .glow {
+    background-size:
+      98vw 100%, 98vw 100%,
+      75vw 100%, 75vw 100%;
+  }
+}
+
 @media (max-width: 48em) {
   .proof {
     padding-block: clamp(1.5rem, 4.5vh, 2.25rem);
+  }
+
+  /* phone: widen the tile most so the short blobs stay horizontal smears */
+  .glow {
+    background-size:
+      132vw 100%, 132vw 100%,
+      102vw 100%, 102vw 100%;
   }
 
   .sub {
@@ -350,31 +427,30 @@
     margin-top: 0.85rem;
   }
 
-  /* filmstrip collapses to compact name chips — the spotlight already shows
-     the active site, so the big video thumbnails are redundant on mobile. */
-  .film {
+  /* still a real strip of preview cards on mobile — just scaled down.
+     Scroll arrows hidden here; native touch-swipe is the affordance. */
+  .filmRow {
     margin-top: 1.1rem;
-    gap: 0.5rem;
   }
 
-  .thumb {
-    width: auto;
-    border-radius: 999px;
-    border-width: 1px;
-  }
-
-  .tbar,
-  .tshot,
-  .ttag {
+  .scrollBtn {
     display: none;
   }
 
-  .tmeta {
-    padding: 0.4rem 0.85rem;
+  .film {
+    gap: 0.6rem;
+  }
+
+  .thumb {
+    width: 124px;
   }
 
   .tname {
-    font-size: 0.85rem;
+    font-size: 0.76rem;
+  }
+
+  .ttag {
+    font-size: 0.62rem;
   }
 
   .apps {

@@ -1,11 +1,11 @@
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { testimonials } from "../../content/testimonials";
 import styles from "./Proof.module.css";
 
 // How far the glow drifts per swipe (px). The glow is an infinitely repeated
 // pattern, so the value can accumulate unbounded without ever exposing an edge.
-const GLOW_STEP = 180;
+const GLOW_STEP = 240;
 
 function hostOf(url: string): string {
   try {
@@ -37,6 +37,46 @@ export function Proof() {
   // section compact. No effect on desktop (the clamp/button are display:none).
   const [expanded, setExpanded] = useState(false);
   const reduceMotion = usePrefersReducedMotion();
+  const filmRef = useRef<HTMLDivElement>(null);
+  // Whether the filmstrip overflows, and which scroll-arrows are live.
+  const [scroll, setScroll] = useState({ overflows: false, atStart: true, atEnd: false });
+
+  const syncScroll = () => {
+    const el = filmRef.current;
+    if (!el) return;
+    const max = el.scrollWidth - el.clientWidth;
+    setScroll({
+      overflows: max > 2,
+      atStart: el.scrollLeft <= 2,
+      atEnd: el.scrollLeft >= max - 2,
+    });
+  };
+
+  function scrollFilm(direction: number) {
+    const el = filmRef.current;
+    if (!el || typeof el.scrollBy !== "function") return;
+    el.scrollBy({ left: direction * el.clientWidth * 0.8, behavior: reduceMotion ? "auto" : "smooth" });
+  }
+
+  // Track overflow on mount and on resize so the arrows show only when needed.
+  useEffect(() => {
+    syncScroll();
+    if (typeof window === "undefined") return;
+    window.addEventListener("resize", syncScroll);
+    return () => window.removeEventListener("resize", syncScroll);
+  }, []);
+
+  // Keep the active client centered in the horizontally-scrolling filmstrip.
+  useEffect(() => {
+    const film = filmRef.current;
+    const el = film?.children[active] as HTMLElement | undefined;
+    if (!film || !el || typeof film.scrollTo !== "function") return;
+    const offset = el.getBoundingClientRect().left - film.getBoundingClientRect().left;
+    film.scrollTo({
+      left: film.scrollLeft + offset - (film.clientWidth - el.clientWidth) / 2,
+      behavior: reduceMotion ? "auto" : "smooth",
+    });
+  }, [active, reduceMotion]);
 
   function select(index: number) {
     if (index === active) return;
@@ -150,8 +190,26 @@ export function Proof() {
           </div>
         </div>
 
-        <div className={styles.film} role="group" aria-label="Clients">
-          {testimonials.map((t, i) => (
+        <div className={styles.filmRow}>
+          {scroll.overflows && (
+            <button
+              type="button"
+              className={`${styles.scrollBtn} ${styles.scrollPrev}`}
+              onClick={() => scrollFilm(-1)}
+              disabled={scroll.atStart}
+              aria-label="Scroll clients left"
+            >
+              <span aria-hidden="true">&lsaquo;</span>
+            </button>
+          )}
+          <div
+            className={styles.film}
+            role="group"
+            aria-label="Clients"
+            ref={filmRef}
+            onScroll={syncScroll}
+          >
+            {testimonials.map((t, i) => (
             <button
               type="button"
               key={t.id}
@@ -178,6 +236,18 @@ export function Proof() {
               </span>
             </button>
           ))}
+          </div>
+          {scroll.overflows && (
+            <button
+              type="button"
+              className={`${styles.scrollBtn} ${styles.scrollNext}`}
+              onClick={() => scrollFilm(1)}
+              disabled={scroll.atEnd}
+              aria-label="Scroll clients right"
+            >
+              <span aria-hidden="true">&rsaquo;</span>
+            </button>
+          )}
         </div>
       </div>
 
