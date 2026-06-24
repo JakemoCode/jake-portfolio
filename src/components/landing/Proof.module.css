@@ -33,7 +33,21 @@
   background-size:
     74vw 100%, 74vw 100%,
     57vw 100%, 57vw 100%;
-  background-position: var(--glow-x, 0) center;
+  /* px the blobs drift per swipe; smaller on mobile (set in the media query) */
+  --glow-step: 240px;
+  background-position: calc(var(--glow-steps, 0) * var(--glow-step)) center;
+  /* a fixed brightness wave the blobs drift THROUGH, so they brighten and dim
+     by position instead of rigidly translating in lockstep with the panel */
+  --glow-mask: linear-gradient(
+    95deg,
+    rgba(0, 0, 0, 0.6),
+    rgba(0, 0, 0, 1) 30%,
+    rgba(0, 0, 0, 0.64) 56%,
+    rgba(0, 0, 0, 1) 82%,
+    rgba(0, 0, 0, 0.6)
+  );
+  -webkit-mask-image: var(--glow-mask);
+  mask-image: var(--glow-mask);
   transition: background-position var(--swipe);
   will-change: background-position;
 }
@@ -369,6 +383,8 @@
 
   /* phone: widen the tile most so the short blobs stay horizontal smears */
   .glow {
+    /* 25% less drift on mobile so it doesn't track the panel in lockstep */
+    --glow-step: 180px;
     background-size:
       132vw 100%, 132vw 100%,
       102vw 100%, 102vw 100%;

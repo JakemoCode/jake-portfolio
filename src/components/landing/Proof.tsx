@@ -3,10 +3,6 @@ import { Link } from "react-router-dom";
 import { testimonials } from "../../content/testimonials";
 import styles from "./Proof.module.css";
 
-// How far the glow drifts per swipe (px). The glow is an infinitely repeated
-// pattern, so the value can accumulate unbounded without ever exposing an edge.
-const GLOW_STEP = 240;
-
 function hostOf(url: string): string {
   try {
     return new URL(url).hostname.replace(/^www\./, "");
@@ -30,9 +26,10 @@ function usePrefersReducedMotion(): boolean {
 
 export function Proof() {
   const [active, setActive] = useState(0);
-  // Drift offset for the glow. Same sign as the film's travel so the blobs
-  // move with the swipe; wraps for free because the glow pattern repeats.
-  const [glowX, setGlowX] = useState(0);
+  // Drift step count for the glow (±1 per swipe). The px distance per step is
+  // a CSS var, so it can differ per breakpoint; the repeating pattern means the
+  // count can accumulate unbounded without ever exposing an edge.
+  const [glowSteps, setGlowSteps] = useState(0);
   // Mobile only: the long quote is clamped behind "Read more" to keep the
   // section compact. No effect on desktop (the clamp/button are display:none).
   const [expanded, setExpanded] = useState(false);
@@ -82,7 +79,7 @@ export function Proof() {
     if (index === active) return;
     const direction = Math.sign(index - active);
     setActive(index);
-    setGlowX((x) => x - direction * GLOW_STEP);
+    setGlowSteps((s) => s - direction);
     setExpanded(false);
   }
 
@@ -91,7 +88,7 @@ export function Proof() {
       <div
         className={styles.glow}
         aria-hidden="true"
-        style={{ "--glow-x": `${glowX}px` } as CSSProperties}
+        style={{ "--glow-steps": glowSteps } as CSSProperties}
       />
 
       <div className={styles.inner}>
