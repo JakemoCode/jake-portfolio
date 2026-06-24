@@ -1,5 +1,6 @@
 .section {
-  padding-block: clamp(3.5rem, 9vh, 6.5rem);
+
+  padding-block: clamp(var(--spacing-4xl), 9vh, var(--spacing-6xl));
 }
 
 .inner {
@@ -7,184 +8,189 @@
   margin: 0 auto;
   padding-inline: var(--gutter);
   display: grid;
-  gap: clamp(2rem, 5vw, 4rem);
+  gap: clamp(var(--spacing-2xl), 5vw, var(--spacing-5xl));
   grid-template-columns: 1fr;
   align-items: start;
 }
 
-@media (min-width: 820px) {
+@media (min-width: 51.25em) {
   .inner {
     grid-template-columns: 0.9fr 1.1fr;
   }
 }
 
 .avatar {
-  width: clamp(92px, 12vw, 120px);
+  --avatar-min: 92px;   /* avatar min-width; px = crisp at small screens — see header */
+  --avatar-max: 120px;  /* avatar max-width; px = crisp — see header */
+  --avatar-shadow: 0 10px 28px -16px rgba(19, 32, 28, 0.4); /* bespoke depth; no --shadow-* rung */
+  --border-avatar: 3px; /* avatar ring; no --border-width-thick rung yet — see header */
+  width: clamp(var(--avatar-min), 12vw, var(--avatar-max));
   aspect-ratio: 1;
   object-fit: cover;
   object-position: 50% 28%;
-  border-radius: 50%;
-  border: 3px solid var(--paper-raised);
-  box-shadow: 0 10px 28px -16px rgba(19, 32, 28, 0.4);
-  margin-bottom: 1.5rem;
+  border-radius: 50%; /* intentional: perfect circle */
+  border: var(--border-avatar) solid var(--color-bg-elevated);
+  box-shadow: var(--avatar-shadow);
+  margin-bottom: var(--spacing-xl);
 }
 
 .title {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-h2);
   letter-spacing: -0.03em;
-  color: var(--ink);
+  color: var(--color-text);
   text-wrap: balance;
 }
 
 .lede {
-  margin-top: 1rem;
+  margin-top: var(--spacing-md);
   max-width: 38ch;
-  color: var(--ink-soft);
-  font-size: 1.1rem;
-  line-height: 1.6;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-body);
 }
 
 .direct {
-  margin-top: 1.5rem;
-  color: var(--ink-soft);
+  margin-top: var(--spacing-xl);
+  color: var(--color-text-muted);
 }
 
 .email {
-  font-weight: 600;
-  color: var(--pine);
-  border-bottom: 2px solid color-mix(in oklab, var(--teal) 40%, transparent);
-  padding-bottom: 1px;
-  transition: color 160ms ease, border-color 160ms ease;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent-pine);
+  border-bottom: 2px solid color-mix(in oklab, var(--color-accent) 40%, transparent); /* 2px: intentional decorative underline */
+  padding-bottom: 1px; /* intentional px: sub-pixel underline gap */
+  transition: color var(--duration-fast) ease, border-color var(--duration-fast) ease; /* var(--duration-fast) = --dur-medium; no global token yet */
 }
 
 .email:hover {
-  color: var(--teal-deep);
-  border-bottom-color: var(--teal);
+  color: var(--color-accent-deep);
+  border-bottom-color: var(--color-accent);
 }
 
 .email:focus-visible {
-  outline: 2px solid var(--teal-deep);
-  outline-offset: 2px;
-  border-radius: 3px;
+  outline: 2px solid var(--color-accent-deep); /* 2px: intentional outline width */
+  outline-offset: 2px; /* px intentional: outline-offset */
+  border-radius: var(--radius-sm);
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: var(--spacing-md);
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: var(--spacing-xs);
 }
 
 .field label {
-  font-weight: 600;
-  font-size: 0.95rem;
-  color: var(--ink);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
 }
 
 .field input,
 .field textarea {
   font-family: var(--font-body);
-  font-size: 1rem;
-  color: var(--ink);
-  background: var(--paper-raised);
-  border: 1px solid var(--border-strong);
-  border-radius: 10px;
-  padding: 0.75rem 0.9rem;
-  transition: border-color 140ms ease, box-shadow 140ms ease;
+  font-size: var(--font-size-base);
+  color: var(--color-text);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-strong); /* 1px: intentional hairline border */
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-sm) var(--spacing-sm);
+  transition: border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
 }
 
 .field textarea {
   resize: vertical;
-  min-height: 7rem;
+  --field-min-h: 7rem; /* component-specific control height; 7rem has no spacing rung */
+  min-height: var(--field-min-h);
 }
 
 .field input::placeholder,
 .field textarea::placeholder {
-  color: var(--ink-mute);
+  color: var(--color-text-subtle);
 }
 
 .field input:focus-visible,
 .field textarea:focus-visible {
   outline: none;
-  border-color: var(--teal-deep);
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--teal) 22%, transparent);
+  border-color: var(--color-accent-deep);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--color-accent) 22%, transparent); /* 3px: intentional focus ring spread */
 }
 
 .field input[aria-invalid="true"],
 .field textarea[aria-invalid="true"] {
-  border-color: var(--rust-deep);
+  border-color: var(--color-cta-hover);
 }
 
 .err {
-  color: var(--rust-deep);
-  font-size: 0.875rem;
-  font-weight: 500;
+  color: var(--color-cta-hover);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
 }
 
 .submit {
   align-self: start;
-  margin-top: 0.5rem;
-  background: var(--rust-soft);
-  color: var(--ink);
+  margin-top: var(--spacing-xs);
+  background: var(--color-cta);
+  color: var(--color-text);
   font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 1.05rem;
-  padding: 0.85rem 1.6rem;
-  border-radius: 12px;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-base);
+  padding: var(--spacing-sm) var(--spacing-xl);
+  border-radius: var(--radius-lg);
   transition:
-    background-color 220ms ease,
-    color 220ms ease,
-    transform 160ms var(--ease-out-quint);
+    background-color var(--duration-medium) ease, /* var(--duration-medium): expressive hover; no token rung */
+    color var(--duration-medium) ease,
+    transform var(--duration-fast) var(--ease-out-quint); /* var(--duration-fast) = --dur-medium; no global token yet */
 }
 
 .submit:hover {
-  background: var(--rust-deep);
-  color: #fff;
-  transform: translateY(-2px);
+  background: var(--color-cta-hover);
+  color: var(--color-bg-elevated); /* #fff equivalent; --color-bg-elevated is white on light theme */
+  transform: translateY(-2px); /* intentional: transform translate offset */
 }
 
 .submit:focus-visible {
-  outline: 2px solid var(--rust-deep);
-  outline-offset: 3px;
+  outline: 2px solid var(--color-cta-hover); /* 2px: intentional outline width */
+  outline-offset: 3px; /* px intentional: outline-offset */
 }
 
 /* Tactile press: springs inward on tap/click. */
 .submit:active:not(:disabled) {
-  transform: scale(0.97);
+  transform: scale(0.97); /* intentional: transform scale */
 }
 
 .submit:disabled {
-  opacity: 0.65;
+  opacity: 0.65; /* intentional: opacity */
   cursor: progress;
   transform: none;
 }
 
 .formError {
-  color: var(--rust-deep);
-  font-weight: 500;
-  line-height: 1.5;
+  color: var(--color-cta-hover);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-snug);
 }
 
 .success {
-  background: var(--surface);
-  border: 1px solid var(--border-strong);
-  border-radius: 14px;
-  padding: clamp(1.5rem, 4vw, 2.25rem);
-  line-height: 1.6;
-  color: var(--ink-soft);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong); /* 1px: intentional hairline border */
+  border-radius: var(--radius-lg);
+  padding: clamp(var(--spacing-xl), 4vw, var(--spacing-2xl));
+  line-height: var(--line-height-body);
+  color: var(--color-text-muted);
 }
 
 .successTitle {
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.3rem;
-  color: var(--ink);
-  margin-bottom: 0.5rem;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-lg);
+  color: var(--color-text);
+  margin-bottom: var(--spacing-xs);
 }

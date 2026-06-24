@@ -1,23 +1,30 @@
+/* Component-scoped tokens — intentional fixed sizes with no global rung */
 .card {
+  --radius-phone-frame: 18px;        /* phone bezel corner; above --radius-xl (16px) */
+  --pad-phone-bezel: 6px;            /* narrow bezel padding; sub-rem intentional */
+  --shadow-phone: 0 6px 24px rgba(0, 0, 0, 0.12); /* phone card depth */
+  --tap-target: 44px;                /* minimum touch target (Fitts's law) */
+  --font-size-project-name-max: 2rem; /* project name clamp max; above --font-size-xl (1.5rem) */
+
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-6);
-  padding: var(--space-6);
+  gap: var(--spacing-2xl);
+  padding: var(--spacing-2xl);
   background: var(--color-bg-elevated);
-  border: 1px solid var(--color-border);
+  border: var(--border-width-thin) solid var(--color-border);
   border-radius: var(--radius-lg);
-  transition: border-color var(--transition-base), transform var(--transition-base);
+  transition: border-color var(--duration-base) ease, transform var(--duration-base) ease;
 }
 
 .card:hover {
   border-color: var(--color-border-strong);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48em) {
   .card {
     grid-template-columns: 5fr 7fr;
-    gap: var(--space-7);
-    padding: var(--space-7);
+    gap: var(--spacing-4xl);
+    padding: var(--spacing-4xl);
   }
 }
 
@@ -25,7 +32,7 @@
   position: relative;
   aspect-ratio: 4 / 3;
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: var(--border-width-thin) solid var(--color-border);
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
@@ -40,12 +47,12 @@
 
 .mediaPhone {
   aspect-ratio: 2 / 3;
-  padding: var(--space-5);
+  padding: var(--spacing-xl);
 }
 
 .mediaLabel {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: var(--font-size-3xs);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--color-text-subtle);
@@ -62,9 +69,9 @@
   height: 100%;
   aspect-ratio: 9 / 19.5;
   background: var(--color-text);
-  border-radius: 18px;
-  padding: 6px;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+  border-radius: var(--radius-phone-frame);
+  padding: var(--pad-phone-bezel);
+  box-shadow: var(--shadow-phone);
   overflow: hidden;
 }
 
@@ -72,65 +79,65 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   display: block;
 }
 
 .body {
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
+  gap: var(--spacing-xl);
 }
 
 .header {
   display: flex;
   align-items: baseline;
-  gap: var(--space-3);
+  gap: var(--spacing-sm);
   flex-wrap: wrap;
 }
 
 .name {
-  font-size: clamp(1.5rem, 2.5vw, 2rem);
-  font-weight: 500;
+  font-size: clamp(var(--font-size-xl), 2.5vw, var(--font-size-project-name-max));
+  font-weight: var(--font-weight-medium);
 }
 
 .badge {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
+  font-size: var(--font-size-3xs);
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--color-badge-text);
   background: var(--color-badge-bg);
-  padding: var(--space-1) var(--space-3);
-  border-radius: 999px;
+  padding: var(--spacing-2xs) var(--spacing-sm);
+  border-radius: var(--radius-pill);
 }
 
 .summary {
   font-family: var(--font-serif);
-  font-size: 1.125rem;
+  font-size: var(--font-size-md);
   font-style: italic;
-  line-height: 1.5;
+  line-height: var(--line-height-snug);
   color: var(--color-text-muted);
 }
 
 .section {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  gap: var(--spacing-xs);
 }
 
 .sectionHeading {
   font-family: var(--font-mono);
-  font-size: 0.7rem;
-  font-weight: 500;
+  font-size: var(--font-size-3xs);
+  font-weight: var(--font-weight-medium);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--color-text-subtle);
 }
 
 .sectionBody {
-  font-size: 0.9375rem;
-  line-height: 1.65;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-body);
   color: var(--color-text);
 }
 
@@ -140,38 +147,38 @@
   margin: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-2);
+  gap: var(--spacing-xs);
 }
 
 .tech {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  padding: var(--space-1) var(--space-3);
+  font-size: var(--font-size-2xs);
+  padding: var(--spacing-2xs) var(--spacing-sm);
   background: var(--color-surface);
   color: var(--color-text-muted);
   border-radius: var(--radius-sm);
-  border: 1px solid var(--color-border);
+  border: var(--border-width-thin) solid var(--color-border);
 }
 
 .links {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-5);
-  margin-top: var(--space-2);
-  padding-top: var(--space-5);
-  border-top: 1px solid var(--color-border);
+  gap: var(--spacing-xl);
+  margin-top: var(--spacing-xs);
+  padding-top: var(--spacing-xl);
+  border-top: var(--border-width-thin) solid var(--color-border);
 }
 
 .linkPrimary {
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   color: var(--color-accent);
 }
 
 .linkSecondary {
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   color: var(--color-text);
-  border-bottom: 1px solid var(--color-border-strong);
-  padding-bottom: 2px;
+  border-bottom: var(--border-width-thin) solid var(--color-border-strong);
+  padding-bottom: var(--spacing-3xs);
 }
 
 .linkSecondary:hover {
@@ -180,14 +187,14 @@
 }
 
 .linkDisabled {
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   color: var(--color-text-subtle);
   cursor: not-allowed;
   font-style: italic;
 }
 
 /* Grow tap targets to 44px on touch without altering the visual (Fitts's). */
-@media (pointer: coarse), (max-width: 640px) {
+@media (pointer: coarse), (max-width: 40em) {
   .linkPrimary,
   .linkSecondary {
     position: relative;
@@ -200,6 +207,6 @@
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-    height: 44px;
+    height: var(--tap-target);
   }
 }

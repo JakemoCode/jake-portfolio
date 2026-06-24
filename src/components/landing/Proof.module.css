@@ -4,9 +4,9 @@
   --swipe: 620ms cubic-bezier(0.7, 0, 0.18, 1);
 
   position: relative;
-  background: var(--dark);
-  color: var(--dark-ink);
-  padding-block: clamp(4rem, 11vh, 8rem);
+  background: var(--color-surface-dark);
+  color: var(--color-on-dark);
+  padding-block: clamp(var(--spacing-5xl), 11vh, var(--spacing-7xl));
   overflow: hidden;
 }
 
@@ -16,7 +16,7 @@
 .glow {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: var(--z-base);
   pointer-events: none;
   /* One distinct blob per colour per tile, placed as halves at 0% and 100%
      (same height) so each tile's edge blob pairs with the next tile's across
@@ -25,11 +25,12 @@
      pine tiles use different widths so the two never line up. Tile WIDTH is
      tuned per breakpoint below to keep the blobs horizontal at any viewport. */
   background-image:
-    radial-gradient(54% 26% at 0% 36%, color-mix(in oklab, var(--teal) 38%, transparent), transparent 70%),
-    radial-gradient(54% 26% at 100% 36%, color-mix(in oklab, var(--teal) 38%, transparent), transparent 70%),
-    radial-gradient(56% 22% at 0% 66%, color-mix(in oklab, var(--pine) 50%, transparent), transparent 70%),
-    radial-gradient(56% 22% at 100% 66%, color-mix(in oklab, var(--pine) 50%, transparent), transparent 70%);
+    radial-gradient(54% 26% at 0% 36%, color-mix(in oklab, var(--color-accent) 38%, transparent), transparent 70%),
+    radial-gradient(54% 26% at 100% 36%, color-mix(in oklab, var(--color-accent) 38%, transparent), transparent 70%),
+    radial-gradient(56% 22% at 0% 66%, color-mix(in oklab, var(--color-accent-pine) 50%, transparent), transparent 70%),
+    radial-gradient(56% 22% at 100% 66%, color-mix(in oklab, var(--color-accent-pine) 50%, transparent), transparent 70%);
   background-repeat: repeat;
+  /* tile widths are viewport-tied by intent (vw), tuned per breakpoint below */
   background-size:
     74vw 100%, 74vw 100%,
     57vw 100%, 57vw 100%;
@@ -54,7 +55,7 @@
 
 .inner {
   position: relative;
-  z-index: 1;
+  z-index: var(--z-raised);
   max-width: var(--maxw);
   margin: 0 auto;
   padding-inline: var(--gutter);
@@ -62,16 +63,16 @@
 
 .title {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(1.9rem, 3.5vw, 2.75rem);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-h2);
   letter-spacing: -0.025em;
-  color: var(--dark-ink);
-  margin: 0 0 0.4rem;
+  color: var(--color-on-dark);
+  margin: 0 0 var(--spacing-xs);
 }
 
 .sub {
-  color: var(--dark-soft);
-  margin: 0 0 clamp(2rem, 5vw, 3rem);
+  color: var(--color-on-dark-muted);
+  margin: 0 0 clamp(var(--spacing-2xl), 5vw, var(--spacing-4xl));
   max-width: 48ch;
 }
 
@@ -80,33 +81,35 @@
 .filmRow {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  margin-top: 1.4rem;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-xl);
 }
 
 .scrollBtn {
   flex: 0 0 auto;
-  width: 40px;
-  height: 40px;
+  /* 2.5rem ≈ a 40px control; rem so the target scales with the user's font */
+  width: var(--spacing-3xl);
+  height: var(--spacing-3xl);
   display: grid;
   place-items: center;
   border-radius: 50%;
-  border: 1px solid color-mix(in oklab, var(--dark-soft) 30%, transparent);
-  background: color-mix(in oklab, var(--dark) 55%, #000);
-  color: var(--dark-ink);
-  font-size: 1.5rem;
-  line-height: 1;
+  border: var(--border-width-thin) solid color-mix(in oklab, var(--color-on-dark-muted) 30%, transparent);
+  background: color-mix(in oklab, var(--color-surface-dark) 55%, var(--color-black));
+  color: var(--color-on-dark);
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-none);
   cursor: pointer;
-  transition: border-color 160ms ease, color 160ms ease, opacity 160ms ease;
+  transition: border-color var(--duration-fast) ease, color var(--duration-fast) ease,
+    opacity var(--duration-fast) ease;
 }
 
 .scrollBtn:hover:not(:disabled) {
-  border-color: var(--teal);
-  color: var(--teal-bright);
+  border-color: var(--color-accent);
+  color: var(--color-accent-bright);
 }
 
 .scrollBtn:focus-visible {
-  outline: 2px solid var(--teal);
+  outline: var(--border-width-thick) solid var(--color-accent);
   outline-offset: 2px;
 }
 
@@ -131,41 +134,45 @@
   margin: 0;
   display: grid;
   grid-template-columns: 1.05fr 1fr;
-  gap: clamp(1.5rem, 4vw, 3rem);
+  gap: clamp(var(--spacing-xl), 4vw, var(--spacing-4xl));
   /* top-anchor: frame and quote share a top edge regardless of quote length */
   align-items: start;
 }
 
 /* ---- preview card (browser frame) ---- */
 .frame {
+  /* component-local sizes: traffic-light dot (intrinsic chrome px) and the
+     contained preview width used on mobile */
+  --dot: 10px;
+  --frame-max: 14rem;
   margin: 0;
-  border-radius: 14px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  border: 1px solid color-mix(in oklab, var(--dark-soft) 25%, transparent);
-  background: color-mix(in oklab, var(--dark) 70%, #000);
-  box-shadow: 0 24px 60px -28px rgba(0, 0, 0, 0.7);
+  border: var(--border-width-thin) solid color-mix(in oklab, var(--color-on-dark-muted) 25%, transparent);
+  background: color-mix(in oklab, var(--color-surface-dark) 70%, var(--color-black));
+  box-shadow: var(--shadow-lg);
 }
 
 .bar {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.55rem 0.8rem;
-  background: var(--dark-2);
-  border-bottom: 1px solid color-mix(in oklab, var(--dark-soft) 18%, transparent);
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  background: var(--color-surface-dark-2);
+  border-bottom: var(--border-width-thin) solid color-mix(in oklab, var(--color-on-dark-muted) 18%, transparent);
 }
 
 .dot {
-  width: 10px;
-  height: 10px;
+  width: var(--dot);
+  height: var(--dot);
   border-radius: 50%;
-  background: color-mix(in oklab, var(--dark-soft) 35%, transparent);
+  background: color-mix(in oklab, var(--color-on-dark-muted) 35%, transparent);
 }
 
 .url {
-  margin-left: 0.6rem;
-  font-size: 0.72rem;
-  color: var(--dark-soft);
+  margin-left: var(--spacing-xs);
+  font-size: var(--font-size-2xs);
+  color: var(--color-on-dark-muted);
   letter-spacing: 0.01em;
 }
 
@@ -174,25 +181,25 @@
   width: 100%;
   aspect-ratio: 16 / 10;
   object-fit: cover;
-  background: var(--dark-2);
+  background: var(--color-surface-dark-2);
 }
 
 .stack {
-  margin: 0.8rem 0 0;
-  color: var(--dark-soft);
-  font-size: 0.85rem;
+  margin: var(--spacing-sm) 0 0;
+  color: var(--color-on-dark-muted);
+  font-size: var(--font-size-sm);
 }
 
 .tech {
-  color: var(--teal-bright);
-  font-weight: 600;
+  color: var(--color-accent-bright);
+  font-weight: var(--font-weight-semibold);
 }
 
 .quote {
   margin: 0;
-  font-size: clamp(1.05rem, 1.5vw, 1.28rem);
-  line-height: 1.55;
-  color: var(--dark-ink);
+  font-size: var(--font-size-lead);
+  line-height: var(--line-height-body);
+  color: var(--color-on-dark);
   letter-spacing: 0.002em;
 }
 
@@ -202,44 +209,44 @@
 }
 
 .cite {
-  margin-top: 1.25rem;
+  margin-top: var(--spacing-lg);
   display: flex;
   flex-direction: column;
-  gap: 0.12rem;
+  gap: var(--spacing-3xs);
 }
 
 .name {
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.05rem;
-  color: #fff;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-base);
+  color: var(--color-white);
 }
 
 .role {
-  color: var(--dark-soft);
-  font-size: 0.95rem;
+  color: var(--color-on-dark-muted);
+  font-size: var(--font-size-sm);
 }
 
 .live {
-  margin-top: 0.9rem;
+  margin-top: var(--spacing-md);
   align-self: start;
-  font-weight: 600;
-  color: var(--teal);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent);
   text-decoration: none;
-  border-bottom: 2px solid color-mix(in oklab, var(--teal) 45%, transparent);
-  padding-bottom: 2px;
-  transition: border-color 160ms ease, color 160ms ease;
+  border-bottom: var(--border-width-thick) solid color-mix(in oklab, var(--color-accent) 45%, transparent);
+  padding-bottom: var(--spacing-3xs);
+  transition: border-color var(--duration-fast) ease, color var(--duration-fast) ease;
 }
 
 .live:hover {
-  color: var(--teal-bright);
-  border-bottom-color: var(--teal);
+  color: var(--color-accent-bright);
+  border-bottom-color: var(--color-accent);
 }
 
 .live:focus-visible {
-  outline: 2px solid var(--teal);
+  outline: var(--border-width-thick) solid var(--color-accent);
   outline-offset: 3px;
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
 }
 
 /* ---- filmstrip: a single horizontally-scrolling row (scales to any count) ---- */
@@ -247,9 +254,9 @@
   flex: 1 1 auto;
   min-width: 0; /* let the flex child shrink so it actually scrolls */
   display: flex;
-  gap: 0.9rem;
+  gap: var(--spacing-sm);
   /* room so the hover lift + focus ring aren't clipped by the scroll overflow */
-  padding: 6px 2px;
+  padding: var(--spacing-2xs) var(--spacing-3xs);
   overflow-x: auto;
   scroll-snap-type: x proximity;
   scrollbar-width: none;
@@ -260,19 +267,21 @@
 }
 
 .thumb {
+  /* fixed card width; rem so it scales with the user's font */
+  --thumb-w: 9.875rem;
   flex: 0 0 auto;
   scroll-snap-align: start;
   cursor: pointer;
   padding: 0;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   overflow: hidden;
-  border: 2px solid transparent;
-  background: color-mix(in oklab, var(--dark) 70%, #000);
-  width: 158px;
+  border: var(--border-width-thick) solid transparent;
+  background: color-mix(in oklab, var(--color-surface-dark) 70%, var(--color-black));
+  width: var(--thumb-w);
   text-align: left;
   color: inherit;
   font: inherit;
-  transition: border-color 180ms ease, transform 180ms ease;
+  transition: border-color var(--duration-fast) ease, transform var(--duration-fast) ease;
 }
 
 .thumb:hover {
@@ -280,82 +289,83 @@
 }
 
 .thumb[aria-pressed="true"] {
-  border-color: var(--teal);
+  border-color: var(--color-accent);
 }
 
 .thumb:focus-visible {
-  outline: 2px solid var(--teal);
+  outline: var(--border-width-thick) solid var(--color-accent);
   outline-offset: 2px;
 }
 
 .tbar {
-  height: 16px;
-  background: var(--dark-2);
+  height: var(--spacing-md); /* intrinsic mini-chrome bar */
+  background: var(--color-surface-dark-2);
   display: flex;
   align-items: center;
-  gap: 3px;
-  padding-left: 6px;
+  gap: var(--spacing-3xs); /* intrinsic chrome spacing between the mini traffic-lights */
+  padding-left: var(--spacing-2xs);
 }
 
 .tbar .dot {
-  width: 5px;
-  height: 5px;
+  /* half the frame's dot — intrinsic chrome */
+  width: var(--spacing-2xs);
+  height: var(--spacing-2xs);
 }
 
 .tshot {
   display: block;
   aspect-ratio: 16 / 9;
-  background-color: var(--dark-2);
+  background-color: var(--color-surface-dark-2);
   background-size: cover;
   background-position: center top;
 }
 
 .tmeta {
   display: block;
-  padding: 0.45rem 0.55rem;
+  padding: var(--spacing-xs);
 }
 
 .tname {
   display: block;
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 0.8rem;
-  color: #fff;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xs);
+  color: var(--color-white);
 }
 
 .ttag {
   display: block;
-  font-size: 0.68rem;
-  color: var(--dark-soft);
+  font-size: var(--font-size-3xs);
+  color: var(--color-on-dark-muted);
 }
 
 .apps {
   position: relative;
-  z-index: 1;
+  z-index: var(--z-raised);
   max-width: var(--maxw);
-  margin: clamp(2rem, 5vw, 3rem) auto 0;
+  margin: clamp(var(--spacing-2xl), 5vw, var(--spacing-4xl)) auto 0;
   padding-inline: var(--gutter);
-  color: var(--dark-soft);
-  font-size: 0.95rem;
+  color: var(--color-on-dark-muted);
+  font-size: var(--font-size-sm);
 }
 
 .appsLink {
-  color: var(--teal);
+  color: var(--color-accent);
   text-decoration: none;
-  border-bottom: 1px solid color-mix(in oklab, var(--teal) 40%, transparent);
-  padding-bottom: 1px;
-  transition: border-color 160ms ease, color 160ms ease;
+  border-bottom: var(--border-width-thin) solid color-mix(in oklab, var(--color-accent) 40%, transparent);
+  padding-bottom: var(--spacing-3xs);
+  transition: border-color var(--duration-fast) ease, color var(--duration-fast) ease;
 }
 
 .appsLink:hover {
-  color: var(--teal-bright);
-  border-bottom-color: var(--teal);
+  color: var(--color-accent-bright);
+  border-bottom-color: var(--color-accent);
 }
 
 .appsLink:focus-visible {
-  outline: 2px solid var(--teal);
+  outline: var(--border-width-thick) solid var(--color-accent);
   outline-offset: 3px;
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -365,8 +375,6 @@
   }
 }
 
-/* Mobile compaction. Placed LAST so its overrides win over the base rules
-   above (media queries add no specificity — source order decides ties). */
 /* tablet: a wider tile keeps the blobs horizontal as the viewport narrows */
 @media (max-width: 64em) {
   .glow {
@@ -376,14 +384,16 @@
   }
 }
 
+/* Mobile compaction. Placed LAST so its overrides win over the base rules
+   above (media queries add no specificity — source order decides ties). */
 @media (max-width: 48em) {
   .proof {
-    padding-block: clamp(1.5rem, 4.5vh, 2.25rem);
+    padding-block: clamp(var(--spacing-xl), 4.5vh, var(--spacing-2xl));
   }
 
-  /* phone: widen the tile most so the short blobs stay horizontal smears */
+  /* phone: widen the tile most so the short blobs stay horizontal smears,
+     and drift 25% less so the glow doesn't track the panel in lockstep */
   .glow {
-    /* 25% less drift on mobile so it doesn't track the panel in lockstep */
     --glow-step: 180px;
     background-size:
       132vw 100%, 132vw 100%,
@@ -391,26 +401,26 @@
   }
 
   .sub {
-    margin-bottom: 1rem;
+    margin-bottom: var(--spacing-md);
   }
 
   .slide {
     grid-template-columns: 1fr;
-    gap: 0.8rem;
+    gap: var(--spacing-sm);
   }
 
   .frame {
-    max-width: 225px;
+    max-width: var(--frame-max);
   }
 
   .stack {
-    margin-top: 0.5rem;
-    font-size: 0.8rem;
+    margin-top: var(--spacing-xs);
+    font-size: var(--font-size-xs);
   }
 
   .quote {
-    font-size: 0.95rem;
-    line-height: 1.45;
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-snug);
   }
 
   /* the long quote is clamped behind "Read more" to keep the section compact */
@@ -423,30 +433,30 @@
 
   .readMore {
     display: inline-flex;
-    margin-top: 0.5rem;
+    margin-top: var(--spacing-xs);
     padding: 0;
     background: none;
     border: none;
     font: inherit;
-    font-weight: 600;
-    color: var(--teal);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-accent);
     cursor: pointer;
   }
 
   .readMore:focus-visible {
-    outline: 2px solid var(--teal);
+    outline: var(--border-width-thick) solid var(--color-accent);
     outline-offset: 3px;
-    border-radius: 3px;
+    border-radius: var(--radius-sm);
   }
 
   .cite {
-    margin-top: 0.85rem;
+    margin-top: var(--spacing-sm);
   }
 
   /* still a real strip of preview cards on mobile — just scaled down.
      Scroll arrows hidden here; native touch-swipe is the affordance. */
   .filmRow {
-    margin-top: 1.1rem;
+    margin-top: var(--spacing-md);
   }
 
   .scrollBtn {
@@ -454,23 +464,23 @@
   }
 
   .film {
-    gap: 0.6rem;
+    gap: var(--spacing-xs);
   }
 
   .thumb {
-    width: 124px;
+    --thumb-w: 7.75rem;
   }
 
   .tname {
-    font-size: 0.76rem;
+    font-size: var(--font-size-2xs);
   }
 
   .ttag {
-    font-size: 0.62rem;
+    font-size: var(--font-size-3xs);
   }
 
   .apps {
-    margin-top: 1.5rem;
-    font-size: 0.9rem;
+    margin-top: var(--spacing-xl);
+    font-size: var(--font-size-sm);
   }
 }

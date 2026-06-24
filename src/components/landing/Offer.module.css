@@ -1,5 +1,5 @@
 .section {
-  padding-block: clamp(3.5rem, 9vh, 6.5rem);
+  padding-block: clamp(var(--spacing-4xl), 9vh, var(--spacing-6xl));
 }
 
 .inner {
@@ -10,76 +10,81 @@
 
 .title {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(1.9rem, 3.5vw, 2.75rem);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-h2);
   letter-spacing: -0.025em;
-  color: var(--ink);
+  color: var(--color-text);
   text-wrap: balance;
 }
 
 .grid {
-  margin-top: clamp(2rem, 4vw, 3rem);
+  margin-top: clamp(var(--spacing-2xl), 4vw, var(--spacing-4xl));
   display: grid;
-  gap: clamp(2rem, 5vw, 4rem);
+  gap: clamp(var(--spacing-2xl), 5vw, var(--spacing-5xl));
   grid-template-columns: 1fr;
 }
 
-@media (min-width: 760px) {
+@media (min-width: 47.5em) {
   .grid {
     grid-template-columns: 1fr 1fr;
   }
 }
 
 .head {
+  --head-font-size: 1.4rem;
   display: flex;
   align-items: center;
-  gap: 0.7rem;
+  gap: var(--spacing-sm);
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.4rem;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--head-font-size);
   letter-spacing: -0.01em;
-  color: var(--ink);
+  color: var(--color-text);
 }
 
 .tri {
-  width: 0.85rem;
-  height: 0.85rem;
+  --tri: 0.85rem;
+  width: var(--tri);
+  height: var(--tri);
   flex: none;
-  background: var(--teal);
+  background: var(--color-accent);
   clip-path: polygon(50% 0, 100% 100%, 0 100%);
 }
 
 .body {
-  margin-top: 0.85rem;
+  --body-font-size: 1.05rem;
+  margin-top: var(--spacing-sm);
   max-width: 42ch;
-  font-size: 1.05rem;
-  line-height: 1.6;
-  color: var(--ink-soft);
+  font-size: var(--body-font-size);
+  line-height: var(--line-height-body);
+  color: var(--color-text-muted);
 }
 
 .list {
-  margin-top: 1.25rem;
+  margin-top: var(--spacing-lg);
   list-style: none;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.6rem;
+  gap: var(--spacing-xs);
 }
 
 .list li {
+  --list-indent: 1.4rem;
   position: relative;
-  padding-left: 1.4rem;
-  color: var(--ink-soft);
-  line-height: 1.5;
+  padding-left: var(--list-indent);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-snug);
 }
 
 .list li::before {
+  --bullet: 0.6rem;
   content: "";
   position: absolute;
   left: 0;
   top: 0.5em;
-  width: 0.6rem;
-  height: 0.6rem;
-  background: var(--teal-deep);
+  width: var(--bullet);
+  height: var(--bullet);
+  background: var(--color-accent-deep);
   clip-path: polygon(50% 0, 100% 100%, 0 100%);
 }

@@ -1,13 +1,13 @@
 .section {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: var(--spacing-2xl);
 }
 
 .eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.9375rem;
-  font-weight: 400;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-normal);
   letter-spacing: 0.15em;
   text-transform: uppercase;
   color: var(--color-text-muted);
@@ -19,13 +19,13 @@
   margin: 0;
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-5);
+  gap: var(--spacing-xl);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48em) {
   .grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--space-6);
+    gap: var(--spacing-2xl);
   }
 }
 
@@ -34,12 +34,12 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
-  padding: var(--space-6);
+  gap: var(--spacing-xl);
+  padding: var(--spacing-2xl);
   background: var(--color-bg-elevated);
-  border: 1px solid var(--color-border);
+  border: var(--border-width-thin) solid var(--color-border);
   border-radius: var(--radius-lg);
-  transition: border-color var(--transition-base);
+  transition: border-color var(--duration-base) ease;
 }
 
 .card:hover {
@@ -49,9 +49,9 @@
 .quote {
   margin: 0;
   font-family: var(--font-serif);
-  font-size: 1.125rem;
+  font-size: var(--font-size-md);
   font-style: italic;
-  line-height: 1.55;
+  line-height: var(--line-height-snug);
   color: var(--color-text);
 }
 
@@ -59,29 +59,29 @@
   margin-top: auto;
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
-  padding-top: var(--space-4);
-  border-top: 1px solid var(--color-border);
+  gap: var(--spacing-2xs);
+  padding-top: var(--spacing-md);
+  border-top: var(--border-width-thin) solid var(--color-border);
 }
 
 .name {
   font-style: normal;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   color: var(--color-text);
 }
 
 .role {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--font-size-2xs);
   letter-spacing: 0.05em;
   color: var(--color-text-muted);
 }
 
 .role a {
   color: inherit;
-  border-bottom: 1px solid var(--color-border-strong);
-  padding-bottom: 1px;
-  transition: color var(--transition-fast), border-color var(--transition-fast);
+  border-bottom: var(--border-width-thin) solid var(--color-border-strong);
+  padding-bottom: var(--border-width-thin);
+  transition: color var(--duration-fast) ease, border-color var(--duration-fast) ease;
 }
 
 .role a:hover {
