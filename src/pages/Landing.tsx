@@ -5,6 +5,7 @@ import { Process } from "../components/landing/Process";
 import { Pricing } from "../components/landing/Pricing";
 import { FoundingNote } from "../components/landing/FoundingNote";
 import { Proof } from "../components/landing/Proof";
+import { ResponsiveShowcase } from "../components/landing/ResponsiveShowcase";
 import { CtaBand } from "../components/landing/CtaBand";
 import { About } from "../components/landing/About";
 import { Contact } from "../components/landing/Contact";
@@ -36,6 +37,7 @@ export function Landing() {
         <Pricing />
         <FoundingNote />
         <Proof />
+        <ResponsiveShowcase />
         <CtaBand />
         <About />
         <Contact />

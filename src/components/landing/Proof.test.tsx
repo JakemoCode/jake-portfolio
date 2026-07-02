@@ -16,32 +16,28 @@ function renderProof() {
 }
 
 describe("Proof", () => {
-  it("lists every client in the filmstrip", () => {
+  it("starts on the first testimonial", () => {
     renderProof();
-    expect(screen.getByRole("button", { name: /Arbor Gymnastics/ })).toBeTruthy();
-    expect(screen.getByRole("button", { name: /Jyotish Tarot/ })).toBeTruthy();
+    expect(within(screen.getByRole("article")).getByText("Morgan Berry")).toBeTruthy();
   });
 
-  it("starts on the first client and exposes only its testimonial", () => {
+  it("advances to the next testimonial with the next arrow", () => {
     renderProof();
-    expect(
-      screen.getByRole("button", { name: /Arbor Gymnastics/ }).getAttribute("aria-pressed"),
-    ).toBe("true");
-    // inactive slides are aria-hidden, so only the active one is in the a11y tree
-    const active = screen.getByRole("article");
-    expect(within(active).getByText("Morgan Berry")).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "Next testimonial" }));
+    expect(within(screen.getByRole("article")).getByText("Debora Bowley")).toBeTruthy();
   });
 
-  it("switches the spotlight when another client is chosen", () => {
+  it("wraps from the last testimonial back to the first via next", () => {
     renderProof();
-    fireEvent.click(screen.getByRole("button", { name: /Jyotish Tarot/ }));
+    const next = screen.getByRole("button", { name: "Next testimonial" });
+    fireEvent.click(next); // → Debora (last of two)
+    fireEvent.click(next); // wraps → Morgan
+    expect(within(screen.getByRole("article")).getByText("Morgan Berry")).toBeTruthy();
+  });
 
-    expect(
-      screen.getByRole("button", { name: /Jyotish Tarot/ }).getAttribute("aria-pressed"),
-    ).toBe("true");
-    expect(
-      screen.getByRole("button", { name: /Arbor Gymnastics/ }).getAttribute("aria-pressed"),
-    ).toBe("false");
+  it("wraps from the first testimonial to the last via prev", () => {
+    renderProof();
+    fireEvent.click(screen.getByRole("button", { name: "Previous testimonial" }));
     expect(within(screen.getByRole("article")).getByText("Debora Bowley")).toBeTruthy();
   });
 

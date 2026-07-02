@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useRef, useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
-import { testimonials } from "../../content/testimonials";
+import { testimonials, type Testimonial } from "../../content/testimonials";
+import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 import styles from "./Proof.module.css";
 
 function hostOf(url: string): string {
@@ -11,77 +12,114 @@ function hostOf(url: string): string {
   }
 }
 
-function usePrefersReducedMotion(): boolean {
-  const [reduce, setReduce] = useState(false);
-  useEffect(() => {
-    if (typeof window === "undefined" || !window.matchMedia) return;
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const sync = () => setReduce(mq.matches);
-    sync();
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, []);
-  return reduce;
+/** Thin right-pointing chevron; the prev button flips it via CSS. */
+function Chevron() {
+  return (
+    <svg className={styles.chev} viewBox="0 0 185.343 185.343" aria-hidden="true">
+      <path
+        fill="currentColor"
+        d="M51.707,185.343c-2.741,0-5.493-1.044-7.593-3.149c-4.194-4.194-4.194-10.981,0-15.175l74.352-74.347L44.114,18.32c-4.194-4.194-4.194-10.987,0-15.175c4.194-4.194,10.987-4.194,15.18,0l81.934,81.934c4.194,4.194,4.194,10.987,0,15.175l-81.934,81.939C57.201,184.293,54.454,185.343,51.707,185.343z"
+      />
+    </svg>
+  );
+}
+
+function Slide({
+  t,
+  className,
+  style,
+  hidden,
+  expanded,
+  onToggleExpanded,
+  onAnimationEnd,
+}: {
+  t: Testimonial;
+  className: string;
+  style?: CSSProperties;
+  hidden?: boolean;
+  expanded: boolean;
+  onToggleExpanded: () => void;
+  onAnimationEnd?: () => void;
+}) {
+  return (
+    <article
+      className={className}
+      style={style}
+      inert={hidden || undefined}
+      aria-hidden={hidden || undefined}
+      onAnimationEnd={onAnimationEnd}
+    >
+      <div className={styles.media}>
+        {t.shot && (
+          <figure className={styles.frame}>
+            <div className={styles.bar}>
+              <span className={styles.dot} />
+              <span className={styles.dot} />
+              <span className={styles.dot} />
+              {t.link && <span className={styles.url}>{hostOf(t.link)}</span>}
+            </div>
+            <img className={styles.shot} src={t.shot.src} alt={t.shot.alt} />
+          </figure>
+        )}
+      </div>
+
+      <div className={styles.body}>
+        <blockquote className={`${styles.quote} ${expanded ? "" : styles.clamped}`}>
+          {t.quote}
+        </blockquote>
+        <button
+          type="button"
+          className={styles.readMore}
+          aria-expanded={expanded}
+          onClick={onToggleExpanded}
+        >
+          {expanded ? "Read less" : "Read more"}
+        </button>
+        <figcaption className={styles.cite}>
+          <span className={styles.name}>{t.name}</span>
+          <span className={styles.role}>{t.role}</span>
+          {t.link && (
+            <a className={styles.live} href={t.link} target="_blank" rel="noopener noreferrer">
+              See it live
+              <span aria-hidden="true"> &rarr;</span>
+            </a>
+          )}
+        </figcaption>
+      </div>
+    </article>
+  );
 }
 
 export function Proof() {
-  const [active, setActive] = useState(0);
-  // Drift step count for the glow (±1 per swipe). The px distance per step is
-  // a CSS var, so it can differ per breakpoint; the repeating pattern means the
-  // count can accumulate unbounded without ever exposing an edge.
-  const [glowSteps, setGlowSteps] = useState(0);
-  // Mobile only: the long quote is clamped behind "Read more" to keep the
-  // section compact. No effect on desktop (the clamp/button are display:none).
-  const [expanded, setExpanded] = useState(false);
   const reduceMotion = usePrefersReducedMotion();
-  const filmRef = useRef<HTMLDivElement>(null);
-  // Whether the filmstrip overflows, and which scroll-arrows are live.
-  const [scroll, setScroll] = useState({ overflows: false, atStart: true, atEnd: false });
+  const [active, setActive] = useState(0);
+  // Glow drift step count (±1 per switch). The px per step is a CSS var, so the
+  // repeating pattern can accumulate unbounded without ever exposing an edge.
+  const [glowSteps, setGlowSteps] = useState(0);
+  // Mobile only: the long quote is clamped behind "Read more" to stay compact.
+  const [expanded, setExpanded] = useState(false);
+  // Last click direction (+1 next / -1 prev). Drives the swipe so it always
+  // travels the way the chevron points, even across the wrap boundary.
+  const [dir, setDir] = useState(1);
+  const [navigated, setNavigated] = useState(false);
+  // The outgoing slide during a swipe (absolute overlay that animates off).
+  const [leaving, setLeaving] = useState<{ index: number; key: number } | null>(null);
+  const count = testimonials.length;
+  const animId = useRef(0);
 
-  const syncScroll = () => {
-    const el = filmRef.current;
-    if (!el) return;
-    const max = el.scrollWidth - el.clientWidth;
-    setScroll({
-      overflows: max > 2,
-      atStart: el.scrollLeft <= 2,
-      atEnd: el.scrollLeft >= max - 2,
-    });
-  };
-
-  function scrollFilm(direction: number) {
-    const el = filmRef.current;
-    if (!el || typeof el.scrollBy !== "function") return;
-    el.scrollBy({ left: direction * el.clientWidth * 0.8, behavior: reduceMotion ? "auto" : "smooth" });
-  }
-
-  // Track overflow on mount and on resize so the arrows show only when needed.
-  useEffect(() => {
-    syncScroll();
-    if (typeof window === "undefined") return;
-    window.addEventListener("resize", syncScroll);
-    return () => window.removeEventListener("resize", syncScroll);
-  }, []);
-
-  // Keep the active client centered in the horizontally-scrolling filmstrip.
-  useEffect(() => {
-    const film = filmRef.current;
-    const el = film?.children[active] as HTMLElement | undefined;
-    if (!film || !el || typeof film.scrollTo !== "function") return;
-    const offset = el.getBoundingClientRect().left - film.getBoundingClientRect().left;
-    film.scrollTo({
-      left: film.scrollLeft + offset - (film.clientWidth - el.clientWidth) / 2,
-      behavior: reduceMotion ? "auto" : "smooth",
-    });
-  }, [active, reduceMotion]);
-
-  function select(index: number) {
-    if (index === active) return;
-    const direction = Math.sign(index - active);
-    setActive(index);
+  function go(direction: number) {
+    if (!reduceMotion) setLeaving({ index: active, key: animId.current++ });
+    setDir(direction);
+    setNavigated(true);
+    setActive((a) => (a + direction + count) % count);
     setGlowSteps((s) => s - direction);
     setExpanded(false);
   }
+
+  const enterX = `${dir * 100}%`;
+  const leaveX = `${dir * -100}%`;
+  const current = testimonials[active]!;
+  const outgoing = leaving ? testimonials[leaving.index] : null;
 
   return (
     <section className={styles.proof} id="work" aria-labelledby="proof-title">
@@ -96,156 +134,73 @@ export function Proof() {
           What people say.
         </h2>
         <p className={`${styles.sub} r-up`}>
-          Real businesses I&rsquo;ve built and fixed sites for. Pick any client to read theirs.
+          Real businesses I&rsquo;ve built and fixed sites for.
         </p>
 
-        <div className={styles.stage}>
-          <div
-            className={styles.track}
-            style={{ transform: `translateX(-${active * 100}%)` }}
+        <div className={styles.spotlight}>
+          <button
+            type="button"
+            className={`${styles.navBtn} ${styles.navPrev}`}
+            onClick={() => go(-1)}
+            aria-label="Previous testimonial"
           >
-            {testimonials.map((t, i) => {
-              const isActive = i === active;
-              return (
-                <article
-                  className={styles.slide}
+            <Chevron />
+          </button>
+
+          <div className={styles.stage}>
+            {/* Invisible stack of every quote — reserves the tallest height so
+                the section never jumps as you swipe between quotes. */}
+            <div className={styles.sizer} aria-hidden="true">
+              {testimonials.map((t) => (
+                <Slide
                   key={t.id}
-                  // Keep off-screen slides out of the tab order and a11y tree.
-                  inert={!isActive}
-                  aria-hidden={!isActive}
-                >
-                  <div className={styles.media}>
-                    <figure className={styles.frame}>
-                      <div className={styles.bar}>
-                        <span className={styles.dot} />
-                        <span className={styles.dot} />
-                        <span className={styles.dot} />
-                        {t.link && <span className={styles.url}>{hostOf(t.link)}</span>}
-                      </div>
-                      {t.preview && (
-                        <video
-                          className={styles.vid}
-                          poster={t.preview.poster}
-                          aria-label={t.preview.alt}
-                          autoPlay={!reduceMotion}
-                          muted
-                          loop
-                          playsInline
-                          preload="metadata"
-                        >
-                          <source src={t.preview.webm} type="video/webm" />
-                          <source src={t.preview.mp4} type="video/mp4" />
-                        </video>
-                      )}
-                    </figure>
-                    {t.platforms && t.platforms.length > 0 && (
-                      <p className={styles.stack}>
-                        Built on{" "}
-                        {t.platforms.map((p, pi) => (
-                          <span key={p}>
-                            <b className={styles.tech}>{p}</b>
-                            {pi < t.platforms!.length - 1 ? " · " : ""}
-                          </span>
-                        ))}
-                      </p>
-                    )}
-                  </div>
+                  t={t}
+                  className={`${styles.slide}`}
+                  hidden
+                  expanded={expanded}
+                  onToggleExpanded={() => {}}
+                />
+              ))}
+            </div>
 
-                  <div className={styles.body}>
-                    <blockquote
-                      className={`${styles.quote} ${expanded ? "" : styles.clamped}`}
-                    >
-                      {t.quote}
-                    </blockquote>
-                    <button
-                      type="button"
-                      className={styles.readMore}
-                      aria-expanded={expanded}
-                      onClick={() => setExpanded((e) => !e)}
-                    >
-                      {expanded ? "Read less" : "Read more"}
-                    </button>
-                    <figcaption className={styles.cite}>
-                      <span className={styles.name}>{t.name}</span>
-                      <span className={styles.role}>{t.role}</span>
-                      {t.link && (
-                        <a
-                          className={styles.live}
-                          href={t.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          See it live
-                          <span aria-hidden="true"> &rarr;</span>
-                        </a>
-                      )}
-                    </figcaption>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className={styles.filmRow}>
-          {scroll.overflows && (
-            <button
-              type="button"
-              className={`${styles.scrollBtn} ${styles.scrollPrev}`}
-              onClick={() => scrollFilm(-1)}
-              disabled={scroll.atStart}
-              aria-label="Scroll clients left"
-            >
-              <span aria-hidden="true">&lsaquo;</span>
-            </button>
-          )}
-          <div
-            className={styles.film}
-            role="group"
-            aria-label="Clients"
-            ref={filmRef}
-            onScroll={syncScroll}
-          >
-            {testimonials.map((t, i) => (
-            <button
-              type="button"
-              key={t.id}
-              className={styles.thumb}
-              aria-pressed={i === active}
-              onClick={() => select(i)}
-            >
-              <span className={styles.tbar} aria-hidden="true">
-                <span className={styles.dot} />
-                <span className={styles.dot} />
-                <span className={styles.dot} />
-              </span>
-              <span
-                className={styles.tshot}
-                style={
-                  t.preview
-                    ? { backgroundImage: `url(${t.preview.poster})` }
-                    : undefined
+            {outgoing && leaving && (
+              <Slide
+                key={`out-${leaving.key}`}
+                t={outgoing}
+                className={`${styles.slide} ${styles.current} ${styles.leaving}`}
+                style={{ "--x": leaveX } as CSSProperties}
+                hidden
+                expanded={expanded}
+                onToggleExpanded={() => {}}
+                onAnimationEnd={() =>
+                  setLeaving((l) => (l?.key === leaving.key ? null : l))
                 }
               />
-              <span className={styles.tmeta}>
-                <span className={styles.tname}>{t.client}</span>
-                <span className={styles.ttag}>{t.tag ?? t.platforms?.join(" · ")}</span>
-              </span>
-            </button>
-          ))}
+            )}
+
+            <Slide
+              key={`in-${active}`}
+              t={current}
+              className={`${styles.slide} ${styles.current} ${navigated ? styles.enter : ""}`}
+              style={{ "--x": enterX } as CSSProperties}
+              expanded={expanded}
+              onToggleExpanded={() => setExpanded((e) => !e)}
+            />
           </div>
-          {scroll.overflows && (
-            <button
-              type="button"
-              className={`${styles.scrollBtn} ${styles.scrollNext}`}
-              onClick={() => scrollFilm(1)}
-              disabled={scroll.atEnd}
-              aria-label="Scroll clients right"
-            >
-              <span aria-hidden="true">&rsaquo;</span>
-            </button>
-          )}
+
+          <button
+            type="button"
+            className={`${styles.navBtn} ${styles.navNext}`}
+            onClick={() => go(1)}
+            aria-label="Next testimonial"
+          >
+            <Chevron />
+          </button>
         </div>
+
+        <p className={styles.counter} aria-live="polite">
+          {active + 1} <span aria-hidden="true">/</span> {count}
+        </p>
       </div>
 
       <p className={styles.apps}>
