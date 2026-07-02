@@ -199,7 +199,12 @@ export function Proof() {
         </div>
 
         <p className={styles.counter} aria-live="polite">
-          {active + 1} <span aria-hidden="true">/</span> {count}
+          <span className={styles.srOnly}>
+            Testimonial {active + 1} of {count}
+          </span>
+          <span aria-hidden="true">
+            {active + 1} / {count}
+          </span>
         </p>
       </div>
 
