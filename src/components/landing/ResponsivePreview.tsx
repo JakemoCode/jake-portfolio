@@ -114,9 +114,15 @@ export function ResponsivePreview({ demo }: { demo: Demo }) {
           style={{ "--frame-w": frameW, "--view-h": viewH } as CSSProperties}
         >
           <div className={styles.bar}>
-            <span className={styles.dot} />
-            <span className={styles.dot} />
-            <span className={styles.dot} />
+            {/* traffic-lights read as a desktop browser; drop them once the
+                frame is emulating a tablet or phone */}
+            {activeLayer?.key === "desktop" && (
+              <>
+                <span className={styles.dot} />
+                <span className={styles.dot} />
+                <span className={styles.dot} />
+              </>
+            )}
             <span className={styles.url}>{hostOf(demo.url)}</span>
             <span className={styles.mode} aria-hidden="true">
               {activeLayer?.label} · {spec.nominal}px
