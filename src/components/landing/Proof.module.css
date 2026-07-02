@@ -1,7 +1,7 @@
 .proof {
   /* One swipe setting — the slide animations AND the glow both read this so they
      can never drift out of sync. Tune here to retime both at once. */
-  --swipe-dur: 620ms;
+  --swipe-dur: 420ms; /* snappy enough for a repeatable paging control */
   --swipe-ease: cubic-bezier(0.7, 0, 0.18, 1);
   --swipe: var(--swipe-dur) var(--swipe-ease);
 

@@ -18,7 +18,6 @@ const CONTENT_H = 480;
 const MAX_W = 1280;
 const DEVICE: Record<DemoLayerKey, { ar: number; nominal: number }> = {
   desktop: { ar: 16 / 9, nominal: 1440 },
-  laptop: { ar: 16 / 10, nominal: 1024 },
   tablet: { ar: 3 / 4, nominal: 768 },
   mobile: { ar: 9 / 19.5, nominal: 390 },
 };

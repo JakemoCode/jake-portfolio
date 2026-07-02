@@ -17,7 +17,6 @@ const demo: Demo = {
   alt: "A test site adapting across widths.",
   layers: [
     { key: "desktop", label: "Desktop", webm: "d.webm", mp4: "d.mp4", poster: "d.jpg" },
-    { key: "laptop", label: "Laptop", webm: "l.webm", mp4: "l.mp4", poster: "l.jpg" },
     { key: "tablet", label: "Tablet", webm: "t.webm", mp4: "t.mp4", poster: "t.jpg" },
     { key: "mobile", label: "Mobile", webm: "m.webm", mp4: "m.mp4", poster: "m.jpg" },
   ],

@@ -15,7 +15,7 @@ import jyotishWebm from "../assets/clients/jyotish-loop.webm";
 import jyotishMp4 from "../assets/clients/jyotish-loop.mp4";
 import jyotishPoster from "../assets/clients/jyotish-poster.jpg";
 
-export type DemoLayerKey = "desktop" | "laptop" | "tablet" | "mobile";
+export type DemoLayerKey = "desktop" | "tablet" | "mobile";
 
 export type DemoLayer = {
   key: DemoLayerKey;
@@ -44,10 +44,9 @@ export const demos: Demo[] = [
     label: "Arbor Gymnastics",
     url: "https://www.arborgymnastics.com/",
     platforms: ["Squarespace", "Jackrabbit"],
-    alt: "The Arbor Gymnastics site adapting across desktop, laptop, tablet, and mobile widths.",
+    alt: "The Arbor Gymnastics site adapting across desktop, tablet, and mobile widths.",
     layers: [
       { key: "desktop", label: "Desktop", webm: arborWebm, mp4: arborMp4, poster: arborPoster },
-      { key: "laptop", label: "Laptop", webm: arborWebm, mp4: arborMp4, poster: arborPoster },
       { key: "tablet", label: "Tablet", webm: arborWebm, mp4: arborMp4, poster: arborPoster },
       { key: "mobile", label: "Mobile", webm: arborWebm, mp4: arborMp4, poster: arborPoster },
     ],
@@ -57,10 +56,9 @@ export const demos: Demo[] = [
     label: "Jyotish Tarot",
     url: "https://jyotishtarot.com/free-jyotish-tarot-reading/",
     platforms: ["WordPress"],
-    alt: "The Jyotish Tarot reader adapting across desktop, laptop, tablet, and mobile widths.",
+    alt: "The Jyotish Tarot reader adapting across desktop, tablet, and mobile widths.",
     layers: [
       { key: "desktop", label: "Desktop", webm: jyotishWebm, mp4: jyotishMp4, poster: jyotishPoster },
-      { key: "laptop", label: "Laptop", webm: jyotishWebm, mp4: jyotishMp4, poster: jyotishPoster },
       { key: "tablet", label: "Tablet", webm: jyotishWebm, mp4: jyotishMp4, poster: jyotishPoster },
       { key: "mobile", label: "Mobile", webm: jyotishWebm, mp4: jyotishMp4, poster: jyotishPoster },
     ],

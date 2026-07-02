@@ -6,8 +6,9 @@
 
 .scrollBtn {
   flex: 0 0 auto;
-  width: var(--spacing-3xl);
-  height: var(--spacing-3xl);
+  /* spacing-4xl (48px) clears the 44px tap target */
+  width: var(--spacing-4xl);
+  height: var(--spacing-4xl);
   display: grid;
   place-items: center;
   border-radius: 50%;

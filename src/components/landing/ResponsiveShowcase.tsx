@@ -22,7 +22,7 @@ export function ResponsiveShowcase() {
           See it adapt.
         </h2>
         <p className={`${styles.sub} r-up`}>
-          Pick a screen size and watch the layout adapt across desktop, laptop, tablet, and mobile.
+          Pick a screen size and watch the layout adapt across desktop, tablet, and mobile.
         </p>
 
         {demos.length > 1 && (
