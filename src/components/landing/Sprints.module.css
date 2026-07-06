@@ -1,0 +1,309 @@
+.section {
+  padding-block: clamp(var(--spacing-4xl), 9vh, var(--spacing-6xl));
+}
+
+.inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-h2);
+  letter-spacing: -0.025em;
+  color: var(--color-text);
+}
+
+.lede {
+  margin-top: var(--spacing-sm);
+  max-width: 58ch;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-body);
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+/* The ladder: audit → the broken/converting pair → feature, stacked. */
+.ladder {
+  margin-top: clamp(var(--spacing-2xl), 4vw, var(--spacing-4xl));
+  display: grid;
+  gap: clamp(var(--spacing-xl), 3vw, var(--spacing-2xl));
+}
+
+.pairGroup {
+  display: grid;
+  gap: var(--spacing-lg);
+}
+
+.pairHead {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-lg);
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+  text-align: center;
+}
+
+.pair {
+  display: grid;
+  gap: clamp(var(--spacing-xl), 3vw, var(--spacing-2xl));
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+
+@media (min-width: 47.5em) {
+  .pair {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ---- Card (shared shape with the Pricing cards) ---- */
+.card {
+  position: relative;
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border); /* 1px: intentional hairline border */
+  border-radius: var(--radius-xl);
+  padding: clamp(var(--spacing-xl), 3vw, var(--spacing-2xl));
+}
+
+/* The audit is the entry point — lift it with a fuller border + accent rail. */
+.lead {
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+.lead::before {
+  content: "";
+  position: absolute;
+  inset-block: clamp(var(--spacing-xl), 3vw, var(--spacing-2xl));
+  inset-inline-start: 0;
+  width: 3px; /* px: intentional accent rail width */
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+}
+
+.badge {
+  position: absolute;
+  top: 0;
+  right: clamp(var(--spacing-xl), 3vw, var(--spacing-2xl));
+  transform: translateY(-50%);
+  background: var(--color-accent);
+  color: var(--color-white);
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-2xs);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  padding: var(--spacing-2xs) var(--spacing-sm);
+  border-radius: var(--radius-pill);
+}
+
+.cardHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.name {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--spacing-xs);
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-lg);
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+}
+
+.icon {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-none);
+}
+
+.price {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xl);
+  letter-spacing: -0.01em;
+  color: var(--color-accent-pine);
+  white-space: nowrap;
+}
+
+/* "Quoted after your audit" reads as a phrase, not a headline number. */
+.priceQuote {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.from {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-right: var(--spacing-2xs);
+}
+
+.priceNote {
+  margin-top: var(--spacing-2xs);
+  text-align: right;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-subtle);
+}
+
+.pitch {
+  margin-top: var(--spacing-sm);
+  max-width: 46ch;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-body);
+  color: var(--color-text-muted);
+}
+
+/* ---- Disclosure (shared shape with the Pricing "See what's included") ---- */
+.details {
+  margin-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border); /* 1px: intentional hairline border */
+  padding-top: var(--spacing-md);
+  interpolate-size: allow-keywords;
+}
+
+.summary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  cursor: pointer;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent-pine);
+  list-style: none;
+  user-select: none;
+  transition: color var(--duration-fast) ease;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary:hover {
+  color: var(--color-accent-deep);
+}
+
+.summary:focus-visible {
+  outline: 2px solid var(--color-accent-deep); /* 2px: intentional outline width */
+  outline-offset: 3px; /* px intentional: outline-offset */
+  border-radius: var(--radius-sm);
+}
+
+/* Grow the toggle's tap target to 44px on touch (Fitts's) without layout shift. */
+@media (pointer: coarse), (max-width: 40em) {
+  .summary {
+    position: relative;
+  }
+  .summary::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    --tap-target: 44px; /* intentional px: WCAG 2.5.5 touch target minimum */
+    height: var(--tap-target);
+  }
+}
+
+.tri {
+  --tri-size: 0.7rem; /* component icon; no spacing rung */
+  width: var(--tri-size);
+  height: var(--tri-size);
+  flex: none;
+  background: var(--color-accent);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transition: transform var(--duration-medium) var(--ease-out-quint);
+}
+
+.details[open] .tri {
+  transform: rotate(180deg);
+}
+
+.includes {
+  list-style: none;
+  margin: var(--spacing-md) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--spacing-xs);
+}
+
+.includes li {
+  position: relative;
+  padding-left: var(--spacing-xl);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-snug);
+  color: var(--color-text-muted);
+}
+
+.includes li::before {
+  content: "\2713"; /* check */
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--color-accent-pine);
+  font-weight: var(--font-weight-bold);
+}
+
+.closing {
+  margin-top: clamp(var(--spacing-2xl), 4vw, var(--spacing-4xl));
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-body);
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+.closing strong {
+  color: var(--color-text);
+  font-weight: var(--font-weight-semibold);
+}
+
+.closing a {
+  color: var(--color-accent-pine);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+  border-bottom: 1px solid transparent; /* 1px: intentional underline */
+  transition:
+    color var(--duration-fast) ease,
+    border-color var(--duration-fast) ease;
+}
+
+.closing a:hover {
+  color: var(--color-accent-deep);
+  border-bottom-color: currentColor;
+}
+
+.closing a:focus-visible {
+  outline: 2px solid var(--color-accent-deep); /* 2px: intentional outline width */
+  outline-offset: 3px; /* px intentional: outline-offset */
+  border-radius: var(--radius-sm);
+}
+
+/* Soft-open the disclosure panel (matches Pricing). Browsers without support
+   fall back to the native instant toggle. */
+@media (prefers-reduced-motion: no-preference) {
+  .details::details-content {
+    block-size: 0;
+    opacity: 0;
+    overflow: clip;
+    display: flow-root;
+    transition:
+      block-size var(--duration-slow) var(--ease-out-quint),
+      opacity var(--duration-base) ease,
+      content-visibility var(--duration-slow) allow-discrete;
+  }
+  .details[open]::details-content {
+    block-size: auto;
+    opacity: 1;
+  }
+}
