@@ -17,7 +17,7 @@ import styles from "./ResponsivePreview.module.css";
 const CONTENT_H = 480;
 const MAX_W = 1280;
 const DEVICE: Record<DemoLayerKey, { ar: number; nominal: number }> = {
-  desktop: { ar: 16 / 9, nominal: 1440 },
+  desktop: { ar: 16 / 9, nominal: 1280 },
   tablet: { ar: 3 / 4, nominal: 768 },
   mobile: { ar: 9 / 19.5, nominal: 390 },
 };
@@ -36,6 +36,7 @@ export function ResponsivePreview({ demo }: { demo: Demo }) {
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const prevActiveRef = useRef(0);
   const [active, setActive] = useState(0);
+  const [inView, setInView] = useState(false);
 
   // Upper bound tracks the container: the frame can't display wider than what's
   // available, and the px readout must match — CSS can't feed that back to JS.
@@ -48,6 +49,27 @@ export function ResponsivePreview({ demo }: { demo: Demo }) {
     const ro = new ResizeObserver(measure);
     ro.observe(el);
     return () => ro.disconnect();
+  }, []);
+
+  // Defer video load/playback until the demo scrolls near view (payload — the
+  // clips are below the fold, so nothing downloads on initial page load).
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setInView(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "200px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
   }, []);
 
   const activeLayer = demo.layers[active];
@@ -67,7 +89,7 @@ export function ResponsivePreview({ demo }: { demo: Demo }) {
   // pause the rest. A (re)warmed or newly promoted layer seeks to the outgoing
   // layer's timestamp so the swap continues rather than restarts.
   useEffect(() => {
-    if (reduceMotion) return;
+    if (reduceMotion || !inView) return;
     const vids = videoRefs.current;
     const prev = prevActiveRef.current;
     const master = vids[prev] ?? vids[active];
@@ -89,7 +111,7 @@ export function ResponsivePreview({ demo }: { demo: Demo }) {
       }
     });
     prevActiveRef.current = active;
-  }, [active, reduceMotion, demo.layers.length]);
+  }, [active, reduceMotion, inView, demo.layers.length]);
 
   return (
     <div className={styles.preview}>
@@ -151,11 +173,10 @@ export function ResponsivePreview({ demo }: { demo: Demo }) {
                   muted
                   loop
                   playsInline
-                  preload="auto"
+                  preload="metadata"
                   aria-hidden="true"
                 >
                   <source src={layer.webm} type="video/webm" />
-                  <source src={layer.mp4} type="video/mp4" />
                 </video>
               ),
             )}

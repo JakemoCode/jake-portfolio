@@ -16,9 +16,9 @@ const demo: Demo = {
   url: "https://example.com/",
   alt: "A test site adapting across widths.",
   layers: [
-    { key: "desktop", label: "Desktop", webm: "d.webm", mp4: "d.mp4", poster: "d.jpg" },
-    { key: "tablet", label: "Tablet", webm: "t.webm", mp4: "t.mp4", poster: "t.jpg" },
-    { key: "mobile", label: "Mobile", webm: "m.webm", mp4: "m.mp4", poster: "m.jpg" },
+    { key: "desktop", label: "Desktop", webm: "d.webm", poster: "d.jpg" },
+    { key: "tablet", label: "Tablet", webm: "t.webm", poster: "t.jpg" },
+    { key: "mobile", label: "Mobile", webm: "m.webm", poster: "m.jpg" },
   ],
 };
 
@@ -26,7 +26,7 @@ describe("ResponsivePreview", () => {
   it("starts on desktop and reports its emulated width", () => {
     render(<ResponsivePreview demo={demo} />);
     expect(screen.getByRole("button", { name: "Desktop" }).getAttribute("aria-pressed")).toBe("true");
-    expect(screen.getByText(/1440px/)).toBeTruthy();
+    expect(screen.getByText(/1280px/)).toBeTruthy();
   });
 
   it("switches device (and reported width) when a size pill is clicked", () => {
