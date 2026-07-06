@@ -1,9 +1,11 @@
 .banner {
   position: relative;
   width: 100%;
-  height: clamp(240px, 32vh, 360px);
-  background-color: var(--surface);
-  border-block: 1px solid var(--border);
+  --banner-min: 240px;
+  --banner-max: 360px;
+  height: clamp(var(--banner-min), 32vh, var(--banner-max));
+  background-color: var(--color-surface);
+  border-block: var(--border-width-thin) solid var(--color-border);
   /* no overflow clip: facets are allowed to bleed past the edges */
   /* Named scroll timeline the layers parallax against. The banner is the
      correct subject (anonymous view() on the oversized layers mis-ranged). */
@@ -39,7 +41,7 @@
 .facetLayer {
   position: absolute;
   inset: 0;
-  z-index: 1;
+  z-index: var(--z-raised);
   /* LEVER: facet travel distance — uniform for every facet. */
   --drift-base: 70px;
 }
@@ -68,11 +70,11 @@
 .left { clip-path: polygon(100% 0, 100% 100%, 0 50%); --dir-x: -1; --dir-y: 0; }
 .right { clip-path: polygon(0 0, 0 100%, 100% 50%); --dir-x: 1; --dir-y: 0; }
 
-.teal { background-color: var(--teal); }
-.pine { background-color: var(--pine); }
-.tealDeep { background-color: var(--teal-deep); }
-.rust { background-color: var(--rust); }
-.stoneDark { background-color: var(--facet-stone); }
+.teal { background-color: var(--color-accent); }
+.pine { background-color: var(--color-accent-pine); }
+.tealDeep { background-color: var(--color-accent-deep); }
+.rust { background-color: var(--color-cta-base); }
+.stoneDark { background-color: var(--color-facet); }
 
 /* Scroll motion against the banner's named timeline: each facet slides along
    its own nose vector while the stone bed lags slowly behind. Gated so
@@ -119,7 +121,7 @@
    collide with the scroll drift's transform). */
 @media (hover: hover) {
   .facet {
-    transition: filter 0.3s ease;
+    transition: filter var(--duration-base) ease; /* snapped from var(--duration-slow) → var(--duration-base) */
   }
   .facet:hover {
     filter: brightness(1.2) saturate(1.1);

@@ -1,5 +1,15 @@
+/* =============================================================================
+   Design tokens — the single source of truth (see frontend-standards.md).
+   Intent-named, never value-named. Components reference these exclusively.
+
+   Colour tokens are SEMANTIC and themed per surface: :root holds the
+   /portfolio palette (+ a [data-theme="dark"] variant); .page (the landing)
+   overrides the same roles with its own brand in Landing.module.css.
+   ========================================================================== */
+
 :root,
 [data-theme="light"] {
+  /* Surfaces & text — /portfolio (light) */
   --color-bg: #faf9f6;
   --color-bg-elevated: #ffffff;
   --color-surface: #f3f1ec;
@@ -30,29 +40,90 @@
 }
 
 :root {
+  /* ---- Primitives (surface-agnostic) ---- */
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* ---- Font families ---- */
   --font-display: "Bricolage Grotesque Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-body: "Switzer", system-ui, -apple-system, sans-serif;
   --font-serif: "Fraunces Variable", Georgia, "Times New Roman", serif;
   --font-sans: "Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 0.75rem;
-  --space-4: 1rem;
-  --space-5: 1.5rem;
-  --space-6: 2rem;
-  --space-7: 3rem;
-  --space-8: 4rem;
-  --space-9: 6rem;
-  --space-10: 8rem;
+  /* ---- Font sizes — rem so type tracks the user's base size. Fluid display
+     sizes use clamp(); the px inside a clamp() is the intentional unit. ---- */
+  --font-size-3xs: 0.7rem;
+  --font-size-2xs: 0.75rem;
+  --font-size-xs: 0.8rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-md: 1.125rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.5rem;
+  --font-size-lead: clamp(1.05rem, 1.5vw, 1.3rem);
+  --font-size-h3: clamp(1.6rem, 3vw, 2.25rem);
+  --font-size-h2: clamp(1.9rem, 3.5vw, 2.75rem);
+  --font-size-h1: clamp(2.75rem, 7vw, 5rem);
 
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  --line-height-none: 1; /* glyph-centering (icons, single-line controls) */
+  --line-height-tight: 1.15;
+  --line-height-snug: 1.45;
+  --line-height-body: 1.6;
+
+  /* ---- Spacing — rem so gaps/padding track type. Fluid section rhythm is
+     composed as clamp(token, vh|vw, token). ---- */
+  --spacing-3xs: 0.125rem;
+  --spacing-2xs: 0.25rem;
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.25rem;
+  --spacing-xl: 1.5rem;
+  --spacing-2xl: 2rem;
+  --spacing-3xl: 2.5rem;
+  --spacing-4xl: 3rem;
+  --spacing-5xl: 4rem;
+  --spacing-6xl: 6rem;
+  --spacing-7xl: 8rem;
+
+  /* ---- Radius — px; corners are a fixed visual, not type-relative.
+     (Perfect circles use border-radius: 50% directly.) ---- */
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 999px;
 
+  /* ---- Border widths — px; hairlines stay crisp ---- */
+  --border-width-thin: 1px;
+  --border-width-thick: 2px;
+
+  /* ---- Shadows ---- */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 8px 24px -12px rgba(0, 0, 0, 0.25);
+  --shadow-lg: 0 24px 60px -28px rgba(0, 0, 0, 0.7);
+
+  /* ---- Z-index layers (semantic, never arbitrary) ---- */
+  --z-base: 0;
+  --z-raised: 1;
+  --z-sticky: 10;
+
+  /* ---- Layout ---- */
   --content-width: 760px;
   --content-width-wide: 1080px;
+  --maxw: 1140px;
+  --gutter: clamp(1.25rem, 5vw, 3rem);
 
-  --transition-fast: 120ms ease;
-  --transition-base: 200ms ease;
+  /* ---- Motion ---- */
+  --duration-fast: 160ms;
+  --duration-medium: 220ms;
+  --duration-base: 260ms;
+  --duration-slow: 300ms;
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }

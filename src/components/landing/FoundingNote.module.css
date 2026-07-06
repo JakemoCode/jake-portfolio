@@ -1,43 +1,47 @@
 .wrap {
   max-width: var(--maxw);
   margin: 0 auto;
-  padding: 0 var(--gutter) clamp(2.5rem, 7vw, 4.5rem);
+  padding: 0 var(--gutter) clamp(var(--spacing-3xl), 7vw, var(--spacing-5xl));
   display: flex;
   justify-content: flex-start;
 }
 
 .note {
+  --note-font-size: 0.98rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 0.5rem 1.5rem;
+  gap: var(--spacing-xs) var(--spacing-xl);
   width: 100%;
   margin: 0;
-  padding: 0.95rem 1.6rem;
-  background: color-mix(in oklab, var(--teal) 7%, var(--paper));
-  border: 1px solid color-mix(in oklab, var(--teal) 22%, transparent);
-  border-radius: 16px;
-  font-size: 0.98rem;
-  line-height: 1.45;
-  color: var(--ink-soft);
+  padding: var(--spacing-md) var(--spacing-2xl);
+  background: color-mix(in oklab, var(--color-accent) 7%, var(--color-bg));
+  border: var(--border-width-thin) solid color-mix(in oklab, var(--color-accent) 22%, transparent);
+  border-radius: var(--radius-xl);
+  font-size: var(--note-font-size);
+  line-height: var(--line-height-snug);
+  color: var(--color-text-muted);
   text-align: left;
 }
 
 .msg {
+  --msg-gap: 0.85rem;
   display: flex;
   align-items: center;
-  gap: 0.85rem;
+  gap: var(--msg-gap);
 }
 
 .dot {
+  --dot: 9px;
+  --dot-ring: 4px;
   position: relative;
   flex: none;
-  width: 9px;
-  height: 9px;
-  border-radius: 999px;
-  background: var(--teal);
-  box-shadow: 0 0 0 4px color-mix(in oklab, var(--teal) 18%, transparent);
+  width: var(--dot);
+  height: var(--dot);
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+  box-shadow: 0 0 0 var(--dot-ring) color-mix(in oklab, var(--color-accent) 18%, transparent);
 }
 
 /* Sonar ping ring, expanding outward over the dot's static ring. */
@@ -46,34 +50,35 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  box-shadow: 0 0 0 0 color-mix(in oklab, var(--teal) 50%, transparent);
+  box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-accent) 50%, transparent);
   opacity: 0;
   pointer-events: none;
 }
 
 .text strong {
-  color: var(--ink);
-  font-weight: 600;
+  color: var(--color-text);
+  font-weight: var(--font-weight-semibold);
 }
 
 .link {
-  color: var(--pine);
-  font-weight: 600;
+  --link-pb: 1px;
+  color: var(--color-accent-pine);
+  font-weight: var(--font-weight-semibold);
   white-space: nowrap;
-  border-bottom: 2px solid color-mix(in oklab, var(--teal) 40%, transparent);
-  padding-bottom: 1px;
-  transition: color 160ms ease, border-color 160ms ease;
+  border-bottom: var(--border-width-thick) solid color-mix(in oklab, var(--color-accent) 40%, transparent);
+  padding-bottom: var(--link-pb);
+  transition: color var(--duration-fast) ease, border-color var(--duration-fast) ease;
 }
 
 .link:hover {
-  color: var(--teal-deep);
-  border-bottom-color: var(--teal);
+  color: var(--color-accent-deep);
+  border-bottom-color: var(--color-accent);
 }
 
 .link:focus-visible {
-  outline: 2px solid var(--teal-deep);
+  outline: var(--border-width-thick) solid var(--color-accent-deep);
   outline-offset: 3px;
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
 }
 
 /* Soft breathing glow on the note + a periodic ping on the bullet, to gently
@@ -91,20 +96,20 @@
 @keyframes foundingGlow {
   0%,
   100% {
-    box-shadow: 0 0 0 0 color-mix(in oklab, var(--teal) 0%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-accent) 0%, transparent);
   }
   50% {
-    box-shadow: 0 0 26px 1px color-mix(in oklab, var(--teal) 26%, transparent);
+    box-shadow: 0 0 26px 1px color-mix(in oklab, var(--color-accent) 26%, transparent);
   }
 }
 
 @keyframes dotPing {
   0% {
-    box-shadow: 0 0 0 0 color-mix(in oklab, var(--teal) 50%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--color-accent) 50%, transparent);
     opacity: 0.9;
   }
   100% {
-    box-shadow: 0 0 0 10px color-mix(in oklab, var(--teal) 0%, transparent);
+    box-shadow: 0 0 0 10px color-mix(in oklab, var(--color-accent) 0%, transparent);
     opacity: 0;
   }
 }

@@ -1,124 +1,123 @@
 .page {
-  /* Match the landing surface: paper bg, green-tinted ink, Switzer body /
-     Bricolage display, pine/teal accents. (Mirrors Landing.module.css .page.) */
-  --paper: #f6f5f3;
-  --ink: #1b201d;
-  --ink-soft: #45514b;
-  --ink-mute: #6c766f;
-  --border: #e4e1db;
-  --pine: #0f5e54;
-  --teal: #14b8a6;
-  --teal-deep: #0f8c7e;
-  --font-display: "Bricolage Grotesque Variable", system-ui, sans-serif;
-  --font-body: "Switzer", system-ui, -apple-system, sans-serif;
+  /* Legal pages wear the landing brand (teal accent, pine link-hover), so this
+     .page re-themes the semantic color roles the same way Landing.module.css
+     does — scoped here because CSS-module .page can't be shared globally. */
+  --color-bg: #f6f5f3;
+  --color-text: #1b201d;
+  --color-text-muted: #45514b;
+  --color-text-subtle: #6c766f;
+  --color-border: #e4e1db;
+  --color-accent: #14b8a6; /* teal */
+  --color-accent-hover: #0f5e54; /* pine — link hover */
 
   min-height: 100vh;
-  background: var(--paper);
-  color: var(--ink);
+  background: var(--color-bg);
+  color: var(--color-text);
   font-family: var(--font-body);
-  line-height: 1.6;
-  padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1.25rem, 5vw, 3rem) clamp(3.5rem, 8vw, 6rem);
+  line-height: var(--line-height-body);
+  padding: clamp(var(--spacing-xl), 4vw, var(--spacing-3xl)) var(--gutter)
+    clamp(var(--spacing-4xl), 8vw, var(--spacing-6xl));
 }
 
 .home {
   display: inline-block;
-  color: var(--ink-mute);
-  font-size: 0.95rem;
-  transition: color 160ms ease;
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-base);
+  transition: color var(--duration-fast) ease;
 }
 
 .home:hover {
-  color: var(--pine);
+  color: var(--color-accent-hover);
 }
 
 .home:focus-visible {
-  outline: 2px solid var(--teal-deep);
+  outline: var(--border-width-thick) solid var(--color-accent-hover);
   outline-offset: 3px;
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
 }
 
 .main {
-  max-width: 760px;
-  margin: clamp(2rem, 5vw, 3rem) auto 0;
+  max-width: var(--content-width);
+  margin: clamp(var(--spacing-2xl), 5vw, var(--spacing-4xl)) auto 0;
 }
 
 .title {
   font-family: var(--font-display);
-  font-size: clamp(1.9rem, 4vw, 2.5rem);
-  font-weight: 700;
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-bold);
   letter-spacing: -0.025em;
-  color: var(--ink);
+  color: var(--color-text);
 }
 
 .effective {
-  margin-top: 0.5rem;
-  color: var(--ink-mute);
-  font-size: 0.95rem;
+  margin-top: var(--spacing-xs);
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-sm);
 }
 
 .intro {
-  margin-top: 1.5rem;
-  font-size: 1.1rem;
-  line-height: 1.7;
-  color: var(--ink-soft);
+  margin-top: var(--spacing-xl);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-body);
+  color: var(--color-text-muted);
 }
 
 .section {
-  margin-top: clamp(2rem, 5vw, 3rem);
+  margin-top: clamp(var(--spacing-2xl), 5vw, var(--spacing-4xl));
 }
 
 .heading {
   font-family: var(--font-display);
-  font-size: 1.2rem;
-  font-weight: 600;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
   letter-spacing: -0.01em;
-  color: var(--ink);
+  color: var(--color-text);
 }
 
 .para {
-  margin-top: 0.75rem;
-  line-height: 1.7;
-  color: var(--ink-soft);
+  margin-top: var(--spacing-sm);
+  line-height: var(--line-height-body);
+  color: var(--color-text-muted);
 }
 
 .list {
-  margin: 0.75rem 0 0;
-  padding-left: 1.25rem;
+  margin: var(--spacing-sm) 0 0;
+  padding-left: var(--spacing-lg);
   display: grid;
-  gap: 0.5rem;
+  gap: var(--spacing-xs);
 }
 
 .list li {
-  line-height: 1.6;
-  color: var(--ink-soft);
+  line-height: var(--line-height-body);
+  color: var(--color-text-muted);
 }
 
 .list li::marker {
-  color: var(--teal);
+  color: var(--color-accent);
 }
 
 .foot {
-  max-width: 760px;
-  margin: clamp(3.5rem, 8vw, 5rem) auto 0;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
+  max-width: var(--content-width);
+  margin: clamp(var(--spacing-4xl), 8vw, var(--spacing-5xl)) auto 0;
+  padding-top: var(--spacing-xl);
+  border-top: var(--border-width-thin) solid var(--color-border);
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;
-  font-size: 0.92rem;
+  gap: var(--spacing-xl);
+  font-size: var(--font-size-sm);
 }
 
 .foot a {
-  color: var(--ink-mute);
-  transition: color 160ms ease;
+  color: var(--color-text-subtle);
+  transition: color var(--duration-fast) ease;
 }
 
 .foot a:hover {
-  color: var(--pine);
+  color: var(--color-accent-hover);
 }
 
 .foot a:focus-visible {
-  outline: 2px solid var(--teal-deep);
+  outline: var(--border-width-thick) solid var(--color-accent-hover);
   outline-offset: 3px;
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
 }

@@ -1,7 +1,7 @@
 .section {
-  padding-block: clamp(3.5rem, 9vh, 6.5rem);
-  background: var(--surface);
-  border-block: 1px solid var(--border);
+  padding-block: clamp(var(--spacing-4xl), 9vh, var(--spacing-6xl));
+  background: var(--color-surface);
+  border-block: var(--border-width-thin) solid var(--color-border);
 }
 
 .inner {
@@ -12,55 +12,55 @@
 
 .title {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(1.9rem, 3.5vw, 2.75rem);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-h2);
   letter-spacing: -0.025em;
-  color: var(--pine);
+  color: var(--color-accent-pine);
 }
 
 .steps {
-  margin-top: clamp(2rem, 4vw, 3.25rem);
+  margin-top: clamp(var(--spacing-2xl), 4vw, var(--spacing-4xl));
   list-style: none;
   padding: 0;
   display: grid;
-  gap: clamp(1.75rem, 3vw, 2.5rem);
+  gap: clamp(var(--spacing-2xl), 3vw, var(--spacing-3xl));
   grid-template-columns: 1fr;
   counter-reset: none;
 }
 
-@media (min-width: 720px) {
+@media (min-width: 45em) {
   .steps {
     grid-template-columns: repeat(4, 1fr);
-    gap: clamp(1.5rem, 2.5vw, 2.5rem);
+    gap: clamp(var(--spacing-xl), 2.5vw, var(--spacing-3xl));
   }
 }
 
 .step {
   position: relative;
-  padding-top: 1.25rem;
-  border-top: 2px solid var(--border-strong);
+  padding-top: var(--spacing-lg);
+  border-top: var(--border-width-thick) solid var(--color-border-strong);
 }
 
 .num {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1rem;
-  color: var(--pine);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-base);
+  color: var(--color-accent-pine);
   letter-spacing: 0.02em;
 }
 
 .stepTitle {
-  margin-top: 0.6rem;
+  margin-top: var(--spacing-xs); /* snapped from 0.6rem → nearest rung 0.5rem */
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.25rem;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-lg);
   letter-spacing: -0.01em;
-  color: var(--ink);
+  color: var(--color-text);
 }
 
 .stepBody {
-  margin-top: 0.5rem;
-  color: var(--ink-soft);
-  line-height: 1.55;
-  font-size: 1rem;
+  margin-top: var(--spacing-xs);
+  color: var(--color-text-muted);
+  line-height: var(--line-height-body); /* snapped from 1.55 → nearest rung 1.6 */
+  font-size: var(--font-size-base);
 }

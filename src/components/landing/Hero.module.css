@@ -5,34 +5,37 @@
 .inner {
   max-width: var(--maxw);
   margin: 0 auto;
-  padding: clamp(3rem, 10vh, 7rem) var(--gutter) clamp(2.5rem, 7vh, 5rem);
+  padding: clamp(var(--spacing-4xl), 10vh, var(--spacing-7xl)) var(--gutter) clamp(var(--spacing-3xl), 7vh, var(--spacing-5xl));
 }
 
 .avail {
+  --avail-gap: 0.55rem;
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--pine);
-  margin-bottom: 1.75rem;
+  gap: var(--avail-gap);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent-pine);
+  margin-bottom: var(--spacing-xl);
 }
 
 .dot {
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 999px;
-  background: var(--teal);
-  box-shadow: 0 0 0 4px color-mix(in oklab, var(--teal) 22%, transparent);
+  --dot: 0.5rem;
+  --dot-ring: 4px;
+  width: var(--dot);
+  height: var(--dot);
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+  box-shadow: 0 0 0 var(--dot-ring) color-mix(in oklab, var(--color-accent) 22%, transparent);
 }
 
 .heading {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(2.75rem, 7vw, 5rem);
-  line-height: 1.0;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-h1);
+  line-height: var(--line-height-none);
   letter-spacing: -0.035em;
-  color: var(--ink);
+  color: var(--color-text);
   margin: 0;
 }
 
@@ -41,55 +44,61 @@
 }
 
 .em {
-  color: var(--pine);
+  color: var(--color-accent-pine);
 }
 
 .sub {
-  margin-top: 1.75rem;
+  margin-top: var(--spacing-xl);
   max-width: 46ch;
-  font-size: clamp(1.1rem, 1.6vw, 1.35rem);
-  line-height: 1.55;
-  color: var(--ink-soft);
+  font-size: var(--font-size-lead);
+  line-height: var(--line-height-body);
+  color: var(--color-text-muted);
   text-wrap: pretty;
 }
 
 .actions {
-  margin-top: 2.25rem;
+  margin-top: var(--spacing-2xl);
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: var(--spacing-xl);
   flex-wrap: wrap;
 }
 
 /* Default: ink on light rust. Hover: white on deep rust. Both pass AA. */
 .primary {
+  --primary-font-size: 1.05rem;
+  --primary-padding-y: 0.9rem;
+  --primary-padding-x: 1.6rem;
+  --primary-transition-duration: var(--duration-medium);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--rust-soft);
-  color: var(--ink);
+  background: var(--color-cta);
+  color: var(--color-text);
   font-family: var(--font-body);
-  font-weight: 600;
-  font-size: 1.05rem;
-  padding: 0.9rem 1.6rem;
-  border-radius: 12px;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--primary-font-size);
+  padding: var(--primary-padding-y) var(--primary-padding-x);
+  border-radius: var(--radius-lg);
   transition:
-    background-color 220ms ease,
-    color 220ms ease,
-    transform 160ms var(--ease-out-quint),
-    box-shadow 220ms ease;
-  box-shadow: 0 8px 22px -14px color-mix(in oklab, var(--rust) 70%, transparent);
+    background-color var(--primary-transition-duration) ease,
+    color var(--primary-transition-duration) ease,
+    transform var(--duration-fast) var(--ease-out-quint),
+    box-shadow var(--primary-transition-duration) ease;
+  --btn-shadow: 0 8px 22px -14px color-mix(in oklab, var(--color-cta-base) 70%, transparent);
+  --btn-shadow-hover: 0 16px 30px -14px color-mix(in oklab, var(--color-cta-hover) 75%, transparent);
+  box-shadow: var(--btn-shadow);
 }
 
 .primary:hover {
-  background: var(--rust-deep);
-  color: #fff;
+  background: var(--color-cta-hover);
+  color: var(--color-white);
   transform: translateY(-2px);
-  box-shadow: 0 16px 30px -14px color-mix(in oklab, var(--rust-deep) 75%, transparent);
+  box-shadow: var(--btn-shadow-hover);
 }
 
 .primary:focus-visible {
-  outline: 2px solid var(--rust-deep);
+  outline: var(--border-width-thick) solid var(--color-cta-hover);
   outline-offset: 3px;
 }
 
@@ -99,47 +108,51 @@
 }
 
 .ghost {
-  color: var(--pine);
-  font-weight: 600;
-  font-size: 1.05rem;
-  border-bottom: 2px solid color-mix(in oklab, var(--teal) 40%, transparent);
-  padding-bottom: 2px;
-  transition: border-color 160ms ease, color 160ms ease;
+  --ghost-font-size: 1.05rem;
+  --ghost-pb: 2px;
+  color: var(--color-accent-pine);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--ghost-font-size);
+  border-bottom: var(--border-width-thick) solid color-mix(in oklab, var(--color-accent) 40%, transparent);
+  padding-bottom: var(--ghost-pb);
+  transition: border-color var(--duration-fast) ease, color var(--duration-fast) ease;
 }
 
 .ghost:hover {
-  color: var(--teal-deep);
-  border-bottom-color: var(--teal);
+  color: var(--color-accent-deep);
+  border-bottom-color: var(--color-accent);
 }
 
 .ghost:focus-visible {
-  outline: 2px solid var(--teal-deep);
+  outline: var(--border-width-thick) solid var(--color-accent-deep);
   outline-offset: 3px;
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
 }
 
 /* Grow the tap target to 44px on touch without altering the visual (Fitts's). */
-@media (pointer: coarse), (max-width: 640px) {
+@media (pointer: coarse), (max-width: 40em) {
   .ghost {
     position: relative;
   }
   .ghost::after {
+    --touch-target: 44px;
     content: "";
     position: absolute;
     left: 0;
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-    height: 44px;
+    height: var(--touch-target);
   }
 }
 
 /* Magnetic wrapper: follows the cursor via --mx/--my (set by useMagnetic), eases
    back on release. The button keeps its own hover lift (nested transform). */
 .magnet {
+  --magnet-transition: 0.35s;
   display: inline-flex;
   transform: translate(var(--mx, 0px), var(--my, 0px));
-  transition: transform 0.35s var(--ease-out-quint);
+  transition: transform var(--magnet-transition) var(--ease-out-quint);
   will-change: transform;
 }
 
@@ -170,10 +183,10 @@
     color: transparent;
     background-image: linear-gradient(
       100deg,
-      var(--pine) 0%,
-      var(--pine) 42%,
-      var(--ink) 58%,
-      var(--ink) 100%
+      var(--color-accent-pine) 0%,
+      var(--color-accent-pine) 42%,
+      var(--color-text) 58%,
+      var(--color-text) 100%
     );
     background-size: 220% 100%;
     background-position-x: 100%;

@@ -15,16 +15,16 @@ body {
   background: var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-sans);
-  font-size: 16px;
-  line-height: 1.6;
-  transition: background var(--transition-base), color var(--transition-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-body);
+  transition: background var(--duration-base) ease, color var(--duration-base) ease;
 }
 
 h1, h2, h3, h4 {
   font-family: var(--font-serif);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   letter-spacing: -0.02em;
-  line-height: 1.15;
+  line-height: var(--line-height-tight);
   margin: 0;
 }
 
@@ -35,7 +35,7 @@ p {
 a {
   color: var(--color-accent);
   text-decoration: none;
-  transition: color var(--transition-fast);
+  transition: color var(--duration-fast) ease;
 }
 
 a:hover {
@@ -43,7 +43,7 @@ a:hover {
 }
 
 a:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: var(--border-width-thick) solid var(--color-accent);
   outline-offset: 3px;
   border-radius: var(--radius-sm);
 }
@@ -59,7 +59,7 @@ button {
 }
 
 button:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: var(--border-width-thick) solid var(--color-accent);
   outline-offset: 3px;
   border-radius: var(--radius-sm);
 }

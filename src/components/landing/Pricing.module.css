@@ -1,5 +1,5 @@
 .section {
-  padding-block: clamp(3.5rem, 9vh, 6.5rem);
+  padding-block: clamp(var(--spacing-4xl), 9vh, var(--spacing-6xl));
 }
 
 .inner {
@@ -10,87 +10,87 @@
 
 .title {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(1.9rem, 3.5vw, 2.75rem);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-h2);
   letter-spacing: -0.025em;
-  color: var(--ink);
+  color: var(--color-text);
 }
 
 .lede {
-  margin-top: 0.85rem;
+  margin-top: var(--spacing-sm);
   max-width: 58ch;
-  font-size: 1.1rem;
-  line-height: 1.55;
-  color: var(--ink-soft);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-body);
+  color: var(--color-text-muted);
   text-wrap: pretty;
 }
 
 .grid {
-  margin-top: clamp(2rem, 4vw, 3rem);
+  margin-top: clamp(var(--spacing-2xl), 4vw, var(--spacing-4xl));
   display: grid;
-  gap: clamp(1.25rem, 3vw, 2rem);
+  gap: clamp(var(--spacing-xl), 3vw, var(--spacing-2xl));
   grid-template-columns: 1fr;
   align-items: start;
 }
 
-@media (min-width: 760px) {
+@media (min-width: 47.5em) {
   .grid {
     grid-template-columns: 1fr 1fr;
   }
 }
 
 .card {
-  background: var(--paper-raised);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: clamp(1.5rem, 3vw, 2rem);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border); /* 1px: intentional hairline border */
+  border-radius: var(--radius-xl);
+  padding: clamp(var(--spacing-xl), 3vw, var(--spacing-2xl));
 }
 
 .cardHead {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--spacing-md);
   flex-wrap: wrap;
 }
 
 .name {
   font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.3rem;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-lg);
   letter-spacing: -0.01em;
-  color: var(--ink);
+  color: var(--color-text);
 }
 
 .price {
   font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 1.6rem;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xl);
   letter-spacing: -0.01em;
-  color: var(--pine);
+  color: var(--color-accent-pine);
   white-space: nowrap;
 }
 
 .from {
   font-family: var(--font-body);
-  font-weight: 500;
-  font-size: 0.8rem;
-  color: var(--ink-soft);
-  margin-right: 0.3rem;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  margin-right: var(--spacing-2xs);
 }
 
 .pitch {
-  margin-top: 0.85rem;
+  margin-top: var(--spacing-sm);
   max-width: 42ch;
-  font-size: 1.02rem;
-  line-height: 1.55;
-  color: var(--ink-soft);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-body);
+  color: var(--color-text-muted);
 }
 
 .details {
-  margin-top: 1.25rem;
-  border-top: 1px solid var(--border);
-  padding-top: 1rem;
+  margin-top: var(--spacing-md);
+  border-top: 1px solid var(--color-border); /* 1px: intentional hairline border */
+  padding-top: var(--spacing-md);
   /* enables the panel to transition to/from its intrinsic (auto) height */
   interpolate-size: allow-keywords;
 }
@@ -98,13 +98,13 @@
 .summary {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: var(--spacing-xs);
   cursor: pointer;
-  font-weight: 600;
-  color: var(--pine);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent-pine);
   list-style: none;
   user-select: none;
-  transition: color 160ms ease;
+  transition: color var(--duration-fast) ease; /* var(--duration-fast) = --dur-medium; no global token yet — see header */
 }
 
 .summary::-webkit-details-marker {
@@ -112,17 +112,17 @@
 }
 
 .summary:hover {
-  color: var(--teal-deep);
+  color: var(--color-accent-deep);
 }
 
 .summary:focus-visible {
-  outline: 2px solid var(--teal-deep);
-  outline-offset: 3px;
-  border-radius: 4px;
+  outline: 2px solid var(--color-accent-deep); /* 2px: intentional outline width */
+  outline-offset: 3px; /* px intentional: outline-offset */
+  border-radius: var(--radius-sm);
 }
 
 /* Grow the toggle's tap target to 44px on touch (Fitts's) without shifting layout. */
-@media (pointer: coarse), (max-width: 640px) {
+@media (pointer: coarse), (max-width: 40em) {
   .summary {
     position: relative;
   }
@@ -133,18 +133,20 @@
     right: 0;
     top: 50%;
     transform: translateY(-50%);
-    height: 44px;
+    --tap-target: 44px; /* intentional px: WCAG 2.5.5 touch target minimum */
+    height: var(--tap-target);
   }
 }
 
 /* Facet-triangle marker — points down ("expand"); rotates up when open. */
 .tri {
-  width: 0.7rem;
-  height: 0.7rem;
+  --tri-size: 0.7rem; /* component icon; no spacing rung — see header */
+  width: var(--tri-size);
+  height: var(--tri-size);
   flex: none;
-  background: var(--teal);
+  background: var(--color-accent);
   clip-path: polygon(0 0, 100% 0, 50% 100%);
-  transition: transform 220ms var(--ease-out-quint);
+  transition: transform var(--duration-medium) var(--ease-out-quint); /* var(--duration-medium): expressive open/close; no token rung */
 }
 
 .details[open] .tri {
@@ -153,18 +155,18 @@
 
 .includes {
   list-style: none;
-  margin: 1rem 0 0;
+  margin: var(--spacing-md) 0 0;
   padding: 0;
   display: grid;
-  gap: 0.5rem;
+  gap: var(--spacing-xs);
 }
 
 .includes li {
   position: relative;
-  padding-left: 1.5rem;
-  font-size: 0.98rem;
-  line-height: 1.5;
-  color: var(--ink-soft);
+  padding-left: var(--spacing-xl);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-snug);
+  color: var(--color-text-muted);
 }
 
 .includes li::before {
@@ -172,33 +174,33 @@
   position: absolute;
   left: 0;
   top: 0;
-  color: var(--pine);
-  font-weight: 700;
+  color: var(--color-accent-pine);
+  font-weight: var(--font-weight-bold);
 }
 
 .owns {
-  margin-top: 1rem;
-  font-size: 0.92rem;
-  line-height: 1.5;
-  color: var(--ink-mute);
+  margin-top: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  color: var(--color-text-subtle);
 }
 
 .rest {
-  margin-top: clamp(2rem, 4vw, 3rem);
+  margin-top: clamp(var(--spacing-2xl), 4vw, var(--spacing-4xl));
   display: grid;
-  gap: 0.85rem;
+  gap: var(--spacing-sm);
   max-width: 64ch;
 }
 
 .rest p {
-  font-size: 1rem;
-  line-height: 1.55;
-  color: var(--ink-soft);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-body);
+  color: var(--color-text-muted);
 }
 
 .rest strong {
-  color: var(--ink);
-  font-weight: 600;
+  color: var(--color-text);
+  font-weight: var(--font-weight-semibold);
 }
 
 /* Soft-open: slide the panel's height open and fade it in (instead of an
@@ -214,9 +216,9 @@
        pops away when content-visibility flips at the end of the close. */
     display: flow-root;
     transition:
-      block-size 300ms var(--ease-out-quint),
-      opacity 260ms ease,
-      content-visibility 300ms allow-discrete;
+      block-size var(--duration-slow) var(--ease-out-quint), /* var(--duration-slow): expressive accordion open; no token rung */
+      opacity var(--duration-base) ease, /* var(--duration-base): fade lag behind height; no token rung */
+      content-visibility var(--duration-slow) allow-discrete;
   }
   .details[open]::details-content {
     block-size: auto;
