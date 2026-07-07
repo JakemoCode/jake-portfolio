@@ -1,14 +1,15 @@
-import { useRef } from "react";
+import { useRef, useState, type MouseEvent } from "react";
 import type { WorkSite } from "../../content/work";
 import { work } from "../../content/work";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 import styles from "./WorkGallery.module.css";
 
-/** One client site. The still is the resting state; on hover the real hero
- *  entrance plays in place (no scroll), and the phone inset shows the same
- *  site's mobile layout. The whole tile links to the live site. */
+/** One client site. The still is the resting state; on hover (or a tap on
+ *  tablet-down) the real hero entrance plays in place, and the phone inset shows
+ *  the same site's mobile layout. The whole tile links to the live site. */
 function Tile({ site, reduceMotion }: { site: WorkSite; reduceMotion: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [tapped, setTapped] = useState(false);
 
   // Replay the entrance from its true first frame on each hover; reset on leave
   // so the still can fade back over the (last) frame.
@@ -20,6 +21,17 @@ function Tile({ site, reduceMotion }: { site: WorkSite; reduceMotion: boolean })
   };
   const stop = () => videoRef.current?.pause();
 
+  // Tablet-down / any no-hover device: tapping the frame plays the hero in place
+  // (and reveals it, since there's no hover to trigger the CSS reveal) instead
+  // of navigating. "Visit site" stays the tap target for opening the live site;
+  // desktop is unchanged (hover plays, whole tile navigates).
+  const onFrameTap = (e: MouseEvent<HTMLDivElement>) => {
+    if (reduceMotion || !window.matchMedia("(hover: none), (max-width: 64em)").matches) return;
+    e.preventDefault();
+    setTapped(true);
+    play();
+  };
+
   return (
     <a
       className={`${styles.tile} ${site.feature ? styles.feature : ""}`}
@@ -27,12 +39,13 @@ function Tile({ site, reduceMotion }: { site: WorkSite; reduceMotion: boolean })
       target="_blank"
       rel="noopener"
       aria-label={`Visit ${site.name} (opens in a new tab)`}
+      data-playing={tapped || undefined}
       onMouseEnter={reduceMotion ? undefined : play}
       onMouseLeave={reduceMotion ? undefined : stop}
       onFocus={reduceMotion ? undefined : play}
       onBlur={reduceMotion ? undefined : stop}
     >
-      <div className={styles.frame}>
+      <div className={styles.frame} onClick={onFrameTap}>
         <div className={styles.chrome}>
           <span className={styles.dot} />
           <span className={styles.dot} />

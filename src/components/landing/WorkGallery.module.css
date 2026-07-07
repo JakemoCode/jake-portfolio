@@ -127,12 +127,14 @@
 }
 
 .tile:hover .motion,
-.tile:focus-visible .motion {
+.tile:focus-visible .motion,
+.tile[data-playing="true"] .motion {
   opacity: 1;
 }
 
 .tile:hover .still,
-.tile:focus-visible .still {
+.tile:focus-visible .still,
+.tile[data-playing="true"] .still {
   opacity: 0;
 }
 

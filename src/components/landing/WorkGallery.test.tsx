@@ -37,4 +37,36 @@ describe("WorkGallery", () => {
     fireEvent.mouseLeave(link);
     expect(HTMLMediaElement.prototype.pause).toHaveBeenCalled();
   });
+
+  it("on tablet-down, tapping the frame plays the hero (reveal on) instead of navigating", () => {
+    const original = window.matchMedia;
+    // Query-aware: tablet-down matches, reduced-motion doesn't (so the video renders).
+    window.matchMedia = ((q: string) => ({
+      matches: q.includes("hover: none") || q.includes("max-width"),
+      media: q,
+      onchange: null,
+      addEventListener() {},
+      removeEventListener() {},
+      addListener() {},
+      removeListener() {},
+      dispatchEvent: () => false,
+    })) as unknown as typeof window.matchMedia;
+    try {
+      render(<WorkGallery />);
+      const site = work[0]!;
+      const link = screen.getByRole("link", { name: new RegExp(`Visit ${site.name}`, "i") });
+      vi.mocked(HTMLMediaElement.prototype.play).mockClear();
+
+      // The host label lives inside the frame; clicking it bubbles to the tap
+      // handler. fireEvent.click returns false when the event's default was
+      // prevented — i.e. the tile link would NOT navigate.
+      const proceeded = fireEvent.click(screen.getByText(site.host));
+
+      expect(proceeded).toBe(false); // navigation suppressed
+      expect(link.getAttribute("data-playing")).toBe("true"); // reveal on
+      expect(HTMLMediaElement.prototype.play).toHaveBeenCalled(); // hero plays
+    } finally {
+      window.matchMedia = original;
+    }
+  });
 });
