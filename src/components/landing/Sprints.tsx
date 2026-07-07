@@ -18,12 +18,7 @@ function OfferRow({ offer, lead }: { offer: Offer; lead?: boolean }) {
   return (
     <article className={`${styles.row} ${lead ? styles.lead : ""} r-up`}>
       <div className={styles.head}>
-        <h4 className={styles.name}>
-          <span className={styles.icon} aria-hidden="true">
-            {offer.icon}
-          </span>
-          {offer.name}
-        </h4>
+        <h4 className={styles.name}>{offer.name}</h4>
         <p className={styles.priceWrap}>
           <Price offer={offer} />
           {offer.priceNote && (

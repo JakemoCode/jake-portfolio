@@ -59,19 +59,11 @@
 }
 
 .name {
-  display: inline-flex;
-  align-items: baseline;
-  gap: var(--spacing-xs);
   font-family: var(--font-display);
   font-weight: var(--font-weight-semibold);
   font-size: var(--font-size-lg);
   letter-spacing: -0.01em;
   color: var(--color-text);
-}
-
-.icon {
-  font-size: var(--font-size-md);
-  line-height: var(--line-height-none);
 }
 
 .priceWrap {

@@ -7,7 +7,6 @@
 
 export type Offer = {
   id: string;
-  icon: string; // leading emoji
   name: string;
   price: string; // a number ("$497") or a phrase ("Quoted after your audit")
   from?: boolean; // prefix the price with "from"
@@ -23,7 +22,6 @@ export type Offer = {
 // because the report is bounded no matter how messy the site is.
 export const AUDIT: Offer = {
   id: "audit",
-  icon: "🔍",
   name: "Website Audit",
   price: "$497",
   priceNote: "credited toward any fix",
@@ -45,7 +43,6 @@ export const AUDIT: Offer = {
 export const FIXES: Offer[] = [
   {
     id: "rescue",
-    icon: "🔧",
     name: "Website Rescue",
     price: "Quoted after your audit",
     quoted: true,
@@ -63,7 +60,6 @@ export const FIXES: Offer[] = [
   },
   {
     id: "tuneup",
-    icon: "📈",
     name: "Conversion Tune-Up",
     price: "Quoted after your audit",
     quoted: true,
@@ -85,7 +81,6 @@ export const FIXES: Offer[] = [
 // with the one-page price so a feature never appears to out-price a whole site.
 export const FEATURE: Offer = {
   id: "feature",
-  icon: "✨",
   name: "Custom Feature Sprint",
   price: "$1,200",
   from: true,
