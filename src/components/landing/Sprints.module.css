@@ -114,13 +114,15 @@
 }
 
 /* The broken-vs-converting self-select, sitting above the two fix rows. */
+/* A quiet connective prompt for the two fix rows — deliberately below the
+   heading tier (no display face, no bold) so it doesn't compete with the
+   offer names on either side of it. */
 .selector {
-  margin-top: var(--spacing-xl);
-  font-family: var(--font-display);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-md);
-  letter-spacing: -0.01em;
-  color: var(--color-text);
+  margin-top: var(--spacing-2xl);
+  margin-bottom: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
 }
 
 .rows {
