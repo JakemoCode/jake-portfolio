@@ -29,9 +29,20 @@ describe("Sprints", () => {
 
   it("keeps the audit-gated fixes free of a flat price", () => {
     render(<Sprints />);
-    // Both Rescue and Conversion Tune-Up defer pricing to the audit (§5).
+    // Both Rescue and Website Tune-Up defer pricing to the audit (§5).
     expect(screen.getAllByText("Quoted after your audit").length).toBe(
       FIXES.length,
     );
+  });
+
+  it("shows the disclosure only on non-quoted offers", () => {
+    render(<Sprints />);
+    // Quoted (audit-gated) offers defer their scope to the audit, so they skip
+    // the "See what's included" toggle. Only the audit + feature keep it.
+    const withDisclosure = [AUDIT, FEATURE, ...FIXES].filter((o) => !o.quoted);
+    expect(screen.getAllByText(/See what.s included/).length).toBe(
+      withDisclosure.length,
+    );
+    expect(FIXES.every((o) => o.quoted)).toBe(true);
   });
 });

@@ -18,28 +18,41 @@ function OfferRow({ offer, lead }: { offer: Offer; lead?: boolean }) {
   return (
     <article className={`${styles.row} ${lead ? styles.lead : ""} r-up`}>
       <div className={styles.head}>
-        <h4 className={styles.name}>{offer.name}</h4>
-        <p className={styles.priceWrap}>
-          <Price offer={offer} />
-          {offer.priceNote && (
-            <span className={styles.priceNote}>{offer.priceNote}</span>
-          )}
-        </p>
+        {/* Facet bullet — the audit has a whole card, so the quieter rows get a
+            colored triangle (the DESIGN.md motif) to give each its own identity.
+            Colors are assigned per row in CSS (teal family; rust stays for CTAs). */}
+        {!lead && <span className={styles.bullet} aria-hidden="true" />}
+        <div className={styles.titleBlock}>
+          <h4 className={styles.name}>{offer.name}</h4>
+          <p className={styles.priceWrap}>
+            <Price offer={offer} />
+            {offer.priceNote && (
+              <span className={styles.priceNote}>{offer.priceNote}</span>
+            )}
+          </p>
+        </div>
+        {offer.badge && <span className={styles.badge}>{offer.badge}</span>}
       </div>
 
       <p className={styles.blurb}>{lead ? offer.pitch : offer.blurb}</p>
 
-      <details className={styles.details}>
-        <summary className={styles.summary}>
-          <span className={styles.tri} aria-hidden="true" />
-          See what&rsquo;s included
-        </summary>
-        <ul className={styles.includes}>
-          {offer.includes.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </details>
+      {/* Audit-gated offers (quoted) defer their scope to the audit itself, so
+          they skip the disclosure — that also thins the repeated "See what's
+          included" column down the tier. Their includes copy stays in
+          offers.ts as the scoping source for the audit conversation. */}
+      {!offer.quoted && (
+        <details className={styles.details}>
+          <summary className={styles.summary}>
+            <span className={styles.tri} aria-hidden="true" />
+            See what&rsquo;s included
+          </summary>
+          <ul className={styles.includes}>
+            {offer.includes.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </details>
+      )}
     </article>
   );
 }
@@ -60,13 +73,12 @@ export function Sprints() {
 
       <OfferRow offer={AUDIT} lead />
 
+      {/* Fixes and the feature build share one row group so the hairline
+          dividers keep an even rhythm (no extra gap before the last one). */}
       <div className={styles.rows}>
         {FIXES.map((offer) => (
           <OfferRow key={offer.id} offer={offer} />
         ))}
-      </div>
-
-      <div className={styles.rows}>
         <OfferRow offer={FEATURE} />
       </div>
     </div>

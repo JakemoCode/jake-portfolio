@@ -22,9 +22,10 @@ export type Offer = {
 // because the report is bounded no matter how messy the site is.
 export const AUDIT: Offer = {
   id: "audit",
-  name: "Website Audit",
+  name: "Website audit",
   price: "$500",
   priceNote: "credited toward any fix",
+  badge: "Start here",
   pitch:
     "Not sure what’s wrong, or where to start? I’ll go through your site the way a first-time visitor, and Google, actually see it, then hand you a plain-English report: what’s slowing it down, what’s confusing people, and exactly what I’d fix first.",
   blurb:
@@ -43,7 +44,7 @@ export const AUDIT: Offer = {
 export const FIXES: Offer[] = [
   {
     id: "rescue",
-    name: "Website Rescue",
+    name: "Website rescue",
     price: "Quoted after your audit",
     quoted: true,
     pitch:
@@ -60,7 +61,7 @@ export const FIXES: Offer[] = [
   },
   {
     id: "tuneup",
-    name: "Conversion Tune-Up",
+    name: "Website tune-up",
     price: "Quoted after your audit",
     quoted: true,
     pitch:
@@ -81,7 +82,7 @@ export const FIXES: Offer[] = [
 // with the one-page price so a feature never appears to out-price a whole site.
 export const FEATURE: Offer = {
   id: "feature",
-  name: "Custom Feature Sprint",
+  name: "Custom feature build",
   price: "$1,200",
   from: true,
   pitch:

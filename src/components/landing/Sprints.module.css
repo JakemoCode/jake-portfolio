@@ -33,6 +33,10 @@
 /* ---- A single offer row ---- */
 .row {
   padding-block: var(--spacing-lg);
+  /* Caps the blurb to a readable measure; the empty space lands outside the row
+     as breathing room. (The price sits under the name now, so the head no longer
+     needs this.) */
+  --row-measure: 38rem;
 }
 
 /* Non-lead rows are quiet, divided by hairlines. */
@@ -40,8 +44,9 @@
   border-top: 1px solid var(--color-border); /* 1px: intentional divider */
 }
 
-/* The audit lifts out of the band on a raised (paper) surface — the emphasis
-   comes from tone, not a badge, shadow, or side rail. */
+/* The audit lifts out of the band on a raised (paper) surface — the tonal lift
+   carries the emphasis; the "Start here" badge just names it as the entry point.
+   Still no shadow or side rail. */
 .lead {
   margin-top: var(--spacing-xl);
   background: var(--color-bg-elevated);
@@ -50,12 +55,33 @@
   padding: clamp(var(--spacing-lg), 2.5vw, var(--spacing-xl));
 }
 
+/* Name + price stack on the left; the optional badge sits top-right. Stacking
+   the price under its name (rather than pushing it to the far edge) keeps the
+   two visually bound and removes the dead horizontal gap on the wide band. */
 .head {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--spacing-md);
+  align-items: flex-start;
+  gap: var(--spacing-sm);
   flex-wrap: wrap;
+}
+
+/* Facet bullet leading the row. Right-pointing triangle (the DESIGN.md motif),
+   nudged down to sit on the name's cap line. */
+.bullet {
+  --bullet-size: 0.62rem;
+  flex: none;
+  width: var(--bullet-size);
+  height: var(--bullet-size);
+  margin-top: 0.42rem; /* optical: align the triangle with the name's cap height */
+  background: var(--color-accent-deep);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
+}
+
+.titleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xs);
+  min-width: 0;
 }
 
 .name {
@@ -69,9 +95,25 @@
 .priceWrap {
   display: inline-flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 2px; /* px: hairline stack between price and its note */
-  text-align: right;
+  text-align: left;
+}
+
+/* "Start here" — a quiet entry-point cue on the audit, not a loud pill. Tinted
+   accent wash + pine text, no border. */
+.badge {
+  flex: none;
+  align-self: flex-start;
+  margin-left: auto; /* push to the top-right of the head */
+  padding: var(--spacing-2xs) var(--spacing-sm);
+  border-radius: var(--radius-pill);
+  background: color-mix(in oklab, var(--color-accent) 14%, var(--color-bg-elevated));
+  color: var(--color-accent-pine);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .price {
@@ -106,14 +148,14 @@
 
 .blurb {
   margin-top: var(--spacing-xs);
-  max-width: 64ch;
+  max-width: var(--row-measure);
   font-size: var(--font-size-base);
   line-height: var(--line-height-body);
   color: var(--color-text-muted);
   text-wrap: pretty;
 }
 
-/* The broken-vs-converting self-select, sitting above the two fix rows. */
+/* The entry rows (rescue, tune-up, feature build). */
 .rows {
   margin-top: var(--spacing-xl);
 }
