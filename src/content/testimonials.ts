@@ -24,6 +24,16 @@ export const testimonials: Testimonial[] = [
     link: "https://www.arborgymnastics.com/",
   },
   {
+    id: "testimonial-zendeb",
+    clientId: "zendeb",
+    client: "Zendeb",
+    quote:
+      "Jake took a dream and a few scribbled notes and turned them into a work of art. The Nakshatra wheel is remarkable: the symbols, the color, the way it spins and then slowly comes to rest when you click to stop it, feels like exploring something timeless. He was always coming up with ideas that delighted me, and the result went far beyond what I pictured. I highly recommend Jake for your own website dreams.",
+    name: "Debora Bowley",
+    role: "Founder, Zendeb",
+    link: "https://zendeb.com/",
+  },
+  {
     id: "testimonial-jyotish",
     clientId: "jyotish",
     client: "Jyotish Tarot",

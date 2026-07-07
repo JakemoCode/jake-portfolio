@@ -2,6 +2,7 @@ import { describe, it, expect, afterEach } from "vitest";
 import { render, screen, fireEvent, within, cleanup } from "@testing-library/react";
 import { MemoryRouter } from "react-router-dom";
 import { Proof } from "./Proof";
+import { testimonials } from "../../content/testimonials";
 
 // This project's Vitest config doesn't enable `globals`, so RTL's automatic
 // per-test cleanup isn't registered — unmount explicitly between tests.
@@ -30,8 +31,9 @@ describe("Proof", () => {
   it("wraps from the last testimonial back to the first via next", () => {
     renderProof();
     const next = screen.getByRole("button", { name: "Next testimonial" });
-    fireEvent.click(next); // → Debora (last of two)
-    fireEvent.click(next); // wraps → Morgan
+    // Walk to the last testimonial, then one more click wraps back to the first.
+    for (let i = 0; i < testimonials.length - 1; i++) fireEvent.click(next);
+    fireEvent.click(next);
     expect(within(screen.getByRole("article")).getByText("Morgan Berry")).toBeTruthy();
   });
 

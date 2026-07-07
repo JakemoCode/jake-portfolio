@@ -46,6 +46,5 @@ Reviewed (multi-angle) and simplified; findings addressed in-branch.
 
 ## Awaiting
 
-- Updated **Zendeb** testimonial from the client (requested a more concrete
-  edit); joins the existing `zendeb` gallery tile when it lands.
-- Testimonials from Zendeb / Victoria to balance the testimonial set.
+- **Victoria Grace** testimonial to round out the set (Arbor and Zendeb, the
+  other two gallery sites, now have quotes).
