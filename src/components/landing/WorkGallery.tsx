@@ -25,8 +25,8 @@ function Tile({ site, reduceMotion }: { site: WorkSite; reduceMotion: boolean })
 
   // No-hover devices (phones and tablets) can't hover, so tapping the frame
   // plays the hero in place (and reveals it, since there's no hover to trigger
-  // the CSS reveal) instead of navigating. "Visit site" stays the tap target for
-  // opening the live site. Gated on `(hover: none)` only — matching the copy
+  // the CSS reveal) instead of navigating. "See it live" stays the tap target
+  // for opening the live site. Gated on `(hover: none)` only — matching the copy
   // toggle — so a hover-capable desktop keeps whole-tile navigation at every
   // width (a width breakpoint would wrongly swallow clicks in a narrow window).
   const onFrameTap = (e: MouseEvent<HTMLDivElement>) => {
@@ -42,7 +42,7 @@ function Tile({ site, reduceMotion }: { site: WorkSite; reduceMotion: boolean })
       href={site.url}
       target="_blank"
       rel="noopener"
-      aria-label={`Visit ${site.name} (opens in a new tab)`}
+      aria-label={`See ${site.name} live (opens in a new tab)`}
       data-playing={tapped || undefined}
       onMouseEnter={playOn}
       onMouseLeave={stopOn}
@@ -78,7 +78,7 @@ function Tile({ site, reduceMotion }: { site: WorkSite; reduceMotion: boolean })
         <h3 className={styles.name}>{site.name}</h3>
         <span className={styles.tag}>{site.tag}</span>
         <span className={styles.visit}>
-          Visit site
+          See it live
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
             <path d="M7 17 17 7M9 7h8v8" />
           </svg>
@@ -100,7 +100,7 @@ export function WorkGallery() {
         <p className={`${styles.sub} r-up`}>
           <span className={styles.onHover}>Hover</span>
           <span className={styles.onTouch}>Tap</span> a project to watch its hero animate the way it
-          does live. The small screen is the same site on a phone. Click through for the real thing.
+          does live. The small screen is the same site on a phone. Open the live site for the real thing.
         </p>
 
         <div className={styles.gallery}>

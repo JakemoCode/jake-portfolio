@@ -138,10 +138,18 @@
 }
 
 .stage {
+  --focus-ring-room: 6px; /* clears the focus ring (2px outline + 3px offset) */
   position: relative;
   flex: 1 1 auto;
   min-width: 0;
+  /* Clip the off-stage swiped slides, but leave a few px so the focus ring on
+     the flush-left controls (See it live / Read more) isn't cropped. The
+     swiped slides translate a full 100%, far past this margin, so they stay
+     hidden. `overflow: hidden` is the fallback where `clip` is unsupported
+     (ring gets cropped as before — no regression). */
   overflow: hidden;
+  overflow: clip;
+  overflow-clip-margin: var(--focus-ring-room);
 }
 
 /* Every quote stacked in one grid cell (invisible) — reserves the tallest

@@ -14,7 +14,7 @@ describe("WorkGallery", () => {
   it("renders every site as a link to its live URL, opening in a new tab", () => {
     render(<WorkGallery />);
     for (const site of work) {
-      const link = screen.getByRole("link", { name: new RegExp(`Visit ${site.name}`, "i") });
+      const link = screen.getByRole("link", { name: new RegExp(site.name, "i") });
       expect(link.getAttribute("href")).toBe(site.url);
       expect(link.getAttribute("target")).toBe("_blank");
       expect(link.getAttribute("rel")).toContain("noopener");
@@ -37,7 +37,7 @@ describe("WorkGallery", () => {
     render(<WorkGallery />);
     expect(HTMLMediaElement.prototype.play).not.toHaveBeenCalled();
 
-    const link = screen.getByRole("link", { name: new RegExp(`Visit ${work[0]!.name}`, "i") });
+    const link = screen.getByRole("link", { name: new RegExp(work[0]!.name, "i") });
     fireEvent.mouseEnter(link);
     expect(HTMLMediaElement.prototype.play).toHaveBeenCalled();
     fireEvent.mouseLeave(link);
@@ -60,7 +60,7 @@ describe("WorkGallery", () => {
     try {
       render(<WorkGallery />);
       const site = work[0]!;
-      const link = screen.getByRole("link", { name: new RegExp(`Visit ${site.name}`, "i") });
+      const link = screen.getByRole("link", { name: new RegExp(site.name, "i") });
       vi.mocked(HTMLMediaElement.prototype.play).mockClear();
 
       // The host label lives inside the frame; clicking it bubbles to the tap

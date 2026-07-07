@@ -36,13 +36,15 @@ Reviewed (multi-angle) and simplified; findings addressed in-branch.
 
 ## Follow-ups
 
-- [ ] **a11y: focus outline clipped in the testimonial spotlight.** `Proof`'s
-  `.stage { overflow: hidden }` (required to clip the off-stage swiped slides)
-  crops the `:focus-visible` outline of the flush-left "See it live" and
-  "Read more" controls (their `outline-offset: 3px` paints outside the clipped
-  box). Fix without breaking the swipe clip — e.g. inset the slide content, a
-  focus-only outline treatment, or a `mask` instead of `overflow`. _Pre-existing;
-  surfaced in the PR #25 review._
+- None open. (The testimonial focus-outline clipping is fixed via
+  `overflow: clip` + `overflow-clip-margin` on `.stage`.)
+
+## Reviews
+
+- `/impeccable critique` on the two new sections: **35/40 (Good)**, detector
+  clean, "not AI-made" verdict. Acted on: unified the client-site CTA to
+  "See it live", made the gallery subhead's verb device-neutral, fixed the
+  focus-outline clip. Deferred: none material.
 
 ## Awaiting
 
