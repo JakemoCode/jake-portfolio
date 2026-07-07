@@ -1,7 +1,7 @@
+/* Sits inside the Pricing section's inner wrapper (which already provides the
+   max-width + gutter), between the lede and the package cards. */
 .wrap {
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 0 var(--gutter) clamp(var(--spacing-3xl), 7vw, var(--spacing-5xl));
+  margin-top: var(--spacing-xl);
   display: flex;
   justify-content: flex-start;
 }
