@@ -94,8 +94,9 @@ export function WorkGallery() {
           The work, in motion.
         </h2>
         <p className={`${styles.sub} r-up`}>
-          Hover a project to watch its hero animate the way it does live. The small screen is the same
-          site on a phone. Click through for the real thing.
+          <span className={styles.onHover}>Hover</span>
+          <span className={styles.onTouch}>Tap</span> a project to watch its hero animate the way it
+          does live. The small screen is the same site on a phone. Click through for the real thing.
         </p>
 
         <div className={styles.gallery}>

@@ -32,6 +32,21 @@
   max-width: 52ch;
 }
 
+/* Name the gesture the device can actually do: "Hover" where a pointer can
+   hover, "Tap" on touch — mirrors the tap-to-play interaction. */
+.onTouch {
+  display: none;
+}
+
+@media (hover: none) {
+  .onHover {
+    display: none;
+  }
+  .onTouch {
+    display: inline;
+  }
+}
+
 .gallery {
   display: grid;
   grid-template-columns: 1fr 1fr;
