@@ -33,10 +33,9 @@
 /* ---- A single offer row ---- */
 .row {
   padding-block: var(--spacing-lg);
-  /* Cap the name+price line and the blurb to a card-like measure so the price
-     sits close to its name (proximity), instead of marooned at the far edge of
-     the full-width band. The empty space then lands outside the row as intended
-     breathing room, not as a gap inside it. */
+  /* Caps the blurb to a readable measure; the empty space lands outside the row
+     as breathing room. (The price sits under the name now, so the head no longer
+     needs this.) */
   --row-measure: 38rem;
 }
 
@@ -45,8 +44,9 @@
   border-top: 1px solid var(--color-border); /* 1px: intentional divider */
 }
 
-/* The audit lifts out of the band on a raised (paper) surface — the emphasis
-   comes from tone, not a badge, shadow, or side rail. */
+/* The audit lifts out of the band on a raised (paper) surface — the tonal lift
+   carries the emphasis; the "Start here" badge just names it as the entry point.
+   Still no shadow or side rail. */
 .lead {
   margin-top: var(--spacing-xl);
   background: var(--color-bg-elevated);
@@ -55,13 +55,22 @@
   padding: clamp(var(--spacing-lg), 2.5vw, var(--spacing-xl));
 }
 
+/* Name + price stack on the left; the optional badge sits top-right. Stacking
+   the price under its name (rather than pushing it to the far edge) keeps the
+   two visually bound and removes the dead horizontal gap on the wide band. */
 .head {
   display: flex;
-  align-items: baseline;
+  align-items: flex-start;
   justify-content: space-between;
   gap: var(--spacing-md);
   flex-wrap: wrap;
-  max-width: var(--row-measure);
+}
+
+.titleBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xs);
+  min-width: 0;
 }
 
 .name {
@@ -75,9 +84,24 @@
 .priceWrap {
   display: inline-flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 2px; /* px: hairline stack between price and its note */
-  text-align: right;
+  text-align: left;
+}
+
+/* "Start here" — a quiet entry-point cue on the audit, not a loud pill. Tinted
+   accent wash + pine text, no border. */
+.badge {
+  flex: none;
+  align-self: flex-start;
+  padding: var(--spacing-2xs) var(--spacing-sm);
+  border-radius: var(--radius-pill);
+  background: color-mix(in oklab, var(--color-accent) 14%, var(--color-bg-elevated));
+  color: var(--color-accent-pine);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .price {
