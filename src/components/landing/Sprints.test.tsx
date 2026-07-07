@@ -19,7 +19,6 @@ describe("Sprints", () => {
     render(<Sprints />);
     expect(screen.getByText("$497")).toBeTruthy();
     expect(screen.getByText("credited toward any fix")).toBeTruthy();
-    expect(screen.getByText("Start here")).toBeTruthy();
   });
 
   it("prices the feature sprint from $1,200 (never below a full site)", () => {
@@ -36,14 +35,10 @@ describe("Sprints", () => {
     );
   });
 
-  it("offers the broken-vs-converting selector and a path up to full builds", () => {
+  it("offers the broken-vs-converting selector", () => {
     render(<Sprints />);
     expect(
       screen.getByText("Is your site broken, or just not converting?"),
     ).toBeTruthy();
-    const up = screen.getByRole("link", {
-      name: /Full websites start at \$1,200/,
-    });
-    expect(up.getAttribute("href")).toBe("#pricing-title");
   });
 });

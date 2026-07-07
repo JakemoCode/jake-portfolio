@@ -1,24 +1,38 @@
 import { AUDIT, FIXES, FEATURE, type Offer } from "../../content/offers";
 import styles from "./Sprints.module.css";
 
-function OfferCard({ offer, lead }: { offer: Offer; lead?: boolean }) {
+function Price({ offer }: { offer: Offer }) {
+  if (offer.quoted)
+    return <span className={styles.priceQuote}>{offer.price}</span>;
   return (
-    <article className={`${styles.card} ${lead ? styles.lead : ""} r-up`}>
-      {offer.badge && <span className={styles.badge}>{offer.badge}</span>}
-      <div className={styles.cardHead}>
-        <h3 className={styles.name}>
+    <span className={styles.price}>
+      {offer.from && <span className={styles.from}>from </span>}
+      {offer.price}
+    </span>
+  );
+}
+
+// One offer as a row. `lead` gives the audit a raised surface + its fuller pitch;
+// the rest are quiet rows separated by hairlines.
+function OfferRow({ offer, lead }: { offer: Offer; lead?: boolean }) {
+  return (
+    <article className={`${styles.row} ${lead ? styles.lead : ""} r-up`}>
+      <div className={styles.head}>
+        <h4 className={styles.name}>
           <span className={styles.icon} aria-hidden="true">
             {offer.icon}
           </span>
           {offer.name}
-        </h3>
-        <p className={offer.quoted ? styles.priceQuote : styles.price}>
-          {offer.from && <span className={styles.from}>from</span>}
-          {offer.price}
+        </h4>
+        <p className={styles.priceWrap}>
+          <Price offer={offer} />
+          {offer.priceNote && (
+            <span className={styles.priceNote}>{offer.priceNote}</span>
+          )}
         </p>
       </div>
-      {offer.priceNote && <p className={styles.priceNote}>{offer.priceNote}</p>}
-      <p className={styles.pitch}>{offer.pitch}</p>
+
+      <p className={styles.blurb}>{lead ? offer.pitch : offer.blurb}</p>
 
       <details className={styles.details}>
         <summary className={styles.summary}>
@@ -35,45 +49,34 @@ function OfferCard({ offer, lead }: { offer: Offer; lead?: boolean }) {
   );
 }
 
+// The entry-offer tier. Renders *inside* the Pricing section (no <section>/<h2>
+// of its own) on a tinted band, so the whole pricing area reads as one section:
+// the full builds are the primary tier, these are the lighter one.
 export function Sprints() {
   return (
-    <section
-      id="ways-to-start"
-      className={styles.section}
-      aria-labelledby="sprints-title"
-    >
-      <div className={styles.inner}>
-        <h2 id="sprints-title" className={`${styles.title} r-rise`}>
-          Smaller ways to start.
-        </h2>
-        <p className={`${styles.lede} r-up`}>
-          Not ready for a full build, or already have a site that needs help?
-          These are smaller, fixed-scope ways to work together &mdash; most start
-          with a quick audit and grow from there.
-        </p>
-
-        <div className={styles.ladder}>
-          <OfferCard offer={AUDIT} lead />
-
-          <div className={styles.pairGroup}>
-            <p className={`${styles.pairHead} r-up`}>
-              Is your site broken, or just not converting?
-            </p>
-            <div className={styles.pair}>
-              {FIXES.map((offer) => (
-                <OfferCard key={offer.id} offer={offer} />
-              ))}
-            </div>
-          </div>
-
-          <OfferCard offer={FEATURE} />
-        </div>
-
-        <p className={`${styles.closing} r-up`}>
-          <strong>Ready for the whole thing?</strong>{" "}
-          <a href="#pricing-title">Full websites start at $1,200 &rarr;</a>
+    <div id="smaller-ways" className={styles.tier}>
+      <div className={styles.tierHead}>
+        <h3 className={styles.tierTitle}>Smaller ways to start</h3>
+        <p className={styles.tierLede}>
+          Already have a site, or not ready for a full build? These are smaller,
+          fixed-scope ways in, and most begin with a quick audit.
         </p>
       </div>
-    </section>
+
+      <OfferRow offer={AUDIT} lead />
+
+      <p className={styles.selector}>
+        Is your site broken, or just not converting?
+      </p>
+      <div className={styles.rows}>
+        {FIXES.map((offer) => (
+          <OfferRow key={offer.id} offer={offer} />
+        ))}
+      </div>
+
+      <div className={styles.rows}>
+        <OfferRow offer={FEATURE} />
+      </div>
+    </div>
   );
 }

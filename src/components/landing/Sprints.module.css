@@ -1,106 +1,56 @@
-.section {
-  padding-block: clamp(var(--spacing-4xl), 9vh, var(--spacing-6xl));
+/* The entry-offer tier — a tinted band that sits inside the Pricing section,
+   below the two full-build cards. Tonal separation (paper card -> tinted band)
+   does the work a second section header used to, per DESIGN.md (depth from
+   bands, not shadows). */
+.tier {
+  margin-top: clamp(var(--spacing-2xl), 4vw, var(--spacing-4xl));
+  background: var(--color-surface);
+  border: 1px solid var(--color-border); /* 1px: intentional hairline */
+  border-radius: var(--radius-xl);
+  padding: clamp(var(--spacing-xl), 3.5vw, var(--spacing-3xl));
 }
 
-.inner {
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding-inline: var(--gutter);
+.tierHead {
+  max-width: 60ch;
 }
 
-.title {
+.tierTitle {
   font-family: var(--font-display);
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-h2);
-  letter-spacing: -0.025em;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xl);
+  letter-spacing: -0.02em;
   color: var(--color-text);
 }
 
-.lede {
-  margin-top: var(--spacing-sm);
-  max-width: 58ch;
-  font-size: var(--font-size-md);
+.tierLede {
+  margin-top: var(--spacing-2xs);
+  font-size: var(--font-size-base);
   line-height: var(--line-height-body);
   color: var(--color-text-muted);
   text-wrap: pretty;
 }
 
-/* The ladder: audit → the broken/converting pair → feature, stacked. */
-.ladder {
-  margin-top: clamp(var(--spacing-2xl), 4vw, var(--spacing-4xl));
-  display: grid;
-  gap: clamp(var(--spacing-xl), 3vw, var(--spacing-2xl));
+/* ---- A single offer row ---- */
+.row {
+  padding-block: var(--spacing-lg);
 }
 
-.pairGroup {
-  display: grid;
-  gap: var(--spacing-lg);
+/* Non-lead rows are quiet, divided by hairlines. */
+.row:not(.lead) {
+  border-top: 1px solid var(--color-border); /* 1px: intentional divider */
 }
 
-.pairHead {
-  font-family: var(--font-display);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-lg);
-  letter-spacing: -0.01em;
-  color: var(--color-text);
-  text-align: center;
-}
-
-.pair {
-  display: grid;
-  gap: clamp(var(--spacing-xl), 3vw, var(--spacing-2xl));
-  grid-template-columns: 1fr;
-  align-items: start;
-}
-
-@media (min-width: 47.5em) {
-  .pair {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-/* ---- Card (shared shape with the Pricing cards) ---- */
-.card {
-  position: relative;
-  background: var(--color-bg-elevated);
-  border: 1px solid var(--color-border); /* 1px: intentional hairline border */
-  border-radius: var(--radius-xl);
-  padding: clamp(var(--spacing-xl), 3vw, var(--spacing-2xl));
-}
-
-/* The audit is the entry point — lift it with a fuller border + accent rail. */
+/* The audit lifts out of the band on a raised (paper) surface — the emphasis
+   comes from tone, not a badge, shadow, or side rail. */
 .lead {
-  border-color: var(--color-border-strong);
-  box-shadow: var(--shadow-md);
+  margin-top: var(--spacing-xl);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-strong); /* 1px: intentional hairline */
+  border-radius: var(--radius-lg);
+  padding: clamp(var(--spacing-lg), 2.5vw, var(--spacing-xl));
 }
 
-.lead::before {
-  content: "";
-  position: absolute;
-  inset-block: clamp(var(--spacing-xl), 3vw, var(--spacing-2xl));
-  inset-inline-start: 0;
-  width: 3px; /* px: intentional accent rail width */
-  border-radius: var(--radius-pill);
-  background: var(--color-accent);
-}
-
-.badge {
-  position: absolute;
-  top: 0;
-  right: clamp(var(--spacing-xl), 3vw, var(--spacing-2xl));
-  transform: translateY(-50%);
-  background: var(--color-accent);
-  color: var(--color-white);
-  font-family: var(--font-body);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-2xs);
-  letter-spacing: 0.02em;
-  text-transform: uppercase;
-  padding: var(--spacing-2xs) var(--spacing-sm);
-  border-radius: var(--radius-pill);
-}
-
-.cardHead {
+.head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -124,21 +74,20 @@
   line-height: var(--line-height-none);
 }
 
+.priceWrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px; /* px: hairline stack between price and its note */
+  text-align: right;
+}
+
 .price {
   font-family: var(--font-display);
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-lg);
   letter-spacing: -0.01em;
   color: var(--color-accent-pine);
-  white-space: nowrap;
-}
-
-/* "Quoted after your audit" reads as a phrase, not a headline number. */
-.priceQuote {
-  font-family: var(--font-body);
-  font-weight: var(--font-weight-medium);
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
   white-space: nowrap;
 }
 
@@ -147,29 +96,48 @@
   font-weight: var(--font-weight-medium);
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
-  margin-right: var(--spacing-2xs);
+}
+
+/* "Quoted after your audit" is a phrase, not a headline number. */
+.priceQuote {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  white-space: nowrap;
 }
 
 .priceNote {
-  margin-top: var(--spacing-2xs);
-  text-align: right;
   font-size: var(--font-size-xs);
   color: var(--color-text-subtle);
 }
 
-.pitch {
-  margin-top: var(--spacing-sm);
-  max-width: 46ch;
+.blurb {
+  margin-top: var(--spacing-xs);
+  max-width: 64ch;
   font-size: var(--font-size-base);
   line-height: var(--line-height-body);
   color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+/* The broken-vs-converting self-select, sitting above the two fix rows. */
+.selector {
+  margin-top: var(--spacing-xl);
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-md);
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+}
+
+.rows {
+  margin-top: var(--spacing-2xs);
 }
 
 /* ---- Disclosure (shared shape with the Pricing "See what's included") ---- */
 .details {
-  margin-top: var(--spacing-md);
-  border-top: 1px solid var(--color-border); /* 1px: intentional hairline border */
-  padding-top: var(--spacing-md);
+  margin-top: var(--spacing-sm);
   interpolate-size: allow-keywords;
 }
 
@@ -178,6 +146,7 @@
   align-items: center;
   gap: var(--spacing-xs);
   cursor: pointer;
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   color: var(--color-accent-pine);
   list-style: none;
@@ -216,8 +185,9 @@
   }
 }
 
+/* Facet-triangle marker — the DESIGN.md motif; points down, rotates up on open. */
 .tri {
-  --tri-size: 0.7rem; /* component icon; no spacing rung */
+  --tri-size: 0.65rem; /* component icon; no spacing rung */
   width: var(--tri-size);
   height: var(--tri-size);
   flex: none;
@@ -232,7 +202,7 @@
 
 .includes {
   list-style: none;
-  margin: var(--spacing-md) 0 0;
+  margin: var(--spacing-sm) 0 0;
   padding: 0;
   display: grid;
   gap: var(--spacing-xs);
@@ -241,7 +211,7 @@
 .includes li {
   position: relative;
   padding-left: var(--spacing-xl);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   line-height: var(--line-height-snug);
   color: var(--color-text-muted);
 }
@@ -253,40 +223,6 @@
   top: 0;
   color: var(--color-accent-pine);
   font-weight: var(--font-weight-bold);
-}
-
-.closing {
-  margin-top: clamp(var(--spacing-2xl), 4vw, var(--spacing-4xl));
-  font-size: var(--font-size-md);
-  line-height: var(--line-height-body);
-  color: var(--color-text-muted);
-  text-align: center;
-}
-
-.closing strong {
-  color: var(--color-text);
-  font-weight: var(--font-weight-semibold);
-}
-
-.closing a {
-  color: var(--color-accent-pine);
-  font-weight: var(--font-weight-semibold);
-  text-decoration: none;
-  border-bottom: 1px solid transparent; /* 1px: intentional underline */
-  transition:
-    color var(--duration-fast) ease,
-    border-color var(--duration-fast) ease;
-}
-
-.closing a:hover {
-  color: var(--color-accent-deep);
-  border-bottom-color: currentColor;
-}
-
-.closing a:focus-visible {
-  outline: 2px solid var(--color-accent-deep); /* 2px: intentional outline width */
-  outline-offset: 3px; /* px intentional: outline-offset */
-  border-radius: var(--radius-sm);
 }
 
 /* Soft-open the disclosure panel (matches Pricing). Browsers without support
