@@ -29,7 +29,7 @@ describe("Sprints", () => {
 
   it("keeps the audit-gated fixes free of a flat price", () => {
     render(<Sprints />);
-    // Both Rescue and Conversion Tune-Up defer pricing to the audit (§5).
+    // Both Rescue and Website Tune-Up defer pricing to the audit (§5).
     expect(screen.getAllByText("Quoted after your audit").length).toBe(
       FIXES.length,
     );

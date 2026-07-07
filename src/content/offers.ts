@@ -60,7 +60,7 @@ export const FIXES: Offer[] = [
   },
   {
     id: "tuneup",
-    name: "Conversion Tune-Up",
+    name: "Website Tune-Up",
     price: "Quoted after your audit",
     quoted: true,
     pitch:
@@ -81,7 +81,7 @@ export const FIXES: Offer[] = [
 // with the one-page price so a feature never appears to out-price a whole site.
 export const FEATURE: Offer = {
   id: "feature",
-  name: "Custom Feature Sprint",
+  name: "Custom Feature Build",
   price: "$1,200",
   from: true,
   pitch:
