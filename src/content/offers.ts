@@ -8,7 +8,7 @@
 export type Offer = {
   id: string;
   name: string;
-  price: string; // a number ("$497") or a phrase ("Quoted after your audit")
+  price: string; // a number ("$500") or a phrase ("Quoted after your audit")
   from?: boolean; // prefix the price with "from"
   quoted?: boolean; // price is a phrase, not a number — render it muted
   priceNote?: string; // small line under the price
@@ -23,7 +23,7 @@ export type Offer = {
 export const AUDIT: Offer = {
   id: "audit",
   name: "Website Audit",
-  price: "$497",
+  price: "$500",
   priceNote: "credited toward any fix",
   pitch:
     "Not sure what’s wrong, or where to start? I’ll go through your site the way a first-time visitor, and Google, actually see it, then hand you a plain-English report: what’s slowing it down, what’s confusing people, and exactly what I’d fix first.",
@@ -34,7 +34,7 @@ export const AUDIT: Offer = {
     "The real numbers, not guesses. I run the same checks Google does",
     "Every issue ranked by what actually matters for your business",
     "Clear next steps you can act on yourself or bring back to me",
-    "Hire me for the fix and the $497 comes right off the top",
+    "Hire me for the fix and the $500 comes right off the top",
   ],
 };
 

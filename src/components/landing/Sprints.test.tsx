@@ -17,7 +17,7 @@ describe("Sprints", () => {
 
   it("shows the audit as the fixed-price entry point, credited", () => {
     render(<Sprints />);
-    expect(screen.getByText("$497")).toBeTruthy();
+    expect(screen.getByText("$500")).toBeTruthy();
     expect(screen.getByText("credited toward any fix")).toBeTruthy();
   });
 
