@@ -320,34 +320,6 @@
   border: 0;
 }
 
-.apps {
-  position: relative;
-  z-index: var(--z-raised);
-  max-width: var(--maxw);
-  margin: clamp(var(--spacing-2xl), 5vw, var(--spacing-4xl)) auto 0;
-  padding-inline: var(--gutter);
-  color: var(--color-on-dark-muted);
-  font-size: var(--font-size-sm);
-}
-
-.appsLink {
-  color: var(--color-accent);
-  text-decoration: none;
-  border-bottom: var(--border-width-thin) solid color-mix(in oklab, var(--color-accent) 40%, transparent);
-  padding-bottom: var(--spacing-3xs);
-  transition: border-color var(--duration-fast) ease, color var(--duration-fast) ease;
-}
-
-.appsLink:hover {
-  color: var(--color-accent-bright);
-  border-bottom-color: var(--color-accent);
-}
-
-.appsLink:focus-visible {
-  outline: var(--border-width-thick) solid var(--color-accent);
-  outline-offset: 3px;
-  border-radius: var(--radius-sm);
-}
 
 @media (prefers-reduced-motion: reduce) {
   .glow {
@@ -437,9 +409,5 @@
 
   .cite {
     margin-top: var(--spacing-sm);
-  }
-
-  .apps {
-    margin-top: var(--spacing-xl);
   }
 }

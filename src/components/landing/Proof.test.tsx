@@ -51,12 +51,6 @@ describe("Proof", () => {
     );
   });
 
-  it("relocates the engineering link to /portfolio", () => {
-    renderProof();
-    const link = screen.getByRole("link", { name: /engineering side of my work/ });
-    expect(link.getAttribute("href")).toBe("/portfolio");
-  });
-
   it("no longer renders the retired Kelly testimonial", () => {
     renderProof();
     expect(screen.queryByText(/Kelly Mosher/)).toBeNull();

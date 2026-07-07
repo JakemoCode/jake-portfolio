@@ -1,5 +1,4 @@
 import { useRef, useState, type CSSProperties } from "react";
-import { Link } from "react-router-dom";
 import { testimonials, type Testimonial } from "../../content/testimonials";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 import styles from "./Proof.module.css";
@@ -207,14 +206,6 @@ export function Proof() {
           </span>
         </p>
       </div>
-
-      <p className={styles.apps}>
-        I build apps from scratch, too.{" "}
-        <Link className={styles.appsLink} to="/portfolio">
-          See the engineering side of my work
-          <span aria-hidden="true"> &rarr;</span>
-        </Link>
-      </p>
     </section>
   );
 }
