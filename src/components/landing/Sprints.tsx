@@ -29,17 +29,23 @@ function OfferRow({ offer, lead }: { offer: Offer; lead?: boolean }) {
 
       <p className={styles.blurb}>{lead ? offer.pitch : offer.blurb}</p>
 
-      <details className={styles.details}>
-        <summary className={styles.summary}>
-          <span className={styles.tri} aria-hidden="true" />
-          See what&rsquo;s included
-        </summary>
-        <ul className={styles.includes}>
-          {offer.includes.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </details>
+      {/* Audit-gated offers (quoted) defer their scope to the audit itself, so
+          they skip the disclosure — that also thins the repeated "See what's
+          included" column down the tier. Their includes copy stays in
+          offers.ts as the scoping source for the audit conversation. */}
+      {!offer.quoted && (
+        <details className={styles.details}>
+          <summary className={styles.summary}>
+            <span className={styles.tri} aria-hidden="true" />
+            See what&rsquo;s included
+          </summary>
+          <ul className={styles.includes}>
+            {offer.includes.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </details>
+      )}
     </article>
   );
 }

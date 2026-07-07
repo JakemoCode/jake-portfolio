@@ -34,4 +34,15 @@ describe("Sprints", () => {
       FIXES.length,
     );
   });
+
+  it("shows the disclosure only on non-quoted offers", () => {
+    render(<Sprints />);
+    // Quoted (audit-gated) offers defer their scope to the audit, so they skip
+    // the "See what's included" toggle. Only the audit + feature keep it.
+    const withDisclosure = [AUDIT, FEATURE, ...FIXES].filter((o) => !o.quoted);
+    expect(screen.getAllByText(/See what.s included/).length).toBe(
+      withDisclosure.length,
+    );
+    expect(FIXES.every((o) => o.quoted)).toBe(true);
+  });
 });

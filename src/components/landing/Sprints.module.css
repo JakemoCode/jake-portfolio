@@ -33,6 +33,11 @@
 /* ---- A single offer row ---- */
 .row {
   padding-block: var(--spacing-lg);
+  /* Cap the name+price line and the blurb to a card-like measure so the price
+     sits close to its name (proximity), instead of marooned at the far edge of
+     the full-width band. The empty space then lands outside the row as intended
+     breathing room, not as a gap inside it. */
+  --row-measure: 38rem;
 }
 
 /* Non-lead rows are quiet, divided by hairlines. */
@@ -56,6 +61,7 @@
   justify-content: space-between;
   gap: var(--spacing-md);
   flex-wrap: wrap;
+  max-width: var(--row-measure);
 }
 
 .name {
@@ -106,7 +112,7 @@
 
 .blurb {
   margin-top: var(--spacing-xs);
-  max-width: 64ch;
+  max-width: var(--row-measure);
   font-size: var(--font-size-base);
   line-height: var(--line-height-body);
   color: var(--color-text-muted);
