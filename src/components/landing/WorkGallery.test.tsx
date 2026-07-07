@@ -38,11 +38,11 @@ describe("WorkGallery", () => {
     expect(HTMLMediaElement.prototype.pause).toHaveBeenCalled();
   });
 
-  it("on tablet-down, tapping the frame plays the hero (reveal on) instead of navigating", () => {
+  it("on a no-hover device, tapping the frame plays the hero (reveal on) instead of navigating", () => {
     const original = window.matchMedia;
-    // Query-aware: tablet-down matches, reduced-motion doesn't (so the video renders).
+    // Query-aware: the no-hover gate matches, reduced-motion doesn't (video renders).
     window.matchMedia = ((q: string) => ({
-      matches: q.includes("hover: none") || q.includes("max-width"),
+      matches: q.includes("hover: none"),
       media: q,
       onchange: null,
       addEventListener() {},

@@ -40,29 +40,27 @@ function Slide({
       aria-hidden={hidden || undefined}
       onAnimationEnd={onAnimationEnd}
     >
-      <div className={styles.body}>
-        <blockquote className={`${styles.quote} ${expanded ? "" : styles.clamped}`}>
-          {t.quote}
-        </blockquote>
-        <button
-          type="button"
-          className={styles.readMore}
-          aria-expanded={expanded}
-          onClick={onToggleExpanded}
-        >
-          {expanded ? "Read less" : "Read more"}
-        </button>
-        <figcaption className={styles.cite}>
-          <span className={styles.name}>{t.name}</span>
-          <span className={styles.role}>{t.role}</span>
-          {t.link && (
-            <a className={styles.live} href={t.link} target="_blank" rel="noopener noreferrer">
-              See it live
-              <span aria-hidden="true"> &rarr;</span>
-            </a>
-          )}
-        </figcaption>
-      </div>
+      <blockquote className={`${styles.quote} ${expanded ? "" : styles.clamped}`}>
+        {t.quote}
+      </blockquote>
+      <button
+        type="button"
+        className={styles.readMore}
+        aria-expanded={expanded}
+        onClick={onToggleExpanded}
+      >
+        {expanded ? "Read less" : "Read more"}
+      </button>
+      <figcaption className={styles.cite}>
+        <span className={styles.name}>{t.name}</span>
+        <span className={styles.role}>{t.role}</span>
+        {t.link && (
+          <a className={styles.live} href={t.link} target="_blank" rel="noopener noreferrer">
+            See it live
+            <span aria-hidden="true"> &rarr;</span>
+          </a>
+        )}
+      </figcaption>
     </article>
   );
 }

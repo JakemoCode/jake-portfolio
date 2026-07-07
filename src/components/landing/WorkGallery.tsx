@@ -21,12 +21,14 @@ function Tile({ site, reduceMotion }: { site: WorkSite; reduceMotion: boolean })
   };
   const stop = () => videoRef.current?.pause();
 
-  // Tablet-down / any no-hover device: tapping the frame plays the hero in place
-  // (and reveals it, since there's no hover to trigger the CSS reveal) instead
-  // of navigating. "Visit site" stays the tap target for opening the live site;
-  // desktop is unchanged (hover plays, whole tile navigates).
+  // No-hover devices (phones and tablets) can't hover, so tapping the frame
+  // plays the hero in place (and reveals it, since there's no hover to trigger
+  // the CSS reveal) instead of navigating. "Visit site" stays the tap target for
+  // opening the live site. Gated on `(hover: none)` only — matching the copy
+  // toggle — so a hover-capable desktop keeps whole-tile navigation at every
+  // width (a width breakpoint would wrongly swallow clicks in a narrow window).
   const onFrameTap = (e: MouseEvent<HTMLDivElement>) => {
-    if (reduceMotion || !window.matchMedia("(hover: none), (max-width: 64em)").matches) return;
+    if (reduceMotion || !window.matchMedia("(hover: none)").matches) return;
     e.preventDefault();
     setTapped(true);
     play();
