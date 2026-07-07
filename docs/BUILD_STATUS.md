@@ -45,6 +45,10 @@ Reviewed (multi-angle) and simplified; findings addressed in-branch.
   clean, "not AI-made" verdict. Acted on: unified the client-site CTA to
   "See it live", made the gallery subhead's verb device-neutral, fixed the
   focus-outline clip. Deferred: none material.
+- `/ux-check` (Laws of UX + Motion) on the two sections: all motion passes
+  §9; laws mostly pass. Fixed: persistent-accent "See it live" on touch
+  (was hover-only, so muted on mobile), `preload="metadata"` on the flagship
+  tile to kill first-play lag.
 
 ## Awaiting
 

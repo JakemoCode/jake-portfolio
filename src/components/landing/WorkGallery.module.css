@@ -249,6 +249,15 @@
   gap: var(--spacing-xs);
 }
 
+/* No hover to reveal it on touch, so keep the "See it live" CTA in the accent
+   colour at rest — otherwise the primary action reads as muted while the frame
+   taps to play the hero. */
+@media (hover: none) {
+  .visit {
+    color: var(--color-accent-bright);
+  }
+}
+
 @media (max-width: 40em) {
   .gallery {
     grid-template-columns: 1fr;

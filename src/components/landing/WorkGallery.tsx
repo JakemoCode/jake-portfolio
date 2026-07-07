@@ -65,7 +65,9 @@ function Tile({ site, reduceMotion }: { site: WorkSite; reduceMotion: boolean })
               src={site.heroWebm}
               muted
               playsInline
-              preload="none"
+              // Warm the flagship so its first play isn't gated on a cold fetch;
+              // the smaller tiles stay fully lazy.
+              preload={site.feature ? "metadata" : "none"}
               aria-hidden="true"
             />
           )}
