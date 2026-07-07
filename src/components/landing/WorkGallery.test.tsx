@@ -30,7 +30,13 @@ describe("WorkGallery", () => {
   });
 
   it("plays the hero on hover and pauses on leave", () => {
+    // jsdom can't apply :hover CSS, so play()/pause() firing is the
+    // observable proxy for the reveal — prove it's the mouseEnter handler
+    // (not mount) that triggers it by clearing the spy and checking first.
+    vi.mocked(HTMLMediaElement.prototype.play).mockClear();
     render(<WorkGallery />);
+    expect(HTMLMediaElement.prototype.play).not.toHaveBeenCalled();
+
     const link = screen.getByRole("link", { name: new RegExp(`Visit ${work[0]!.name}`, "i") });
     fireEvent.mouseEnter(link);
     expect(HTMLMediaElement.prototype.play).toHaveBeenCalled();

@@ -2,6 +2,15 @@
    the bright client screenshots glow. Sits right after Proof (also dark), so the
    two read as one credibility zone — testimonials, then the work itself. */
 .section {
+  /* Local, component-scale values with no shared-token rung (same pattern as
+     Proof.module.css's --chev/--chev-gap) — device-chrome dimensions that are
+     one-off to this gallery, not a workspace-wide design constant. */
+  --dot: 0.625rem; /* traffic-light dot */
+  --phone-inset-min: 4.625rem; /* phone inset's smallest legible width */
+  --phone-inset-max: 8.25rem; /* phone inset's largest width before crowding the frame */
+  --visit-icon: 0.875rem; /* "Visit site" arrow glyph box */
+  --phone-bezel: 3px; /* phone frame's outer ring thickness */
+
   background: var(--color-surface-dark);
   color: var(--color-on-dark);
   /* Reduced top: continues the dark Proof zone directly above, so the seam is
@@ -97,8 +106,8 @@
 }
 
 .dot {
-  width: 10px;
-  height: 10px;
+  width: var(--dot);
+  height: var(--dot);
   border-radius: var(--radius-pill);
   background: color-mix(in oklab, var(--color-on-dark) 20%, transparent);
 }
@@ -160,8 +169,8 @@
   right: 4.5%;
   bottom: 0;
   width: 15%;
-  min-width: 74px;
-  max-width: 132px;
+  min-width: var(--phone-inset-min);
+  max-width: var(--phone-inset-max);
   aspect-ratio: 390 / 844;
   transform: translateY(14%);
   transition: transform var(--duration-slow) cubic-bezier(0.16, 1, 0.3, 1);
@@ -175,7 +184,7 @@
 .phone::before {
   content: "";
   position: absolute;
-  inset: -3px;
+  inset: calc(-1 * var(--phone-bezel));
   border-radius: var(--radius-lg);
   background: var(--color-black);
   box-shadow: var(--shadow-md);
@@ -230,8 +239,8 @@
 }
 
 .visit svg {
-  width: 14px;
-  height: 14px;
+  width: var(--visit-icon);
+  height: var(--visit-icon);
 }
 
 .tile:hover .visit,

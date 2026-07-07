@@ -4,9 +4,9 @@ import { work } from "../../content/work";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 import styles from "./WorkGallery.module.css";
 
-/** One client site. The still is the resting state; on hover (or a tap on
- *  tablet-down) the real hero entrance plays in place, and the phone inset shows
- *  the same site's mobile layout. The whole tile links to the live site. */
+/** One client site. The still is the resting state; on hover (or a tap on a
+ *  no-hover device) the real hero entrance plays in place, and the phone inset
+ *  shows the same site's mobile layout. The whole tile links to the live site. */
 function Tile({ site, reduceMotion }: { site: WorkSite; reduceMotion: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [tapped, setTapped] = useState(false);
@@ -20,6 +20,8 @@ function Tile({ site, reduceMotion }: { site: WorkSite; reduceMotion: boolean })
     void v.play().catch(() => {});
   };
   const stop = () => videoRef.current?.pause();
+  const playOn = reduceMotion ? undefined : play;
+  const stopOn = reduceMotion ? undefined : stop;
 
   // No-hover devices (phones and tablets) can't hover, so tapping the frame
   // plays the hero in place (and reveals it, since there's no hover to trigger
@@ -42,10 +44,10 @@ function Tile({ site, reduceMotion }: { site: WorkSite; reduceMotion: boolean })
       rel="noopener"
       aria-label={`Visit ${site.name} (opens in a new tab)`}
       data-playing={tapped || undefined}
-      onMouseEnter={reduceMotion ? undefined : play}
-      onMouseLeave={reduceMotion ? undefined : stop}
-      onFocus={reduceMotion ? undefined : play}
-      onBlur={reduceMotion ? undefined : stop}
+      onMouseEnter={playOn}
+      onMouseLeave={stopOn}
+      onFocus={playOn}
+      onBlur={stopOn}
     >
       <div className={styles.frame} onClick={onFrameTap}>
         <div className={styles.chrome}>
