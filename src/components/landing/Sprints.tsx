@@ -60,9 +60,6 @@ export function Sprints() {
 
       <OfferRow offer={AUDIT} lead />
 
-      <p className={styles.selector}>
-        Is your site broken, or just not converting?
-      </p>
       <div className={styles.rows}>
         {FIXES.map((offer) => (
           <OfferRow key={offer.id} offer={offer} />

@@ -34,11 +34,4 @@ describe("Sprints", () => {
       FIXES.length,
     );
   });
-
-  it("offers the broken-vs-converting selector", () => {
-    render(<Sprints />);
-    expect(
-      screen.getByText("Is your site broken, or just not converting?"),
-    ).toBeTruthy();
-  });
 });

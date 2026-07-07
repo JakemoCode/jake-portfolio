@@ -114,19 +114,8 @@
 }
 
 /* The broken-vs-converting self-select, sitting above the two fix rows. */
-/* A quiet connective prompt for the two fix rows — deliberately below the
-   heading tier (no display face, no bold) so it doesn't compete with the
-   offer names on either side of it. */
-.selector {
-  margin-top: var(--spacing-2xl);
-  margin-bottom: var(--spacing-xs);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-muted);
-}
-
 .rows {
-  margin-top: var(--spacing-2xs);
+  margin-top: var(--spacing-xl);
 }
 
 /* ---- Disclosure (shared shape with the Pricing "See what's included") ---- */
