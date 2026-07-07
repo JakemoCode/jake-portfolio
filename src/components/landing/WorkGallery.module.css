@@ -1,0 +1,284 @@
+/* A dark "theater" band: the surround goes to the landing's own pine-black so
+   the bright client screenshots glow. Sits right after Proof (also dark), so the
+   two read as one credibility zone — testimonials, then the work itself. */
+.section {
+  /* Local, component-scale values with no shared-token rung (same pattern as
+     Proof.module.css's --chev/--chev-gap) — device-chrome dimensions that are
+     one-off to this gallery, not a workspace-wide design constant. */
+  --dot: 0.625rem; /* traffic-light dot */
+  --phone-inset-min: 4.625rem; /* phone inset's smallest legible width */
+  --phone-inset-max: 8.25rem; /* phone inset's largest width before crowding the frame */
+  --visit-icon: 0.875rem; /* "Visit site" arrow glyph box */
+  --phone-bezel: 3px; /* phone frame's outer ring thickness */
+
+  background: var(--color-surface-dark);
+  color: var(--color-on-dark);
+  /* Reduced top: continues the dark Proof zone directly above, so the seam is
+     one modest gap, not two stacked section paddings. Full bottom before the
+     next (differently-coloured) section. */
+  padding-block-start: clamp(var(--spacing-xl), 3vh, var(--spacing-3xl));
+  padding-block-end: clamp(var(--spacing-4xl), 9vh, var(--spacing-6xl));
+}
+
+.inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-h2);
+  letter-spacing: -0.025em;
+  color: var(--color-on-dark);
+  margin: 0 0 var(--spacing-xs);
+}
+
+.sub {
+  color: var(--color-on-dark-muted);
+  margin: 0 0 clamp(var(--spacing-xl), 4vw, var(--spacing-3xl));
+  max-width: 52ch;
+}
+
+/* Name the gesture the device can actually do: "Hover" where a pointer can
+   hover, "Tap" on touch — mirrors the tap-to-play interaction. */
+.onTouch {
+  display: none;
+}
+
+@media (hover: none) {
+  .onHover {
+    display: none;
+  }
+  .onTouch {
+    display: inline;
+  }
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(var(--spacing-md), 2.5vw, var(--spacing-xl));
+}
+
+.tile {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  background: var(--color-surface-dark-2);
+  border: var(--border-width-thin) solid color-mix(in oklab, var(--color-on-dark) 14%, transparent);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition:
+    transform var(--duration-slow) cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow var(--duration-slow) cubic-bezier(0.16, 1, 0.3, 1),
+    border-color var(--duration-base) ease;
+}
+
+.feature {
+  grid-column: 1 / -1;
+}
+
+.tile:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: color-mix(in oklab, var(--color-on-dark) 28%, transparent);
+}
+
+.tile:focus-visible {
+  outline: var(--border-width-thick) solid var(--color-accent-bright);
+  outline-offset: 3px;
+}
+
+/* browser frame */
+.frame {
+  background: color-mix(in oklab, var(--color-surface-dark) 62%, var(--color-black));
+}
+
+.chrome {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+  padding: var(--spacing-2xs) var(--spacing-sm);
+}
+
+.dot {
+  width: var(--dot);
+  height: var(--dot);
+  border-radius: var(--radius-pill);
+  background: color-mix(in oklab, var(--color-on-dark) 20%, transparent);
+}
+
+.host {
+  margin-left: var(--spacing-sm);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-2xs);
+  color: var(--color-on-dark-muted);
+}
+
+.screen {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1280 / 760;
+  background: var(--color-surface-dark);
+}
+
+.still,
+.motion {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+}
+
+/* Fast swap: a slow crossfade would mask the animation's opening frames behind
+   the still (reads as a trimmed front). The video plays from its true frame 0,
+   so reveal it almost immediately. */
+.motion {
+  opacity: 0;
+  transition: opacity var(--duration-fast) ease;
+}
+
+.still {
+  opacity: 1;
+  transition: opacity var(--duration-fast) ease;
+}
+
+.tile:hover .motion,
+.tile:focus-visible .motion,
+.tile[data-playing="true"] .motion {
+  opacity: 1;
+}
+
+.tile:hover .still,
+.tile:focus-visible .still,
+.tile[data-playing="true"] .still {
+  opacity: 0;
+}
+
+/* mobile inset — the responsive proof, static, same site */
+.phone {
+  position: absolute;
+  z-index: var(--z-raised);
+  right: 4.5%;
+  bottom: 0;
+  width: 15%;
+  min-width: var(--phone-inset-min);
+  max-width: var(--phone-inset-max);
+  aspect-ratio: 390 / 844;
+  transform: translateY(14%);
+  transition: transform var(--duration-slow) cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.feature .phone {
+  width: 12%;
+  right: 5.5%;
+}
+
+.phone::before {
+  content: "";
+  position: absolute;
+  inset: calc(-1 * var(--phone-bezel));
+  border-radius: var(--radius-lg);
+  background: var(--color-black);
+  box-shadow: var(--shadow-md);
+}
+
+.phone img {
+  position: relative;
+  z-index: var(--z-raised);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  border-radius: var(--radius-md);
+  display: block;
+}
+
+.tile:hover .phone {
+  transform: translateY(6%);
+}
+
+.meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-lg) calc(var(--spacing-md) + var(--spacing-2xs));
+}
+
+.name {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: -0.01em;
+  font-size: var(--font-size-md);
+  margin: 0;
+  color: var(--color-on-dark);
+}
+
+.tag {
+  font-size: var(--font-size-sm);
+  color: var(--color-on-dark-muted);
+}
+
+.visit {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+  white-space: nowrap;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-on-dark-muted);
+  transition: color var(--duration-base) ease, gap var(--duration-base) ease;
+}
+
+.visit svg {
+  width: var(--visit-icon);
+  height: var(--visit-icon);
+}
+
+.tile:hover .visit,
+.tile:focus-visible .visit {
+  color: var(--color-accent-bright);
+  gap: var(--spacing-xs);
+}
+
+/* No hover to reveal it on touch, so keep the "See it live" CTA in the accent
+   colour at rest — otherwise the primary action reads as muted while the frame
+   taps to play the hero. */
+@media (hover: none) {
+  .visit {
+    color: var(--color-accent-bright);
+  }
+}
+
+@media (max-width: 40em) {
+  .gallery {
+    grid-template-columns: 1fr;
+  }
+  .meta {
+    flex-wrap: wrap;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tile,
+  .still,
+  .motion,
+  .phone,
+  .visit {
+    transition: none;
+  }
+  .tile:hover {
+    transform: none;
+  }
+  .tile:hover .phone {
+    transform: translateY(14%);
+  }
+}

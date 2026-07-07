@@ -4,6 +4,7 @@ import { Offer } from "../components/landing/Offer";
 import { Process } from "../components/landing/Process";
 import { Pricing } from "../components/landing/Pricing";
 import { Proof } from "../components/landing/Proof";
+import { WorkGallery } from "../components/landing/WorkGallery";
 import { CtaBand } from "../components/landing/CtaBand";
 import { About } from "../components/landing/About";
 import { Contact } from "../components/landing/Contact";
@@ -34,6 +35,7 @@ export function Landing() {
         <Process />
         <Pricing />
         <Proof />
+        <WorkGallery />
         <CtaBand />
         <About />
         <Contact />

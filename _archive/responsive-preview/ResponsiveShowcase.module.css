@@ -1,0 +1,29 @@
+.showcase {
+  padding-block: clamp(var(--spacing-4xl), 9vh, var(--spacing-6xl));
+  background: var(--color-bg);
+}
+
+.inner {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-h2);
+  letter-spacing: -0.025em;
+  color: var(--color-text);
+  margin: 0 0 var(--spacing-xs);
+}
+
+.sub {
+  color: var(--color-text-muted);
+  margin: 0;
+  max-width: 48ch;
+}
+
+.picker {
+  margin-top: clamp(var(--spacing-lg), 3vw, var(--spacing-2xl));
+}

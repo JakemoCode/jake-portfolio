@@ -1,6 +1,7 @@
 /// <reference types="vitest/config" />
 import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
+import { configDefaults } from "vitest/config";
 
 // Injects a <link rel="preload"> for the above-the-fold hero font using the
 // hashed filename Vite emits, so the preload URL can never drift from the
@@ -46,5 +47,6 @@ export default defineConfig({
   plugins: [react(), preloadHeroFont()],
   test: {
     environment: "jsdom",
+    exclude: [...configDefaults.exclude, "_archive/**"],
   },
 });

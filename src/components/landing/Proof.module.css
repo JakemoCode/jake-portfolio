@@ -1,44 +1,46 @@
 .proof {
-  /* One swipe setting — the film track AND the glow both read this, so they
+  /* One swipe setting — the slide animations AND the glow both read this so they
      can never drift out of sync. Tune here to retime both at once. */
-  --swipe: 620ms cubic-bezier(0.7, 0, 0.18, 1);
+  --swipe-dur: 420ms; /* snappy enough for a repeatable paging control */
+  --swipe-ease: cubic-bezier(0.7, 0, 0.18, 1);
+  --swipe: var(--swipe-dur) var(--swipe-ease);
+
+  /* Chevron slot + gap. Hoisted here (not on .spotlight) so .inner can reserve
+     the same width as side padding in the mid band where there's no outer
+     margin to hold the arrows. */
+  --chev: 2.75rem; /* button hit target (44px); the icon inside is smaller */
+  --chev-gap: clamp(var(--spacing-sm), 2vw, var(--spacing-xl));
 
   position: relative;
   background: var(--color-surface-dark);
   color: var(--color-on-dark);
-  padding-block: clamp(var(--spacing-5xl), 11vh, var(--spacing-7xl));
+  /* Full top gap; reduced bottom because WorkGallery continues the same dark
+     surface directly below — a full section gap on both sides would read as
+     dead space with no colour change to justify it. */
+  padding-block-start: clamp(var(--spacing-4xl), 9vh, var(--spacing-6xl));
+  padding-block-end: clamp(var(--spacing-xl), 3vh, var(--spacing-3xl));
   overflow: hidden;
 }
 
-/* The orb-smear glow: an infinitely repeated teal/pine pattern. Driven by
-   background-position so it can drift any distance in the swipe's direction
-   and never expose a seam (repeat tiles it forever). */
+/* The orb-smear glow: an infinitely repeated teal/pine pattern driven by
+   background-position, so it can drift any distance in the switch's direction
+   and never expose a seam. */
 .glow {
   position: absolute;
   inset: 0;
   z-index: var(--z-base);
   pointer-events: none;
-  /* One distinct blob per colour per tile, placed as halves at 0% and 100%
-     (same height) so each tile's edge blob pairs with the next tile's across
-     the boundary — seamless, no repeat line — while the tile interior stays a
-     gap so the blobs read as separate and their drift is visible. Teal and
-     pine tiles use different widths so the two never line up. Tile WIDTH is
-     tuned per breakpoint below to keep the blobs horizontal at any viewport. */
   background-image:
     radial-gradient(54% 26% at 0% 36%, color-mix(in oklab, var(--color-accent) 38%, transparent), transparent 70%),
     radial-gradient(54% 26% at 100% 36%, color-mix(in oklab, var(--color-accent) 38%, transparent), transparent 70%),
     radial-gradient(56% 22% at 0% 66%, color-mix(in oklab, var(--color-accent-pine) 50%, transparent), transparent 70%),
     radial-gradient(56% 22% at 100% 66%, color-mix(in oklab, var(--color-accent-pine) 50%, transparent), transparent 70%);
   background-repeat: repeat;
-  /* tile widths are viewport-tied by intent (vw), tuned per breakpoint below */
   background-size:
     74vw 100%, 74vw 100%,
     57vw 100%, 57vw 100%;
-  /* px the blobs drift per swipe; smaller on mobile (set in the media query) */
   --glow-step: 240px;
   background-position: calc(var(--glow-steps, 0) * var(--glow-step)) center;
-  /* a fixed brightness wave the blobs drift THROUGH, so they brighten and dim
-     by position instead of rigidly translating in lockstep with the panel */
   --glow-mask: linear-gradient(
     95deg,
     rgba(0, 0, 0, 0.6),
@@ -72,129 +74,134 @@
 
 .sub {
   color: var(--color-on-dark-muted);
-  margin: 0 0 clamp(var(--spacing-2xl), 5vw, var(--spacing-4xl));
+  margin: 0 0 clamp(var(--spacing-xl), 4vw, var(--spacing-3xl));
   max-width: 48ch;
 }
 
-/* filmstrip row: scroll arrows flank the scrollable strip so mouse users
-   (no horizontal wheel) can page through the cards. */
-.filmRow {
+/* Spotlight row: prev/next arrows flank one testimonial at a time. */
+.spotlight {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: var(--spacing-xs);
-  margin-top: var(--spacing-xl);
+  gap: var(--chev-gap);
+  /* Pull the chevrons out into the gutter (exactly one chevron + gap on each
+     side) so the quote aligns with the section heading and the arrows live
+     outside the content column. */
+  margin-inline: calc(-1 * (var(--chev) + var(--chev-gap)));
 }
 
-.scrollBtn {
-  flex: 0 0 auto;
-  /* 2.5rem ≈ a 40px control; rem so the target scales with the user's font */
-  width: var(--spacing-3xl);
-  height: var(--spacing-3xl);
+/* Large bare chevrons — no circle. The glyph itself is the target. */
+.navBtn {
+  flex: 0 0 var(--chev);
+  min-height: var(--chev); /* 44px tap target (WCAG 2.5.5) — icon centered inside */
   display: grid;
   place-items: center;
-  border-radius: 50%;
-  border: var(--border-width-thin) solid color-mix(in oklab, var(--color-on-dark-muted) 30%, transparent);
-  background: color-mix(in oklab, var(--color-surface-dark) 55%, var(--color-black));
-  color: var(--color-on-dark);
-  font-size: var(--font-size-xl);
-  line-height: var(--line-height-none);
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-on-dark-muted);
   cursor: pointer;
-  transition: border-color var(--duration-fast) ease, color var(--duration-fast) ease,
-    opacity var(--duration-fast) ease;
+  transition: color var(--duration-fast) ease, transform var(--duration-fast) ease;
 }
 
-.scrollBtn:hover:not(:disabled) {
-  border-color: var(--color-accent);
+.chev {
+  display: block;
+  width: clamp(1.5rem, 2.4vw, 2.25rem);
+  height: auto; /* natural 1:1 box */
+}
+
+.navPrev .chev {
+  transform: scaleX(-1);
+}
+
+.navBtn:hover,
+.navBtn:focus-visible {
   color: var(--color-accent-bright);
 }
 
-.scrollBtn:focus-visible {
+.navBtn:active {
+  color: var(--color-accent);
+}
+
+.navPrev:hover {
+  transform: translateX(-3px);
+}
+
+.navNext:hover {
+  transform: translateX(3px);
+}
+
+.navBtn:focus-visible {
   outline: var(--border-width-thick) solid var(--color-accent);
-  outline-offset: 2px;
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
 }
 
-.scrollBtn:disabled {
-  opacity: 0.3;
-  cursor: default;
-}
-
-/* ---- film viewport + sliding track ---- */
 .stage {
+  --focus-ring-room: 6px; /* clears the focus ring (2px outline + 3px offset) */
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  /* Clip the off-stage swiped slides, but leave a few px so the focus ring on
+     the flush-left controls (See it live / Read more) isn't cropped. The
+     swiped slides translate a full 100%, far past this margin, so they stay
+     hidden. `overflow: hidden` is the fallback where `clip` is unsupported
+     (ring gets cropped as before — no regression). */
   overflow: hidden;
+  overflow: clip;
+  overflow-clip-margin: var(--focus-ring-room);
 }
 
-.track {
-  display: flex;
-  transition: transform var(--swipe);
-  will-change: transform;
+/* Every quote stacked in one grid cell (invisible) — reserves the tallest
+   height so the section doesn't jump as the swiped slides come and go. */
+.sizer {
+  display: grid;
+  visibility: hidden;
+}
+
+.sizer > .slide {
+  grid-area: 1 / 1;
 }
 
 .slide {
-  flex: 0 0 100%;
   margin: 0;
-  display: grid;
-  grid-template-columns: 1.05fr 1fr;
-  gap: clamp(var(--spacing-xl), 4vw, var(--spacing-4xl));
-  /* top-anchor: frame and quote share a top edge regardless of quote length */
-  align-items: start;
 }
 
-/* ---- preview card (browser frame) ---- */
-.frame {
-  /* component-local sizes: traffic-light dot (intrinsic chrome px) and the
-     contained preview width used on mobile */
-  --dot: 10px;
-  --frame-max: 14rem;
-  margin: 0;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  border: var(--border-width-thin) solid color-mix(in oklab, var(--color-on-dark-muted) 25%, transparent);
-  background: color-mix(in oklab, var(--color-surface-dark) 70%, var(--color-black));
-  box-shadow: var(--shadow-lg);
+/* The live + outgoing slides overlay the sizer and cross-slide. --x is the
+   off-stage edge in the click's direction, so the motion always follows the
+   chevron (even across the wrap boundary). */
+.current {
+  position: absolute;
+  inset: 0;
 }
 
-.bar {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  background: var(--color-surface-dark-2);
-  border-bottom: var(--border-width-thin) solid color-mix(in oklab, var(--color-on-dark-muted) 18%, transparent);
+.enter {
+  animation: swipeIn var(--swipe-dur) var(--swipe-ease);
 }
 
-.dot {
-  width: var(--dot);
-  height: var(--dot);
-  border-radius: 50%;
-  background: color-mix(in oklab, var(--color-on-dark-muted) 35%, transparent);
+.leaving {
+  animation: swipeOut var(--swipe-dur) var(--swipe-ease) forwards;
 }
 
-.url {
-  margin-left: var(--spacing-xs);
-  font-size: var(--font-size-2xs);
-  color: var(--color-on-dark-muted);
-  letter-spacing: 0.01em;
+@keyframes swipeIn {
+  from {
+    transform: translateX(var(--x));
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 
-.vid {
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
-  background: var(--color-surface-dark-2);
+@keyframes swipeOut {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(var(--x));
+  }
 }
 
-.stack {
-  margin: var(--spacing-sm) 0 0;
-  color: var(--color-on-dark-muted);
-  font-size: var(--font-size-sm);
-}
-
-.tech {
-  color: var(--color-accent-bright);
-  font-weight: var(--font-weight-semibold);
-}
-
+/* ---- quote (the feature) ---- */
 .quote {
   margin: 0;
   font-size: var(--font-size-lead);
@@ -249,129 +256,44 @@
   border-radius: var(--radius-sm);
 }
 
-/* ---- filmstrip: a single horizontally-scrolling row (scales to any count) ---- */
-.film {
-  flex: 1 1 auto;
-  min-width: 0; /* let the flex child shrink so it actually scrolls */
-  display: flex;
-  gap: var(--spacing-sm);
-  /* room so the hover lift + focus ring aren't clipped by the scroll overflow */
-  padding: var(--spacing-2xs) var(--spacing-3xs);
-  overflow-x: auto;
-  scroll-snap-type: x proximity;
-  scrollbar-width: none;
-}
-
-.film::-webkit-scrollbar {
-  display: none;
-}
-
-.thumb {
-  /* fixed card width; rem so it scales with the user's font */
-  --thumb-w: 9.875rem;
-  flex: 0 0 auto;
-  scroll-snap-align: start;
-  cursor: pointer;
-  padding: 0;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  border: var(--border-width-thick) solid transparent;
-  background: color-mix(in oklab, var(--color-surface-dark) 70%, var(--color-black));
-  width: var(--thumb-w);
-  text-align: left;
-  color: inherit;
-  font: inherit;
-  transition: border-color var(--duration-fast) ease, transform var(--duration-fast) ease;
-}
-
-.thumb:hover {
-  transform: translateY(-2px);
-}
-
-.thumb[aria-pressed="true"] {
-  border-color: var(--color-accent);
-}
-
-.thumb:focus-visible {
-  outline: var(--border-width-thick) solid var(--color-accent);
-  outline-offset: 2px;
-}
-
-.tbar {
-  height: var(--spacing-md); /* intrinsic mini-chrome bar */
-  background: var(--color-surface-dark-2);
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-3xs); /* intrinsic chrome spacing between the mini traffic-lights */
-  padding-left: var(--spacing-2xs);
-}
-
-.tbar .dot {
-  /* half the frame's dot — intrinsic chrome */
-  width: var(--spacing-2xs);
-  height: var(--spacing-2xs);
-}
-
-.tshot {
-  display: block;
-  aspect-ratio: 16 / 9;
-  background-color: var(--color-surface-dark-2);
-  background-size: cover;
-  background-position: center top;
-}
-
-.tmeta {
-  display: block;
-  padding: var(--spacing-xs);
-}
-
-.tname {
-  display: block;
-  font-family: var(--font-display);
-  font-weight: var(--font-weight-semibold);
-  font-size: var(--font-size-xs);
-  color: var(--color-white);
-}
-
-.ttag {
-  display: block;
-  font-size: var(--font-size-3xs);
-  color: var(--color-on-dark-muted);
-}
-
-.apps {
-  position: relative;
-  z-index: var(--z-raised);
-  max-width: var(--maxw);
-  margin: clamp(var(--spacing-2xl), 5vw, var(--spacing-4xl)) auto 0;
-  padding-inline: var(--gutter);
-  color: var(--color-on-dark-muted);
+.counter {
+  margin: clamp(var(--spacing-lg), 3vw, var(--spacing-2xl)) 0 0;
+  text-align: center;
+  font-family: var(--font-mono);
   font-size: var(--font-size-sm);
+  color: var(--color-on-dark-muted);
+  letter-spacing: 0.08em;
 }
 
-.appsLink {
-  color: var(--color-accent);
-  text-decoration: none;
-  border-bottom: var(--border-width-thin) solid color-mix(in oklab, var(--color-accent) 40%, transparent);
-  padding-bottom: var(--spacing-3xs);
-  transition: border-color var(--duration-fast) ease, color var(--duration-fast) ease;
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
-.appsLink:hover {
-  color: var(--color-accent-bright);
-  border-bottom-color: var(--color-accent);
-}
-
-.appsLink:focus-visible {
-  outline: var(--border-width-thick) solid var(--color-accent);
-  outline-offset: 3px;
-  border-radius: var(--radius-sm);
-}
 
 @media (prefers-reduced-motion: reduce) {
-  .track,
   .glow {
     transition: none;
+  }
+  .enter,
+  .leaving {
+    animation: none;
+  }
+}
+
+/* Mid band: below ~1280px there's no outer margin to hold the chevrons, so
+   narrow the container (extra side padding = the chevron reserve) and the arrows
+   sit inside the viewport instead of clipping past its edge. */
+@media (min-width: 48em) and (max-width: 80em) {
+  .inner {
+    padding-inline: calc(var(--chev) + var(--chev-gap) + var(--spacing-md));
   }
 }
 
@@ -384,15 +306,13 @@
   }
 }
 
-/* Mobile compaction. Placed LAST so its overrides win over the base rules
-   above (media queries add no specificity — source order decides ties). */
+/* Mobile compaction. Placed LAST so its overrides win (media queries add no
+   specificity — source order decides ties). */
 @media (max-width: 48em) {
   .proof {
-    padding-block: clamp(var(--spacing-xl), 4.5vh, var(--spacing-2xl));
+    padding-block: clamp(var(--spacing-2xl), 5vh, var(--spacing-4xl));
   }
 
-  /* phone: widen the tile most so the short blobs stay horizontal smears,
-     and drift 25% less so the glow doesn't track the panel in lockstep */
   .glow {
     --glow-step: 180px;
     background-size:
@@ -400,22 +320,9 @@
       102vw 100%, 102vw 100%;
   }
 
-  .sub {
-    margin-bottom: var(--spacing-md);
-  }
-
-  .slide {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-sm);
-  }
-
-  .frame {
-    max-width: var(--frame-max);
-  }
-
-  .stack {
-    margin-top: var(--spacing-xs);
-    font-size: var(--font-size-xs);
+  .spotlight {
+    --chev-gap: var(--spacing-xs);
+    margin-inline: 0;
   }
 
   .quote {
@@ -423,7 +330,6 @@
     line-height: var(--line-height-snug);
   }
 
-  /* the long quote is clamped behind "Read more" to keep the section compact */
   .quote.clamped {
     display: -webkit-box;
     -webkit-line-clamp: 3;
@@ -451,36 +357,5 @@
 
   .cite {
     margin-top: var(--spacing-sm);
-  }
-
-  /* still a real strip of preview cards on mobile — just scaled down.
-     Scroll arrows hidden here; native touch-swipe is the affordance. */
-  .filmRow {
-    margin-top: var(--spacing-md);
-  }
-
-  .scrollBtn {
-    display: none;
-  }
-
-  .film {
-    gap: var(--spacing-xs);
-  }
-
-  .thumb {
-    --thumb-w: 7.75rem;
-  }
-
-  .tname {
-    font-size: var(--font-size-2xs);
-  }
-
-  .ttag {
-    font-size: var(--font-size-3xs);
-  }
-
-  .apps {
-    margin-top: var(--spacing-xl);
-    font-size: var(--font-size-sm);
   }
 }

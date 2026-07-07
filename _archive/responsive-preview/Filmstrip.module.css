@@ -1,0 +1,140 @@
+.filmRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.scrollBtn {
+  flex: 0 0 auto;
+  /* spacing-4xl (48px) clears the 44px tap target */
+  width: var(--spacing-4xl);
+  height: var(--spacing-4xl);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: var(--border-width-thin) solid var(--color-border-strong);
+  background: var(--color-bg-elevated);
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xl);
+  line-height: var(--line-height-none);
+  cursor: pointer;
+  transition: border-color var(--duration-fast) ease, color var(--duration-fast) ease,
+    opacity var(--duration-fast) ease;
+}
+
+.scrollBtn:hover:not(:disabled) {
+  border-color: var(--color-accent);
+  color: var(--color-accent-deep);
+}
+
+.scrollBtn:focus-visible {
+  outline: var(--border-width-thick) solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.scrollBtn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.film {
+  flex: 1 1 auto;
+  min-width: 0; /* let the flex child shrink so it actually scrolls */
+  display: flex;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-2xs) var(--spacing-3xs);
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+.film::-webkit-scrollbar {
+  display: none;
+}
+
+.thumb {
+  --thumb-w: 9.875rem;
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  cursor: pointer;
+  padding: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: var(--border-width-thick) solid transparent;
+  background: var(--color-bg-elevated);
+  width: var(--thumb-w);
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--duration-fast) ease, transform var(--duration-fast) ease;
+}
+
+.thumb:hover {
+  transform: translateY(-2px);
+}
+
+.thumb[aria-pressed="true"] {
+  border-color: var(--color-accent);
+}
+
+.thumb:focus-visible {
+  outline: var(--border-width-thick) solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.tbar {
+  height: var(--spacing-md);
+  background: var(--color-surface);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3xs);
+  padding-left: var(--spacing-2xs);
+  border-bottom: var(--border-width-thin) solid var(--color-border);
+}
+
+.dot {
+  width: var(--spacing-2xs);
+  height: var(--spacing-2xs);
+  border-radius: 50%;
+  background: color-mix(in oklab, var(--color-text-subtle) 40%, transparent);
+}
+
+.tshot {
+  display: block;
+  aspect-ratio: 16 / 9;
+  background-color: var(--color-surface);
+  background-size: cover;
+  background-position: center top;
+}
+
+.tmeta {
+  display: block;
+  padding: var(--spacing-xs);
+}
+
+.tname {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xs);
+  color: var(--color-text);
+}
+
+.ttag {
+  display: block;
+  font-size: var(--font-size-3xs);
+  color: var(--color-text-subtle);
+}
+
+@media (max-width: 48em) {
+  .scrollBtn {
+    display: none;
+  }
+  .film {
+    gap: var(--spacing-xs);
+  }
+  .thumb {
+    --thumb-w: 7.75rem;
+  }
+}

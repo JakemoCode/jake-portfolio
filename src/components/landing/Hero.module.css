@@ -47,6 +47,13 @@
   color: var(--color-accent-pine);
 }
 
+/* The heading's line-height (1) makes the glyph box exactly font-height, so
+   line 2's descenders (the "g" hook) fall outside the background-clip: text
+   paint box and get clipped. A hair of padding extends the box to catch them. */
+.line2 {
+  padding-bottom: var(--spacing-2xs);
+}
+
 .sub {
   margin-top: var(--spacing-xl);
   max-width: 46ch;
