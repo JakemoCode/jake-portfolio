@@ -18,6 +18,10 @@ function OfferRow({ offer, lead }: { offer: Offer; lead?: boolean }) {
   return (
     <article className={`${styles.row} ${lead ? styles.lead : ""} r-up`}>
       <div className={styles.head}>
+        {/* Facet bullet — the audit has a whole card, so the quieter rows get a
+            colored triangle (the DESIGN.md motif) to give each its own identity.
+            Colors are assigned per row in CSS (teal family; rust stays for CTAs). */}
+        {!lead && <span className={styles.bullet} aria-hidden="true" />}
         <div className={styles.titleBlock}>
           <h4 className={styles.name}>{offer.name}</h4>
           <p className={styles.priceWrap}>

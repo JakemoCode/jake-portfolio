@@ -61,9 +61,20 @@
 .head {
   display: flex;
   align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
   flex-wrap: wrap;
+}
+
+/* Facet bullet leading the row. Right-pointing triangle (the DESIGN.md motif),
+   nudged down to sit on the name's cap line. */
+.bullet {
+  --bullet-size: 0.62rem;
+  flex: none;
+  width: var(--bullet-size);
+  height: var(--bullet-size);
+  margin-top: 0.42rem; /* optical: align the triangle with the name's cap height */
+  background: var(--color-accent-deep);
+  clip-path: polygon(0 0, 100% 50%, 0 100%);
 }
 
 .titleBlock {
@@ -94,6 +105,7 @@
 .badge {
   flex: none;
   align-self: flex-start;
+  margin-left: auto; /* push to the top-right of the head */
   padding: var(--spacing-2xs) var(--spacing-sm);
   border-radius: var(--radius-pill);
   background: color-mix(in oklab, var(--color-accent) 14%, var(--color-bg-elevated));
@@ -143,7 +155,7 @@
   text-wrap: pretty;
 }
 
-/* The broken-vs-converting self-select, sitting above the two fix rows. */
+/* The entry rows (rescue, tune-up, feature build). */
 .rows {
   margin-top: var(--spacing-xl);
 }
