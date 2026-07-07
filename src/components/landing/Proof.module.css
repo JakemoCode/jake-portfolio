@@ -14,7 +14,11 @@
   position: relative;
   background: var(--color-surface-dark);
   color: var(--color-on-dark);
-  padding-block: clamp(var(--spacing-4xl), 9vh, var(--spacing-6xl));
+  /* Full top gap; reduced bottom because WorkGallery continues the same dark
+     surface directly below — a full section gap on both sides would read as
+     dead space with no colour change to justify it. */
+  padding-block-start: clamp(var(--spacing-4xl), 9vh, var(--spacing-6xl));
+  padding-block-end: clamp(var(--spacing-xl), 3vh, var(--spacing-3xl));
   overflow: hidden;
 }
 

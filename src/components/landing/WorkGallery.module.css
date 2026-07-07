@@ -4,7 +4,11 @@
 .section {
   background: var(--color-surface-dark);
   color: var(--color-on-dark);
-  padding-block: clamp(var(--spacing-4xl), 9vh, var(--spacing-6xl));
+  /* Reduced top: continues the dark Proof zone directly above, so the seam is
+     one modest gap, not two stacked section paddings. Full bottom before the
+     next (differently-coloured) section. */
+  padding-block-start: clamp(var(--spacing-xl), 3vh, var(--spacing-3xl));
+  padding-block-end: clamp(var(--spacing-4xl), 9vh, var(--spacing-6xl));
 }
 
 .inner {
