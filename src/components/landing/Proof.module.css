@@ -85,8 +85,8 @@
   align-items: center;
   gap: var(--chev-gap);
   /* Pull the chevrons out into the gutter (exactly one chevron + gap on each
-     side) so the screenshot/quote align with the section heading and the arrows
-     live outside the content column. */
+     side) so the quote aligns with the section heading and the arrows live
+     outside the content column. */
   margin-inline: calc(-1 * (var(--chev) + var(--chev-gap)));
 }
 
@@ -157,11 +157,12 @@
 
 .slide {
   margin: 0;
-  display: grid;
-  grid-template-columns: minmax(0, 15rem) 1fr;
-  gap: clamp(var(--spacing-lg), 3vw, var(--spacing-3xl));
-  /* top-anchor: frame and quote share a top edge regardless of quote length */
-  align-items: start;
+}
+
+/* Cap the quote's measure so the imageless spotlight keeps a readable line
+   length instead of running the full content width. */
+.body {
+  max-width: 60ch;
 }
 
 /* The live + outgoing slides overlay the sizer and cross-slide. --x is the
@@ -196,52 +197,6 @@
   to {
     transform: translateX(var(--x));
   }
-}
-
-/* ---- supporting screenshot (browser frame), now a small anchor ---- */
-.frame {
-  --dot: 10px; /* intrinsic chrome traffic-light */
-  margin: 0;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  border: var(--border-width-thin) solid color-mix(in oklab, var(--color-on-dark-muted) 25%, transparent);
-  background: color-mix(in oklab, var(--color-surface-dark) 70%, var(--color-black));
-  box-shadow: var(--shadow-md);
-}
-
-.bar {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  background: var(--color-surface-dark-2);
-  border-bottom: var(--border-width-thin) solid color-mix(in oklab, var(--color-on-dark-muted) 18%, transparent);
-}
-
-.dot {
-  width: var(--dot);
-  height: var(--dot);
-  border-radius: 50%;
-  background: color-mix(in oklab, var(--color-on-dark-muted) 35%, transparent);
-}
-
-.url {
-  margin-left: var(--spacing-xs);
-  font-size: var(--font-size-2xs);
-  color: var(--color-on-dark-muted);
-  letter-spacing: 0.01em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.shot {
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
-  object-position: center top;
-  background: var(--color-surface-dark-2);
 }
 
 /* ---- quote (the feature) ---- */
@@ -366,15 +321,6 @@
   .spotlight {
     --chev-gap: var(--spacing-xs);
     margin-inline: 0;
-  }
-
-  .slide {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-sm);
-  }
-
-  .frame {
-    max-width: 12rem;
   }
 
   .quote {

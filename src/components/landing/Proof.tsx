@@ -3,14 +3,6 @@ import { testimonials, type Testimonial } from "../../content/testimonials";
 import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 import styles from "./Proof.module.css";
 
-function hostOf(url: string): string {
-  try {
-    return new URL(url).hostname.replace(/^www\./, "");
-  } catch {
-    return url;
-  }
-}
-
 /** Thin right-pointing chevron; the prev button flips it via CSS. */
 function Chevron() {
   return (
@@ -48,20 +40,6 @@ function Slide({
       aria-hidden={hidden || undefined}
       onAnimationEnd={onAnimationEnd}
     >
-      <div className={styles.media}>
-        {t.shot && (
-          <figure className={styles.frame}>
-            <div className={styles.bar}>
-              <span className={styles.dot} />
-              <span className={styles.dot} />
-              <span className={styles.dot} />
-              {t.link && <span className={styles.url}>{hostOf(t.link)}</span>}
-            </div>
-            <img className={styles.shot} src={t.shot.src} alt={t.shot.alt} />
-          </figure>
-        )}
-      </div>
-
       <div className={styles.body}>
         <blockquote className={`${styles.quote} ${expanded ? "" : styles.clamped}`}>
           {t.quote}

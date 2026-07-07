@@ -1,19 +1,15 @@
-import arborPoster from "../assets/clients/arbor-poster.jpg";
-import jyotishPoster from "../assets/clients/jyotish-poster.jpg";
-
 export type Testimonial = {
   id: string;
-  /** Joins to a demo in demos.ts when the client also has a live preview. */
+  /** Joins to a live site in work.ts when the client also has a gallery tile. */
   clientId: string;
-  /** Business name — shown in the frame's URL pill context. */
+  /** Business name. */
   client: string;
   quote: string;
   /** The person quoted. */
   name: string;
   role: string;
+  /** Live site, surfaced as the "See it live" link under the quote. */
   link?: string;
-  /** Still screenshot anchoring the quote (the live-motion view lives in demos.ts). */
-  shot?: { src: string; alt: string };
 };
 
 export const testimonials: Testimonial[] = [
@@ -26,10 +22,6 @@ export const testimonials: Testimonial[] = [
     name: "Morgan Berry",
     role: "Owner, Arbor Gymnastics LLC",
     link: "https://www.arborgymnastics.com/",
-    shot: {
-      src: arborPoster,
-      alt: "The Arbor Gymnastics site, with class listings reorganized into age-specific sections.",
-    },
   },
   {
     id: "testimonial-jyotish",
@@ -40,9 +32,5 @@ export const testimonials: Testimonial[] = [
     name: "Debora Bowley",
     role: "Founder/Author, Jyotish Tarot",
     link: "https://jyotishtarot.com/free-jyotish-tarot-reading/",
-    shot: {
-      src: jyotishPoster,
-      alt: "The custom Jyotish Tarot reader, with a spread of cards laid out.",
-    },
   },
 ];
