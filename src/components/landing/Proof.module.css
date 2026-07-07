@@ -159,12 +159,6 @@
   margin: 0;
 }
 
-/* Cap the quote's measure so the imageless spotlight keeps a readable line
-   length instead of running the full content width. */
-.body {
-  max-width: 60ch;
-}
-
 /* The live + outgoing slides overlay the sizer and cross-slide. --x is the
    off-stage edge in the click's direction, so the motion always follows the
    chevron (even across the wrap boundary). */
