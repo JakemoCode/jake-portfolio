@@ -87,14 +87,6 @@ export function Pricing() {
           ))}
         </div>
 
-        <div className={`${styles.rest} r-up`}>
-          <p>
-            <strong>Not sure which fits?</strong> Most people start with the
-            one-page site and grow into more pages later. Either way, I&rsquo;ll
-            point you to the right one, no upsell.
-          </p>
-        </div>
-
         <Sprints />
       </div>
     </section>

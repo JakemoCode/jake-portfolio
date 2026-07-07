@@ -185,24 +185,6 @@
   color: var(--color-text-subtle);
 }
 
-.rest {
-  margin-top: clamp(var(--spacing-2xl), 4vw, var(--spacing-4xl));
-  display: grid;
-  gap: var(--spacing-sm);
-  max-width: 64ch;
-}
-
-.rest p {
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-body);
-  color: var(--color-text-muted);
-}
-
-.rest strong {
-  color: var(--color-text);
-  font-weight: var(--font-weight-semibold);
-}
-
 /* Soft-open: slide the panel's height open and fade it in (instead of an
    instant pop). Uses ::details-content + interpolate-size; browsers without
    support fall back to the native instant toggle, which is fine. */
