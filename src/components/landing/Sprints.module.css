@@ -1,0 +1,228 @@
+/* The entry-offer tier — a tinted band that sits inside the Pricing section,
+   below the two full-build cards. Tonal separation (paper card -> tinted band)
+   does the work a second section header used to, per DESIGN.md (depth from
+   bands, not shadows). */
+.tier {
+  margin-top: clamp(var(--spacing-2xl), 4vw, var(--spacing-4xl));
+  background: var(--color-surface);
+  border: 1px solid var(--color-border); /* 1px: intentional hairline */
+  border-radius: var(--radius-xl);
+  padding: clamp(var(--spacing-xl), 3.5vw, var(--spacing-3xl));
+}
+
+.tierHead {
+  max-width: 60ch;
+}
+
+.tierTitle {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-xl);
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+
+.tierLede {
+  margin-top: var(--spacing-2xs);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-body);
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+/* ---- A single offer row ---- */
+.row {
+  padding-block: var(--spacing-lg);
+}
+
+/* Non-lead rows are quiet, divided by hairlines. */
+.row:not(.lead) {
+  border-top: 1px solid var(--color-border); /* 1px: intentional divider */
+}
+
+/* The audit lifts out of the band on a raised (paper) surface — the emphasis
+   comes from tone, not a badge, shadow, or side rail. */
+.lead {
+  margin-top: var(--spacing-xl);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border-strong); /* 1px: intentional hairline */
+  border-radius: var(--radius-lg);
+  padding: clamp(var(--spacing-lg), 2.5vw, var(--spacing-xl));
+}
+
+.head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.name {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-lg);
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+}
+
+.priceWrap {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px; /* px: hairline stack between price and its note */
+  text-align: right;
+}
+
+.price {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-lg);
+  letter-spacing: -0.01em;
+  color: var(--color-accent-pine);
+  white-space: nowrap;
+}
+
+.from {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+/* "Quoted after your audit" is a phrase, not a headline number. */
+.priceQuote {
+  font-family: var(--font-body);
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.priceNote {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-subtle);
+}
+
+.blurb {
+  margin-top: var(--spacing-xs);
+  max-width: 64ch;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-body);
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+/* The broken-vs-converting self-select, sitting above the two fix rows. */
+.rows {
+  margin-top: var(--spacing-xl);
+}
+
+/* ---- Disclosure (shared shape with the Pricing "See what's included") ---- */
+.details {
+  margin-top: var(--spacing-sm);
+  interpolate-size: allow-keywords;
+}
+
+.summary {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent-pine);
+  list-style: none;
+  user-select: none;
+  transition: color var(--duration-fast) ease;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.summary:hover {
+  color: var(--color-accent-deep);
+}
+
+.summary:focus-visible {
+  outline: 2px solid var(--color-accent-deep); /* 2px: intentional outline width */
+  outline-offset: 3px; /* px intentional: outline-offset */
+  border-radius: var(--radius-sm);
+}
+
+/* Grow the toggle's tap target to 44px on touch (Fitts's) without layout shift. */
+@media (pointer: coarse), (max-width: 40em) {
+  .summary {
+    position: relative;
+  }
+  .summary::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    --tap-target: 44px; /* intentional px: WCAG 2.5.5 touch target minimum */
+    height: var(--tap-target);
+  }
+}
+
+/* Facet-triangle marker — the DESIGN.md motif; points down, rotates up on open. */
+.tri {
+  --tri-size: 0.65rem; /* component icon; no spacing rung */
+  width: var(--tri-size);
+  height: var(--tri-size);
+  flex: none;
+  background: var(--color-accent);
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  transition: transform var(--duration-medium) var(--ease-out-quint);
+}
+
+.details[open] .tri {
+  transform: rotate(180deg);
+}
+
+.includes {
+  list-style: none;
+  margin: var(--spacing-sm) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--spacing-xs);
+}
+
+.includes li {
+  position: relative;
+  padding-left: var(--spacing-xl);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  color: var(--color-text-muted);
+}
+
+.includes li::before {
+  content: "\2713"; /* check */
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--color-accent-pine);
+  font-weight: var(--font-weight-bold);
+}
+
+/* Soft-open the disclosure panel (matches Pricing). Browsers without support
+   fall back to the native instant toggle. */
+@media (prefers-reduced-motion: no-preference) {
+  .details::details-content {
+    block-size: 0;
+    opacity: 0;
+    overflow: clip;
+    display: flow-root;
+    transition:
+      block-size var(--duration-slow) var(--ease-out-quint),
+      opacity var(--duration-base) ease,
+      content-visibility var(--duration-slow) allow-discrete;
+  }
+  .details[open]::details-content {
+    block-size: auto;
+    opacity: 1;
+  }
+}

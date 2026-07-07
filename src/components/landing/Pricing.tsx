@@ -1,3 +1,5 @@
+import { FoundingNote } from "./FoundingNote";
+import { Sprints } from "./Sprints";
 import styles from "./Pricing.module.css";
 
 type Package = {
@@ -58,6 +60,8 @@ export function Pricing() {
           surprises, no hourly meter running.
         </p>
 
+        <FoundingNote />
+
         <div className={styles.grid}>
           {PACKAGES.map((pkg) => (
             <article key={pkg.name} className={`${styles.card} r-up`}>
@@ -86,23 +90,7 @@ export function Pricing() {
           ))}
         </div>
 
-        <div className={`${styles.rest} r-up`}>
-          <p>
-            <strong>Not sure which fits?</strong> Most people start with the
-            one-page site and grow into more pages later. Either way, I&rsquo;ll
-            point you to the right one, no upsell.
-          </p>
-          <p>
-            <strong>Bigger or more custom?</strong> Things like online booking, a
-            store, or rebuilding an existing site are quoted to fit.
-            Let&rsquo;s talk.
-          </p>
-          <p>
-            <strong>Already have a Squarespace or WordPress site?</strong> I can
-            refresh or rebuild it so it finally looks the way you want. Tell me
-            what&rsquo;s bugging you and I&rsquo;ll take a look.
-          </p>
-        </div>
+        <Sprints />
       </div>
     </section>
   );
