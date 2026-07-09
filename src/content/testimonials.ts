@@ -14,14 +14,14 @@ export type Testimonial = {
 
 export const testimonials: Testimonial[] = [
   {
-    id: "testimonial-arbor",
-    clientId: "arbor",
-    client: "Arbor Gymnastics",
+    id: "testimonial-victoria",
+    clientId: "victoria",
+    client: "Victoria Grace Real Estate",
     quote:
-      "Jake helped improve the user experience on my Squarespace website for my business, Arbor Gymnastics. He streamlined both the home page and class registration pages, with one of the biggest improvements being the reorganization of our class listings into age-specific sections. This makes it much easier for parents to quickly find the right class for their child. He was communicative, responsive to feedback, and did a great job preserving the look, feel, and color palette that reflect our brand. The process felt collaborative, and the final result is a cleaner, more professional website that's easier for families to navigate.",
-    name: "Morgan Berry",
-    role: "Owner, Arbor Gymnastics LLC",
-    link: "https://www.arborgymnastics.com/",
+      "I had been playing around with the idea of personalizing a website for years, but I was never happy with the pricing or concepts offered to me from previous designers. I reached out to Jake to discuss building a site that was simple, easy to navigate, and true to my brand. Within a day we were collaborating and discussing content ideas. Jake is passionate about his work and it shows. From start to finish, I had a live website in less than a week. He involves you as a client and makes sure you are happy with the finished results.",
+    name: "Victoria Grace",
+    role: "Realtor, Victoria Grace Real Estate",
+    link: "https://victoriagracerealestate.com/",
   },
   {
     id: "testimonial-zendeb",
@@ -32,6 +32,16 @@ export const testimonials: Testimonial[] = [
     name: "Debora Bowley",
     role: "Founder, Zendeb",
     link: "https://zendeb.com/",
+  },
+  {
+    id: "testimonial-arbor",
+    clientId: "arbor",
+    client: "Arbor Gymnastics",
+    quote:
+      "Jake helped improve the user experience on my Squarespace website for my business, Arbor Gymnastics. He streamlined both the home page and class registration pages, with one of the biggest improvements being the reorganization of our class listings into age-specific sections. This makes it much easier for parents to quickly find the right class for their child. He was communicative, responsive to feedback, and did a great job preserving the look, feel, and color palette that reflect our brand. The process felt collaborative, and the final result is a cleaner, more professional website that's easier for families to navigate.",
+    name: "Morgan Berry",
+    role: "Owner, Arbor Gymnastics LLC",
+    link: "https://www.arborgymnastics.com/",
   },
   {
     id: "testimonial-jyotish",
