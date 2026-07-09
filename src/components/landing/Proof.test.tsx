@@ -19,13 +19,13 @@ function renderProof() {
 describe("Proof", () => {
   it("starts on the first testimonial", () => {
     renderProof();
-    expect(within(screen.getByRole("article")).getByText("Morgan Berry")).toBeTruthy();
+    expect(within(screen.getByRole("article")).getByText(testimonials[0]!.name)).toBeTruthy();
   });
 
   it("advances to the next testimonial with the next arrow", () => {
     renderProof();
     fireEvent.click(screen.getByRole("button", { name: "Next testimonial" }));
-    expect(within(screen.getByRole("article")).getByText("Debora Bowley")).toBeTruthy();
+    expect(within(screen.getByRole("article")).getByText(testimonials[1]!.name)).toBeTruthy();
   });
 
   it("wraps from the last testimonial back to the first via next", () => {
@@ -34,13 +34,13 @@ describe("Proof", () => {
     // Walk to the last testimonial, then one more click wraps back to the first.
     for (let i = 0; i < testimonials.length - 1; i++) fireEvent.click(next);
     fireEvent.click(next);
-    expect(within(screen.getByRole("article")).getByText("Morgan Berry")).toBeTruthy();
+    expect(within(screen.getByRole("article")).getByText(testimonials[0]!.name)).toBeTruthy();
   });
 
   it("wraps from the first testimonial to the last via prev", () => {
     renderProof();
     fireEvent.click(screen.getByRole("button", { name: "Previous testimonial" }));
-    expect(within(screen.getByRole("article")).getByText("Debora Bowley")).toBeTruthy();
+    expect(within(screen.getByRole("article")).getByText(testimonials[testimonials.length - 1]!.name)).toBeTruthy();
   });
 
   it("toggles the mobile read-more control on the quote", () => {
