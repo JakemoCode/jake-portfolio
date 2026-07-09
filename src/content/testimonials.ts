@@ -34,6 +34,16 @@ export const testimonials: Testimonial[] = [
     link: "https://zendeb.com/",
   },
   {
+    id: "testimonial-victoria",
+    clientId: "victoria",
+    client: "Victoria Grace Real Estate",
+    quote:
+      "I had been playing around with the idea of personalizing a website for years, but I was never happy with the pricing or concepts offered to me from previous designers. I reached out to Jake to discuss building a site that was simple, easy to navigate, and true to my brand. Within a day we were collaborating and discussing content ideas. Jake is passionate about his work and it shows. From start to finish, I had a live website in less than a week. He involves you as a client and makes sure you are happy with the finished results.",
+    name: "Victoria Grace",
+    role: "Realtor, Victoria Grace Real Estate",
+    link: "https://victoriagracerealestate.com/",
+  },
+  {
     id: "testimonial-jyotish",
     clientId: "jyotish",
     client: "Jyotish Tarot",

@@ -15,24 +15,20 @@ _Last updated: 2026-07-07_
 | Build | `npx vite build` | ✅ clean |
 | Dev | `npm run dev` | serves at `localhost:5173` |
 
+## Shipped
+
+**PR #25 — work gallery + testimonial spotlight** (merged 2026-07-07, in `main`).
+Reworked the landing's "proof" zone into two dark-surface sections: the
+`WorkGallery` (hero-on-hover/tap tiles + phone inset, VP9 WebM per
+[`MEDIA.md`](./MEDIA.md), replacing the device-pill preview) and the imageless
+`Proof` spotlight. The old responsive-preview system is archived to
+`_archive/responsive-preview/`.
+
 ## In flight
 
-**PR #25 — work gallery + testimonial spotlight** · branch `feat/responsive-preview` · **draft**, base `main`.
-
-Reworks the landing's "proof" zone into two sections on a shared dark surface:
-
-- **Work gallery** (`WorkGallery`) — replaces the old device-pill / scroll-video
-  "See it adapt" preview. Each client tile plays the site's real hero entrance
-  on hover (desktop) or tap (no-hover devices); a static phone inset shows the
-  mobile layout; the tile links to the live site. VP9 WebM, lazy (`preload="none"`),
-  captured per [`MEDIA.md`](./MEDIA.md).
-- **Testimonial spotlight** (`Proof`) — imageless, full-width quote (the per-quote
-  screenshot duplicated the gallery below it).
-- Old system (`ResponsiveShowcase`, `ResponsivePreview`, `Filmstrip`,
-  `previewLayers`, `demos` + per-device assets) archived to
-  `_archive/responsive-preview/` (excluded from vitest).
-
-Reviewed (multi-angle) and simplified; findings addressed in-branch.
+**Victoria Grace testimonial** · branch `feat/victoria-testimonial`.
+Fourth testimonial (the flagship gallery client) — every gallery site now has a
+quote, from three distinct clients.
 
 ## Follow-ups
 
@@ -52,5 +48,5 @@ Reviewed (multi-angle) and simplified; findings addressed in-branch.
 
 ## Awaiting
 
-- **Victoria Grace** testimonial to round out the set (Arbor and Zendeb, the
-  other two gallery sites, now have quotes).
+- Nothing outstanding. All three gallery sites (Arbor, Zendeb, Victoria) now
+  have testimonials; the spotlight cycles four quotes from three clients.
