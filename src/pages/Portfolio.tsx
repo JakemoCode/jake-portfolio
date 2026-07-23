@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import styles from "./Portfolio.module.css";
 import { Hero } from "../components/portfolio/Hero";
+import { Approach } from "../components/portfolio/Approach";
 import { ProjectCard } from "../components/portfolio/ProjectCard";
 import { Testimonials } from "../components/portfolio/Testimonials";
 import { ContactLinks } from "../components/portfolio/ContactLinks";
@@ -30,6 +31,8 @@ export function Portfolio() {
             </>
           }
         />
+
+        <Approach />
 
         <section className={styles.projects} aria-label="Projects">
           {projects.map((project) => (
