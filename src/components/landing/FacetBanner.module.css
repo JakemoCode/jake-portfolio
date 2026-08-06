@@ -111,10 +111,11 @@
   }
 }
 
-/* Lag direction: stone eases down as the page scrolls up, so it trails the page. */
+/* Lead direction: stone eases up as the page scrolls up, so it runs with the
+   page rather than trailing it. */
 @keyframes stoneDrift {
-  from { transform: translateY(-25%); }
-  to { transform: translateY(25%); }
+  from { transform: translateY(25%); }
+  to { transform: translateY(-25%); }
 }
 
 /* Facets catch a little light on hover (pointer devices only; filter doesn't
