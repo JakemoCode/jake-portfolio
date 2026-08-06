@@ -1,5 +1,6 @@
-// Legal copy. Source of truth lives in ~/Workspace/legal/*.md; this mirrors it
-// verbatim (section headings normalized from ALL-CAPS to readable case).
+// Legal copy. Source of truth lives in ~/Workspace/freelance-ops/legal/*.md;
+// this mirrors it verbatim (section headings normalized from ALL-CAPS to
+// readable case).
 
 export type Block = { type: "p"; text: string } | { type: "ul"; items: string[] };
 export type LegalSection = { heading: string; blocks: Block[] };
