@@ -1,4 +1,3 @@
-import { FoundingNote } from "./FoundingNote";
 import { Sprints } from "./Sprints";
 import styles from "./Pricing.module.css";
 
@@ -59,8 +58,6 @@ export function Pricing() {
           After a quick chat, I&rsquo;ll give you one honest, fixed price. No
           surprises, no hourly meter running.
         </p>
-
-        <FoundingNote />
 
         <div className={styles.grid}>
           {PACKAGES.map((pkg) => (
