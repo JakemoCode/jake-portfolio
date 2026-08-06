@@ -73,6 +73,24 @@ export function CaseStudy() {
                 <blockquote className={styles.pull}>{section.pullQuote}</blockquote>
               )}
 
+              {section.gallery && (
+                <figure className={styles.gallery}>
+                  <ul className={styles.galleryGrid}>
+                    {section.gallery.map((item) => (
+                      <li key={item.label} className={styles.galleryItem}>
+                        <img src={item.src} alt={item.alt} loading="lazy" decoding="async" />
+                        <p className={styles.galleryLabel}>{item.label}</p>
+                        <p className={styles.galleryNote}>{item.note}</p>
+                      </li>
+                    ))}
+                  </ul>
+                  <figcaption>
+                    One piece from each family. Different subjects, different
+                    rules, same hand.
+                  </figcaption>
+                </figure>
+              )}
+
               {section.demo === "nakshatra-wheel" && (
                 <div className={styles.demo}>
                   <NakshatraWheel />

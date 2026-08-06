@@ -1,3 +1,8 @@
+import birthCard from "../assets/case-studies/zendeb-art/birth-card.webp";
+import sunCard from "../assets/case-studies/zendeb-art/sun-card.webp";
+import nakshatraPainting from "../assets/case-studies/zendeb-art/nakshatra-painting.webp";
+import nakshatraGlyph from "../assets/case-studies/zendeb-art/nakshatra-glyph.svg";
+
 /* Long-form case studies. Body sections are rendered in order by
    pages/CaseStudy.tsx; a section may pull in a live demo by id. */
 
@@ -11,6 +16,8 @@ export type CaseStudySection = {
   demo?: "nakshatra-wheel";
   /** Optional annotated code excerpt. */
   code?: { caption: string; language: string; source: string };
+  /** One representative asset per family, shown as visual proof of coherence. */
+  gallery?: { src: string; alt: string; label: string; note: string }[];
 };
 
 export type CaseStudy = {
@@ -35,7 +42,7 @@ const zendeb: CaseStudy = {
   role: "Design engineer, sole builder",
   year: "2026",
   summary:
-    "Building a repeatable system for AI-generated artwork, then hand-tuning the interaction physics of the wheel it lives on.",
+    "Building a repeatable system for AI-generated artwork across three decks and 91 illustrations, then hand-tuning the interaction physics of the wheel it lives on.",
   lede: "Two problems sat at opposite ends of the same site. Hundreds of illustrations had to look like they came from one artist, and a spinning wheel had to feel good enough that people would use it twice. Neither was solved by writing better prompts or reaching for an easing curve.",
   stack: ["WordPress", "PHP", "Vanilla JS", "SVG", "AI image generation"],
   liveUrl: "https://zendeb.com",
@@ -53,10 +60,17 @@ const zendeb: CaseStudy = {
       body: [
         "Instead of describing pictures, I built reusable templates that encoded a visual language: composition, color palette, lighting, symbolism, negative space, and an explicit list of things the model should avoid. Each template was a contract for a category of asset rather than a description of one image.",
         "The loop was the important part. Every iteration taught me something, and whenever a pattern reliably produced better results, I folded it back into the template rather than keeping it in my head. Over time the templates accumulated the judgment I had been applying manually, which is exactly what a design system does for a team.",
-        "Different asset classes got their own rules while sharing the same underlying principles. Hero images, editorial photography, card illustrations, and the Nakshatra glyphs each had specific constraints, but none of them drifted from the common language.",
+        "Three separate decks came out of it: 52 birth cards, 12 sun-in-signs cards, and 27 nakshatra paintings, plus a matching set of 27 glyphs and the site's hero and editorial imagery. Each family got rules specific to its purpose while inheriting the same underlying language. A playing card and a nakshatra painting need different compositions, but they should not look like they were made by different people.",
+        "That is the part the system had to earn. One good image proves nothing. Ninety-one of them, made weeks apart, across three decks, still agreeing with each other is the only real evidence that the process worked.",
       ],
       pullQuote:
         "It felt much less like prompt engineering and much more like building a design system.",
+      gallery: [
+        { src: birthCard, alt: "Ace of hearts birth card", label: "Birth cards", note: "52 pieces" },
+        { src: sunCard, alt: "Leo sun-in-signs card", label: "Sun in signs", note: "12 pieces" },
+        { src: nakshatraPainting, alt: "Revati nakshatra painting", label: "Nakshatra paintings", note: "27 pieces" },
+        { src: nakshatraGlyph, alt: "Revati nakshatra glyph", label: "Glyphs", note: "27 pieces, SVG" },
+      ],
     },
     {
       heading: "Telling it what not to do",
