@@ -25,6 +25,10 @@
 }
 
 .link {
+  /* 44px minimum touch target; these measured 29px. Shared with /portfolio. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-medium);
   color: var(--color-text);

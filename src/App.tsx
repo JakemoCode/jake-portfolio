@@ -4,6 +4,7 @@ import { Landing } from "./pages/Landing";
 import { Portfolio } from "./pages/Portfolio";
 import { LegalPage } from "./pages/LegalPage";
 import { Playground } from "./pages/Playground";
+import { CaseStudy } from "./pages/CaseStudy";
 import { privacyPolicy, termsOfUse } from "./content/legal";
 
 // <BrowserRouter> does not reset scroll on navigation (only the data-router
@@ -24,6 +25,7 @@ export function App() {
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/portfolio" element={<Portfolio />} />
+        <Route path="/case-study/:slug" element={<CaseStudy />} />
         <Route path="/privacy" element={<LegalPage doc={privacyPolicy} />} />
         <Route path="/terms" element={<LegalPage doc={termsOfUse} />} />
         <Route path="/playground" element={<Playground />} />

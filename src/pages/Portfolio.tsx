@@ -7,6 +7,8 @@ import { Testimonials } from "../components/portfolio/Testimonials";
 import { ContactLinks } from "../components/portfolio/ContactLinks";
 import { ThemeToggle } from "../components/portfolio/ThemeToggle";
 import { projects } from "../content/projects";
+import { CaseStudyTeaser } from "../components/portfolio/CaseStudyTeaser";
+import { caseStudies } from "../content/caseStudies";
 
 export function Portfolio() {
   return (
@@ -33,6 +35,8 @@ export function Portfolio() {
         />
 
         <Approach />
+
+        {caseStudies[0] && <CaseStudyTeaser study={caseStudies[0]} />}
 
         <section className={styles.projects} aria-label="Projects">
           {projects.map((project) => (
