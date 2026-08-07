@@ -10,7 +10,6 @@ export function CaseStudyTeaser({ study }: Props) {
   return (
     <section className={styles.wrap} aria-labelledby="case-study-teaser-title">
       <Link to={`/case-study/${study.slug}`} className={styles.card}>
-        <p className={styles.eyebrow}>Case study</p>
         <h2 id="case-study-teaser-title" className={styles.title}>
           {study.title}
         </h2>

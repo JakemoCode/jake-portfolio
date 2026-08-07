@@ -9,7 +9,6 @@
   padding: 1.75rem 1.9rem;
   background: var(--color-bg-elevated);
   border: 1px solid var(--color-border);
-  border-left: 3px solid var(--color-accent);
   border-radius: 12px;
   text-decoration: none;
   color: inherit;
@@ -20,7 +19,6 @@
 
 .card:hover {
   border-color: var(--color-border-strong);
-  border-left-color: var(--color-accent);
   transform: translateY(-2px);
 }
 
@@ -29,14 +27,6 @@
   outline-offset: 3px;
 }
 
-.eyebrow {
-  margin: 0 0 0.6rem;
-  font-family: var(--font-mono);
-  font-size: var(--font-size-2xs);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--color-accent);
-}
 
 .title {
   margin: 0 0 0.6rem;
