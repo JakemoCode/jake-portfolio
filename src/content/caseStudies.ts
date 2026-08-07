@@ -47,12 +47,12 @@ export type CaseStudy = {
 
 const zendeb: CaseStudy = {
   slug: "zendeb",
-  title: "Teaching a machine to have one opinion",
+  title: "Making ninety-one images agree",
   client: "Zendeb",
   role: "Design engineer, sole builder",
   year: "2026",
   summary:
-    "Building a repeatable system for AI-generated artwork across three decks and 91 illustrations, then hand-tuning the interaction physics of the wheel it lives on.",
+    "Building a repeatable system for AI-generated artwork across three decks, then hand-tuning the interaction physics of the wheel it lives on.",
   lede: "Two problems sat at opposite ends of the same site. Hundreds of illustrations had to look like they came from one artist, and a spinning wheel had to feel good enough that people would use it twice. Neither was solved by writing better prompts or reaching for an easing curve.",
   stack: ["WordPress", "PHP", "Vanilla JS", "SVG", "AI image generation"],
   liveUrl: "https://zendeb.com",
