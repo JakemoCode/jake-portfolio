@@ -25,12 +25,28 @@ describe("NakshatraWheel", () => {
     const { container } = render(<NakshatraWheel />);
     const live = container.querySelector("[aria-live='polite']");
     expect(live).toBeTruthy();
-    expect(live?.textContent).toMatch(/lands where you stopped it/i);
+    // Keyed on the mechanic, not the sentence: copy gets revised, the
+    // requirement (tell the user the wheel lands where they stop it) does not.
+    expect(live?.textContent?.trim()).not.toBe("");
+    expect(live?.textContent).toMatch(/stop/i);
   });
 
   it("labels the wheel itself", () => {
     render(<NakshatraWheel />);
     expect(screen.getByRole("img", { name: /27 nakshatras/i })).toBeTruthy();
+  });
+
+  it("does not fetch any painting before the wheel is used", () => {
+    const { container } = render(<NakshatraWheel />);
+    // The 27 paintings are pulled one at a time during the slow-down, so a
+    // reader who never spins pays nothing for them.
+    const srcs = [...container.querySelectorAll("img")].map((i) => i.getAttribute("src") ?? "");
+    expect(srcs.some((s) => s.includes("/case-study/nakshatra/"))).toBe(false);
+  });
+
+  it("shows no reveal until something has landed", () => {
+    const { container } = render(<NakshatraWheel />);
+    expect(container.querySelector("[class*='reveal']")).toBeNull();
   });
 
   it("survives an environment without matchMedia", () => {

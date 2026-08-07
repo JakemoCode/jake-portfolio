@@ -6,15 +6,85 @@
   gap: var(--space-4, 1rem);
 }
 
+/* Ported from .zd-nak__stage / .zd-nak__wheel / .zd-nak__reveal in the zendeb
+   theme, values unchanged. The wheel and the reveal share one grid cell so the
+   swap does not move anything; the wheel recedes as the painting rises. */
 .stage {
+  position: relative;
+  display: grid;
   width: min(100%, 30rem);
-  aspect-ratio: 1;
+}
+
+.wheel {
+  grid-area: 1 / 1;
+  justify-self: center;
+  align-self: start;
+  width: 100%;
+  transition:
+    opacity 0.7s var(--ease-out-quint),
+    transform 0.7s var(--ease-out-quint);
+  transform-origin: 50% 42%;
+}
+
+.stageRevealed .wheel {
+  opacity: 0;
+  transform: scale(0.55);
+  pointer-events: none;
 }
 
 .svg {
   width: 100%;
-  height: 100%;
+  height: auto;
   display: block;
+}
+
+/* The mount has an aspect-ratio but its only child is absolutely positioned,
+   so it has no intrinsic width. In the masthead a grid column supplies one; in
+   this centred flex column nothing does, so it needs the explicit width the
+   original panel carries. */
+.revealMount {
+  width: min(82vw, 26rem);
+}
+
+.reveal {
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(var(--spacing-md), 3vw, var(--spacing-xl));
+  animation: nak-rise 0.85s var(--ease-out-quint) both;
+}
+
+@keyframes nak-rise {
+  from {
+    opacity: 0;
+    transform: translateY(46px) scale(0.96);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wheel {
+    transition: opacity 0.4s ease;
+  }
+
+  .stageRevealed .wheel {
+    transform: none;
+  }
+
+  .reveal {
+    animation: nak-fade 0.4s ease both;
+  }
+}
+
+@keyframes nak-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* Glyph art is authored with fill="currentColor". Gold, matching the disc's
@@ -23,6 +93,16 @@
 .glyph {
   color: #d8b061;
   overflow: visible;
+}
+
+/* Ties the control to the object it drives. */
+.stage {
+  transition: transform var(--duration-medium) var(--ease-out-quint);
+}
+
+.wrap:has(.action:hover:not(:disabled)) .stage,
+.wrap:has(.action:focus-visible) .stage {
+  transform: scale(1.012);
 }
 
 .controls {
@@ -34,7 +114,9 @@
 }
 
 .action {
-  font-family: var(--font-sans);
+  /* 44px minimum touch target; the button measured 38px tall. */
+  min-height: 44px;
+  font-family: var(--font-display);
   font-size: var(--font-size-sm);
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -42,13 +124,19 @@
   background: var(--color-accent);
   border: none;
   border-radius: 999px;
-  padding: 0.65rem 1.6rem;
+  padding: var(--spacing-sm) var(--spacing-xl);
   cursor: pointer;
-  transition: background-color 160ms ease;
+  transition:
+    background-color var(--duration-fast) var(--ease-out-quint),
+    transform var(--duration-fast) var(--ease-out-quint);
 }
 
 .action:hover:not(:disabled) {
   background: var(--color-accent-hover);
+}
+
+.action:active:not(:disabled) {
+  transform: scale(0.97);
 }
 
 .action:focus-visible {
@@ -89,7 +177,14 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .action {
+  .action,
+  .stage {
     transition: none;
+  }
+
+  .action:active:not(:disabled),
+  .wrap:has(.action:hover:not(:disabled)) .stage,
+  .wrap:has(.action:focus-visible) .stage {
+    transform: none;
   }
 }

@@ -6,6 +6,7 @@
    state, so a spin costs zero React renders. Only the landed result re-renders. */
 import { useCallback, useEffect, useRef, useState } from "react";
 import styles from "./NakshatraWheel.module.css";
+import { JuteMount } from "./JuteMount";
 import { nakshatras } from "../../content/nakshatras";
 import { decelTarget, easeOutCubic, smoothstep, type DecelPlan } from "../../lib/nakshatra";
 import discSrc from "../../assets/case-studies/nakshatra/wheel-disc.webp";
@@ -35,6 +36,8 @@ const OUTER_R = 426;
 const RING = OUTER_R * 0.73;
 const GLYPH_SIZE = OUTER_R * 0.155;
 const HUB_R = OUTER_R * 0.3;
+
+const paintingSrc = (slug: string) => `/case-study/nakshatra/${slug}.webp`;
 
 const N = nakshatras.length;
 const STEP = 360 / N;
@@ -110,7 +113,7 @@ export function NakshatraWheel() {
 
       if (phaseNow === "decel") {
         const plan = planRef.current;
-        if (!plan) return;
+        if (!plan) { rafRef.current = null; return; }
         plan.t += dt;
         const p = plan.T > 0 ? Math.min(plan.t / plan.T, 1) : 1;
         setAngle(plan.a0 + plan.D * easeOutCubic(p));
@@ -119,6 +122,7 @@ export function NakshatraWheel() {
           velRef.current = 0;
           setLanded(plan.index);
           enter("landed");
+          rafRef.current = null;
           return;
         }
         rafRef.current = requestAnimationFrame(frame);
@@ -135,19 +139,40 @@ export function NakshatraWheel() {
     [],
   );
 
+  /* Only ever one loop. rafRef doubles as the "a loop is running" flag: two
+     fast clicks used to both read the (stale) React phase as "idle" and each
+     schedule a loop, which drove the rotor at double speed and leaked one of
+     the two frame ids. */
+  const schedule = useCallback(() => {
+    if (rafRef.current !== null) return;
+    rafRef.current = requestAnimationFrame(frame);
+  }, [frame]);
+
   const start = () => {
     accelTRef.current = 0;
     lastRef.current = null;
     enter("accel");
-    rafRef.current = requestAnimationFrame(frame);
+    schedule();
   };
 
   const stop = () => {
     const plan = decelTarget(angleRef.current, velRef.current, N, { refVel: cruise });
+    // Reduced motion lowers cruise, and duration is derived from it, so the
+    // slow-down stretched from ~2s to ~5.4s. Someone asking for less motion was
+    // getting more of it. Cap it instead.
+    if (reduced) plan.T = Math.min(plan.T, 700);
+    // Fetch the painting during the slow-down, as the original does, so the
+    // reveal has something decoded to show the moment it lands.
+    const target = nakshatras[plan.index];
+    if (target) {
+      const img = new Image();
+      img.decoding = "async";
+      img.src = paintingSrc(target.slug);
+    }
     planRef.current = { ...plan, t: 0, a0: angleRef.current };
     lastRef.current = null;
     enter("decel");
-    rafRef.current = requestAnimationFrame(frame);
+    schedule();
   };
 
   const reset = () => {
@@ -156,9 +181,11 @@ export function NakshatraWheel() {
   };
 
   const onAction = () => {
-    if (phase === "idle") start();
-    else if (phase === "accel" || phase === "cruise") stop();
-    else if (phase === "landed") reset();
+    // phaseRef, not phase: state lags a click, the ref does not.
+    const now = phaseRef.current;
+    if (now === "idle") start();
+    else if (now === "accel" || now === "cruise") stop();
+    else if (now === "landed") reset();
   };
 
   const landedNak = landed !== null ? nakshatras[landed] : undefined;
@@ -167,14 +194,15 @@ export function NakshatraWheel() {
     phase === "idle"
       ? "Spin the wheel"
       : phase === "decel"
-        ? "Landing"
+        ? "Stopping"
         : phase === "landed"
           ? "Spin again"
           : "Stop";
 
   return (
     <figure className={styles.wrap}>
-      <div className={styles.stage}>
+      <div className={`${styles.stage} ${landedNak ? styles.stageRevealed : ""}`}>
+        <div className={styles.wheel}>
         <svg
           className={styles.svg}
           viewBox={`0 0 ${W} ${W}`}
@@ -206,6 +234,18 @@ export function NakshatraWheel() {
           />
           <image href={pointerSrc} x={487} y={20} width={69} height={150} />
         </svg>
+        </div>
+
+        {landedNak && (
+          <div className={styles.reveal}>
+            <JuteMount
+              className={styles.revealMount}
+              src={paintingSrc(landedNak.slug)}
+              alt={`${landedNak.name}, the painting for this nakshatra`}
+              glow
+            />
+          </div>
+        )}
       </div>
 
       <div className={styles.controls}>
@@ -223,7 +263,7 @@ export function NakshatraWheel() {
               Landed on <strong>{landedNak.name}</strong>
             </>
           ) : (
-            <span className={styles.hint}>Stop it wherever you like. It lands where you stopped it.</span>
+            <span className={styles.hint}>Stop it wherever you like. It lands on whichever glyph was under the pointer.</span>
           )}
         </p>
       </div>
