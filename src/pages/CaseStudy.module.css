@@ -1,4 +1,35 @@
+/* This route commits to one visual world instead of following the site's
+   light/dark toggle. The palette is lifted from the work it documents: the
+   wheel's deep indigo ground, the antique gold of its glyphs and gilding, and
+   the artwork's ivory paper used as ink rather than as background. Committing
+   to colour is also what keeps this page out of the monochrome-editorial lane
+   every other long-form case study has landed in.
+
+   Tokens are overridden on the page container, the same mechanism Landing uses
+   for its accent scale, so nothing leaks to other routes. */
 .page {
+  --color-bg: #10202e;
+  --color-bg-elevated: #16293a;
+  --color-surface: #1a3145;
+  --color-border: #2a4459;
+  --color-border-strong: #3b5a72;
+  --color-text: #f0e9dc;
+  --color-text-muted: #bcb3a3;
+  --color-text-subtle: #9a917f;
+  --color-accent: #d8b061;
+  --color-accent-hover: #ecc98a;
+
+  color-scheme: dark;
+  /* Light-on-dark compensation. Type reads lighter on a dark ground, so the
+     fix is three axes together: a touch more leading, a little tracking, and
+     no light weights anywhere on this route. */
+  letter-spacing: 0.008em;
+  font-kerning: normal;
+  font-optical-sizing: auto;
+  /* Inherited default for the subtree. Without this, anything that doesn't set
+     a family (the shared ContactLinks anchors) falls back to the site-wide
+     sans and quietly adds a fourth typeface to the page. */
+  font-family: var(--font-body);
   min-height: 100vh;
   background: var(--color-bg);
   color: var(--color-text);
@@ -6,18 +37,31 @@
 
 .back {
   position: fixed;
-  top: 1.25rem;
-  left: 1.5rem;
+  /* 44px minimum touch target; measured 38px. */
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+  min-height: 44px;
+  top: var(--spacing-lg);
+  left: var(--spacing-xl);
   z-index: 10;
-  font-family: var(--font-sans);
-  font-size: var(--font-size-xs);
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
   letter-spacing: 0.04em;
   text-decoration: none;
   color: var(--color-text-muted);
   background: var(--color-bg-elevated);
   border: 1px solid var(--color-border);
   border-radius: 999px;
-  padding: 0.4rem 0.9rem;
+  padding: var(--spacing-xs) var(--spacing-md);
+}
+
+/* Every interactive element on this route changed state instantly. Feedback
+   under ~150ms reads as instant while still acknowledging the input. */
+.back {
+  transition:
+    color var(--duration-fast) var(--ease-out-quint),
+    border-color var(--duration-fast) var(--ease-out-quint);
 }
 
 .back:hover {
@@ -31,68 +75,103 @@
 }
 
 .main {
-  max-width: 42rem;
+  /* ch resolves against this container's font size, not the paragraph's, so
+     the declared value runs ahead of the measured one. 80 here lands the body
+     copy around 65ch, the top of the comfortable band. */
+  max-width: 66rem;
   margin: 0 auto;
-  padding: 6rem 1.5rem 5rem;
+  padding: var(--spacing-6xl) var(--spacing-xl) var(--spacing-5xl);
 }
 
 /* Masthead */
 
+/* Two columns so the work appears in the first screen rather than 1,600 words
+   down. The painting sits in its real jute mount, which shows the presentation
+   system and not just an asset. Stacks below 42rem, art after the lede so the
+   headline still leads. */
 .masthead {
-  margin-bottom: 3.5rem;
+  margin-bottom: var(--spacing-4xl);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 15rem;
+  gap: var(--spacing-3xl);
+  align-items: start;
+}
+
+/* The headline gets the full column so it keeps its two-line break; everything
+   meant to be read is held to the measure. */
+.mastheadText > *:not(.title) {
+  max-width: 76ch;
+}
+
+/* Width only. The mount itself is JuteMount, shared with the wheel's reveal. */
+.mastheadArt {
+  width: 100%;
+}
+
+@media (max-width: 42rem) {
+  .masthead {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-2xl);
+  }
+
+  .mastheadArt {
+    order: -1;
+    max-width: 11rem;
+  }
 }
 
 .eyebrow {
   font-family: var(--font-mono);
-  font-size: var(--font-size-2xs);
+  font-size: var(--font-size-3xs);
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-accent);
-  margin: 0 0 0.9rem;
+  margin: 0 0 var(--spacing-md);
 }
 
 .eyebrow span {
   color: var(--color-text-subtle);
-  margin: 0 0.3rem;
+  margin: 0 var(--spacing-2xs);
 }
 
 .title {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 5.5vw, 3rem);
+  font-size: clamp(2rem, 6vw, 3.75rem);
   font-weight: 600;
   line-height: 1.08;
   letter-spacing: -0.02em;
   text-wrap: balance;
-  margin: 0 0 1.2rem;
+  margin: 0 0 var(--spacing-lg);
 }
 
 .lede {
-  font-family: var(--font-serif);
+  font-family: var(--font-body);
+  font-weight: 400;
   font-size: var(--font-size-lead);
   line-height: 1.55;
   color: var(--color-text-muted);
-  margin: 0 0 2rem;
+  margin: 0 0 var(--spacing-2xl);
   text-wrap: pretty;
 }
 
 .meta {
   display: grid;
-  gap: 0.9rem;
+  gap: var(--spacing-md);
   margin: 0;
-  padding-top: 1.5rem;
+  padding-top: var(--spacing-xl);
   border-top: 1px solid var(--color-border);
 }
 
 .meta div {
   display: flex;
-  gap: 0.75rem;
+  gap: var(--spacing-sm);
   align-items: baseline;
 }
 
 .meta dt {
   flex: 0 0 5.5rem;
   font-family: var(--font-mono);
-  font-size: var(--font-size-2xs);
+  font-size: var(--font-size-3xs);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--color-text-subtle);
@@ -107,70 +186,88 @@
 
 .meta a {
   color: var(--color-accent);
+  transition: color var(--duration-fast) var(--ease-out-quint);
+}
+
+.meta a:hover {
+  color: var(--color-accent-hover);
 }
 
 /* Body */
 
+/* Rhythm. Uniform 48px between every section read as a metronome. Prose runs
+   tighter; the sections that carry an artefact (the wheel, the aside card) are
+   given room so they land as events rather than as more page. */
 .section {
-  margin-bottom: 3rem;
+  /* Measure lives here now that the container is wide enough for the masthead. */
+  max-width: 76ch;
+  margin-bottom: clamp(var(--spacing-3xl), 5vw, var(--spacing-5xl));
+}
+
+.section:has(.demo),
+.sectionCard {
+  margin-top: clamp(var(--spacing-4xl), 7vw, var(--spacing-6xl));
+  margin-bottom: clamp(var(--spacing-4xl), 7vw, var(--spacing-6xl));
+}
+
+/* Tight grouping inside a section: a heading belongs to the prose under it. */
+.heading + .para {
+  margin-top: 0;
 }
 
 .heading {
   font-family: var(--font-display);
   font-size: var(--font-size-xl);
+  margin-top: var(--spacing-xs);
   font-weight: 600;
   line-height: 1.2;
   letter-spacing: -0.01em;
   text-wrap: balance;
-  margin: 0 0 1rem;
+  margin: 0 0 var(--spacing-md);
 }
 
 .para {
   font-family: var(--font-body);
   font-size: var(--font-size-md);
-  line-height: 1.7;
-  margin: 0 0 1.1rem;
+  line-height: 1.75;
+  margin: 0 0 var(--spacing-md);
   text-wrap: pretty;
 }
 
-.pull {
-  margin: 2rem 0;
-  padding-left: 1.25rem;
-  border-left: 2px solid var(--color-accent);
-  font-family: var(--font-serif);
-  font-size: var(--font-size-lg);
-  line-height: 1.45;
-  color: var(--color-text);
-  text-wrap: pretty;
-}
 
 .demo {
-  margin: 2.5rem 0;
-  padding: 2rem 1rem;
+  margin: var(--spacing-3xl) 0;
+  padding: var(--spacing-2xl) var(--spacing-md);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 12px;
 }
 
 .codeFigure {
-  margin: 2rem 0 0;
+  margin: var(--spacing-2xl) 0 0;
 }
 
 .code {
   margin: 0;
-  padding: 1.1rem 1.25rem;
+  padding: var(--spacing-md) var(--spacing-lg);
   background: var(--color-bg-elevated);
   border: 1px solid var(--color-border);
   border-radius: 10px;
   overflow-x: auto;
   font-family: var(--font-mono);
-  font-size: var(--font-size-2xs);
+  font-size: var(--font-size-sm);
+  font-variant-ligatures: none;
   line-height: 1.7;
   color: var(--color-text);
 }
 
+.code code {
+  font-family: inherit;
+}
+
 .codeFigure figcaption {
-  margin-top: 0.7rem;
+  max-width: 46ch;
+  margin-top: var(--spacing-sm);
   font-family: var(--font-body);
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
@@ -180,14 +277,14 @@
 @media (max-width: 30rem) {
   .meta div {
     flex-direction: column;
-    gap: 0.15rem;
+    gap: var(--spacing-3xs);
   }
 }
 
 /* Art family strip: the visual proof that one system produced all of it. */
 
 .gallery {
-  margin: 2.25rem 0 0;
+  margin: var(--spacing-2xl) 0 0;
 }
 
 .galleryGrid {
@@ -196,7 +293,23 @@
   padding: 0;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 0.9rem;
+  gap: var(--spacing-md);
+}
+
+.galleryItem {
+  min-width: 0;
+}
+
+/* The strip is the visual proof; a small lift on hover invites inspection
+   without animating anything on load. */
+.galleryItem img,
+.galleryGlyph {
+  transition: transform var(--duration-medium) var(--ease-out-quint);
+}
+
+.galleryItem:hover img,
+.galleryItem:hover .galleryGlyph {
+  transform: scale(1.02);
 }
 
 .galleryItem img {
@@ -211,22 +324,23 @@
 }
 
 .galleryLabel {
-  margin: 0.55rem 0 0;
-  font-family: var(--font-sans);
-  font-size: var(--font-size-2xs);
+  margin: var(--spacing-xs) 0 0;
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
   font-weight: 600;
   color: var(--color-text);
 }
 
 .galleryNote {
-  margin: 0.1rem 0 0;
+  margin: var(--spacing-3xs) 0 0;
   font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
   font-size: var(--font-size-3xs);
   color: var(--color-text-subtle);
 }
 
 .gallery figcaption {
-  margin-top: 1rem;
+  margin-top: var(--spacing-md);
   font-family: var(--font-body);
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
@@ -236,6 +350,232 @@
 @media (max-width: 34rem) {
   .galleryGrid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 0.75rem;
+    gap: var(--spacing-sm);
   }
+}
+
+/* The glyph is line art authored as fill="currentColor", so it is inlined
+   rather than served through <img> and given the same gold as the wheel.
+   As an <img> it resolved to black and vanished against the dark theme. */
+.galleryGlyph {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  padding: 18%;
+  color: #d8b061;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+}
+
+.galleryGlyph svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Transferable principles. Unnumbered on purpose: they are independent, not a
+   sequence, and numbering would assert an order the content does not have.
+   Deliberately not cards either. Ten boxes stopped the article dead; a quiet
+   list keeps the reader moving into the section that follows. */
+
+.principles {
+  margin: var(--spacing-xl) 0 0;
+}
+
+.principle {
+  padding: var(--spacing-md) 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.principle:last-child {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.principleTitle {
+  font-family: var(--font-display);
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  margin-bottom: var(--spacing-2xs);
+}
+
+.principleBody {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--font-size-md);
+  line-height: 1.65;
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+/* A whole section as one card. Used for the transferable-principles aside:
+   boxing the section marks it as a digression, so the narrative resumes
+   cleanly afterwards instead of the reader wondering if they lost the thread. */
+
+.sectionCard {
+  padding: var(--spacing-xl) var(--spacing-2xl) var(--spacing-2xl);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+}
+
+.sectionCard .heading {
+  margin-top: 0;
+}
+
+/* Hairlines inside a tinted card need a touch more contrast to stay visible. */
+.sectionCard .principle {
+  border-top-color: var(--color-border-strong);
+}
+
+.sectionCard .principle:last-child {
+  border-bottom-color: var(--color-border-strong);
+}
+
+@media (max-width: 34rem) {
+  .sectionCard {
+    padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-xl);
+  }
+}
+
+/* Contents. A reader arriving from a forwarded link should be able to reach the
+   live wheel without scrolling past 1,600 words, and should be able to see the
+   article's shape without holding nine sections in memory. Set in the body face
+   rather than more tracked uppercase mono: the page already carries enough of
+   that texture. */
+
+.contents {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--spacing-md);
+  margin-top: var(--spacing-xl);
+  padding-top: var(--spacing-xl);
+  border-top: 1px solid var(--color-border);
+}
+
+.contents a {
+  /* 44px hit area at touch sizes without inflating the visual row. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.contents a {
+  transition:
+    color var(--duration-fast) var(--ease-out-quint),
+    border-color var(--duration-fast) var(--ease-out-quint);
+}
+
+.contents a:hover {
+  color: var(--color-text);
+  border-bottom-color: var(--color-border-strong);
+}
+
+.contents a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.contentsDemo {
+  color: var(--color-accent) !important;
+  font-weight: 600;
+}
+
+.contentsDemo:hover {
+  border-bottom-color: var(--color-accent) !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .back,
+  .contents a,
+  .meta a,
+  .galleryItem img,
+  .galleryGlyph {
+    transition: none;
+  }
+
+  .galleryItem:hover img,
+  .galleryItem:hover .galleryGlyph {
+    transform: none;
+  }
+}
+
+/* A single long unbroken token (a compound word, a URL, a pasted identifier)
+   was widening the page at 390px. Headings and labels are the exposed spots:
+   body prose already wraps on spaces. */
+.title,
+.heading,
+.principleTitle,
+.galleryLabel,
+.lede {
+  overflow-wrap: break-word;
+}
+
+/* Visually hidden, still announced. Used to tell screen reader users that a
+   link opens in a new tab, which the arrow glyph only signals visually. */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Reading progress. CSS-only via a scroll timeline, per the technique
+   overdrive.md prescribes, guarded the same way reveal.css guards its view()
+   timelines. Where the timeline is unsupported or motion is reduced, the bar
+   stays at scaleX(0) and is simply absent rather than stuck at some wrong
+   value. It is aria-hidden: the scrollbar already conveys this, and it is
+   ambient rather than actionable. */
+.progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 2px;
+  z-index: var(--z-sticky);
+  background: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: scroll()) {
+    .progress {
+      animation: read-progress linear both;
+      /* scroll(root block), not bare scroll(): the bar is position:fixed, so
+         the "nearest" scroller does not resolve to the document and the bar
+         only reached ~64% at the bottom of the page. */
+      animation-timeline: scroll(root block);
+    }
+  }
+}
+
+@keyframes read-progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* [P3] This caption measured 84ch while the code caption was already capped. */
+.gallery figcaption {
+  max-width: 62ch;
 }
