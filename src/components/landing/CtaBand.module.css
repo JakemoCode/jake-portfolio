@@ -57,6 +57,14 @@
   outline-offset: 3px;
 }
 
+/* Lifted while fleeing so it slides over its neighbours rather than under
+   them. Occlusion is what makes the dodge read as deliberate. */
+.evading {
+  position: relative;
+  z-index: var(--z-raised);
+  will-change: transform;
+}
+
 /* Tactile press: springs inward on tap/click. */
 .button:active {
   transform: scale(0.96);

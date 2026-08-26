@@ -116,22 +116,38 @@
 }
 
 .navCta {
-  color: var(--color-accent-pine) !important;
+  color: var(--color-accent-pine);
   font-weight: var(--font-weight-semibold);
   border: var(--border-width-thin) solid color-mix(in oklab, var(--color-accent-pine) 35%, transparent);
   padding: var(--spacing-xs) var(--spacing-md);
   border-radius: var(--radius-pill);
-  transition: background-color var(--duration-fast) ease, border-color var(--duration-fast) ease;
+  transition:
+    background-color var(--duration-fast) ease,
+    border-color var(--duration-fast) ease,
+    transform var(--duration-fast) var(--ease-out-quint);
+}
+
+/* Lifted while fleeing so it slides over the other nav items, not under. */
+.navCtaEvading {
+  position: relative;
+  z-index: var(--z-raised);
+  will-change: transform;
 }
 .navCta:hover {
   background: color-mix(in oklab, var(--color-accent) 12%, transparent);
   border-color: color-mix(in oklab, var(--color-accent-pine) 55%, transparent);
 }
 
-.navLinks a:focus-visible {
+.navLinks a:focus-visible,
+.navCta:focus-visible {
   outline: var(--border-width-thick) solid var(--color-accent-pine);
   outline-offset: 3px;
   border-radius: var(--radius-sm);
+}
+
+/* Keep the pill, which the shared rule above would square off on focus. */
+.navCta:focus-visible {
+  border-radius: var(--radius-pill);
 }
 
 /* Full width; each section owns its own max-width + gutter so full-bleed
