@@ -1,14 +1,15 @@
+import { useState } from "react";
+import { DeclinedNotice } from "./DeclinedNotice";
+import { EvasiveCta } from "./EvasiveCta";
+import { BOUNDS_ATTRIBUTE } from "./useEvasiveCta";
 import styles from "./Hero.module.css";
 
 export function Hero() {
+  const [declined, setDeclined] = useState(false);
+
   return (
     <section className={styles.hero} aria-labelledby="hero-heading">
-      <div className={styles.inner}>
-        <p className={`${styles.avail} ${styles.reveal} ${styles.d3}`}>
-          <span className={styles.dot} aria-hidden="true" />
-          Available for new projects
-        </p>
-
+      <div className={styles.inner} {...{ [BOUNDS_ATTRIBUTE]: "" }}>
         <h1 id="hero-heading" className={styles.heading}>
           <span className={`${styles.reveal} ${styles.line1}`}>You bring the idea.</span>
           <span className={`${styles.em} ${styles.line2}`}>I bring the craft.</span>
@@ -20,13 +21,19 @@ export function Hero() {
         </p>
 
         <div className={`${styles.actions} ${styles.reveal} ${styles.d3}`}>
-          <a className={styles.primary} href="#contact">
-            Start a project
-          </a>
+          <EvasiveCta
+            className={styles.primary}
+            evadingClassName={styles.evading}
+            onCaught={() => setDeclined(true)}
+          >
+            Punt a project
+          </EvasiveCta>
           <a className={styles.ghost} href="#work">
             See recent work
           </a>
         </div>
+
+        <DeclinedNotice shown={declined} />
       </div>
     </section>
   );

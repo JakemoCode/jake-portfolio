@@ -8,27 +8,6 @@
   padding: clamp(var(--spacing-4xl), 10vh, var(--spacing-7xl)) var(--gutter) clamp(var(--spacing-3xl), 7vh, var(--spacing-5xl));
 }
 
-.avail {
-  --avail-gap: 0.55rem;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--avail-gap);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-accent-pine);
-  margin-bottom: var(--spacing-xl);
-}
-
-.dot {
-  --dot: 0.5rem;
-  --dot-ring: 4px;
-  width: var(--dot);
-  height: var(--dot);
-  border-radius: var(--radius-pill);
-  background: var(--color-accent);
-  box-shadow: 0 0 0 var(--dot-ring) color-mix(in oklab, var(--color-accent) 22%, transparent);
-}
-
 .heading {
   font-family: var(--font-display);
   font-weight: var(--font-weight-bold);
@@ -109,6 +88,14 @@
   outline-offset: 3px;
 }
 
+/* Lifted while fleeing so it slides over the secondary link rather than
+   under it. Occlusion is what makes the dodge read as deliberate. */
+.evading {
+  position: relative;
+  z-index: var(--z-raised);
+  will-change: transform;
+}
+
 /* Tactile press: springs inward on tap/click (the mobile analog of the lift). */
 .primary:active {
   transform: scale(0.96);
@@ -159,8 +146,8 @@
     transform: translateY(14px);
     animation: rise 0.8s var(--ease-out-quint) forwards;
   }
-  /* Sequential cascade — each element gets its own moment before the next:
-     line 1 → line 2 wipe → subheader → buttons + availability banner. */
+  /* Sequential cascade, each element getting its own moment before the next:
+     line 1, then the line 2 wipe, then the subheader, then the buttons. */
   .d2 { animation-delay: 1.8s; }
   .d3 { animation-delay: 2.3s; }
 

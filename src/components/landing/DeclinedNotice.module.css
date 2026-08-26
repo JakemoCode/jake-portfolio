@@ -1,0 +1,31 @@
+/* The region stays mounted so the notice is announced when it lands. Empty, it
+   must hold no slot: an empty child of a flex container still collects the
+   container's gap, which would leave dead space under the CTA band's button.
+   Out of flow it is not a flex item at all, and it is still a live region. */
+.region:empty {
+  position: absolute;
+}
+
+.notice {
+  margin-top: var(--spacing-lg);
+  max-width: 46ch;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-body);
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+.hal {
+  font-family: var(--font-mono, monospace);
+  color: var(--color-text);
+}
+
+.link {
+  color: var(--color-accent-pine);
+  border-bottom: var(--border-width-thin) solid color-mix(in oklab, var(--color-accent) 40%, transparent);
+}
+
+.link:hover {
+  color: var(--color-accent-deep);
+  border-bottom-color: var(--color-accent);
+}

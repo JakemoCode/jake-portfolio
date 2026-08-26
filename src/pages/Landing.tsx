@@ -2,13 +2,15 @@ import { Hero } from "../components/landing/Hero";
 import { FacetBanner } from "../components/landing/FacetBanner";
 import { Offer } from "../components/landing/Offer";
 import { Process } from "../components/landing/Process";
-import { Pricing } from "../components/landing/Pricing";
 import { Proof } from "../components/landing/Proof";
 import { WorkGallery } from "../components/landing/WorkGallery";
 import { CtaBand } from "../components/landing/CtaBand";
 import { About } from "../components/landing/About";
 import { Contact } from "../components/landing/Contact";
 import { SiteFooter } from "../components/landing/SiteFooter";
+import { EvasiveCta } from "../components/landing/EvasiveCta";
+import { BOUNDS_ATTRIBUTE } from "../components/landing/useEvasiveCta";
+import { CONTACT_EMAIL } from "../components/landing/contactForm";
 import styles from "./Landing.module.css";
 
 export function Landing() {
@@ -18,13 +20,21 @@ export function Landing() {
         Skip to content
       </a>
 
-      <header className={styles.nav}>
+      <header className={styles.nav} {...{ [BOUNDS_ATTRIBUTE]: "" }}>
         <span className={styles.brand}>Jake Mosher</span>
         <nav className={styles.navLinks} aria-label="Primary">
           <a href="#work">Work</a>
-          <a className={styles.navCta} href="#contact">
+          {/* No punchline here: catching it does what the label promises,
+              which is the whole of what is still on offer. */}
+          <EvasiveCta
+            className={styles.navCta}
+            evadingClassName={styles.navCtaEvading}
+            onCaught={() => {
+              window.location.href = `mailto:${CONTACT_EMAIL}`;
+            }}
+          >
             Get in touch
-          </a>
+          </EvasiveCta>
         </nav>
       </header>
 
@@ -33,7 +43,6 @@ export function Landing() {
         <FacetBanner />
         <Offer />
         <Process />
-        <Pricing />
         <Proof />
         <WorkGallery />
         <CtaBand />
