@@ -20,6 +20,7 @@
   font-style: italic;
   font-size: var(--font-size-lead);
   line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-serif-italic);
   color: var(--color-text-muted);
   text-wrap: pretty;
 }
