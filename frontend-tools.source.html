@@ -1,256 +1,91 @@
 <!doctype html>
 <!--
   Source for src/assets/frontend-tools.png (the Frontend Tools project card image).
-  Not a product screenshot: the project is a set of Claude Code commands with no
-  UI, so the card shows what the tool consumes and what it hands back. The
-  finding is a real, abridged /ux-check result quoted in the repo's README.
 
-  Authored at 800x600 CSS px and doubled with zoom:2, so the window must be the
-  doubled size and the scale factor must stay at 1. Regenerate after edits:
+  The project is a set of Claude Code commands with no UI, so there is no
+  product screenshot to take. The commands are the thing you actually type,
+  so the card sets them at the size they deserve and says one sentence.
+
+  AUTHORED AT THE SIZE IT SHIPS. The card renders in a 4:3 media box about
+  390px wide, so this page is 400x300 CSS px and every size below is roughly
+  the real on-screen size. Export at 3x for retina. Do NOT author this large
+  and let the browser shrink it: an earlier version was built at 800x600 and
+  the 0.49 downscale aliased every hairline and dropped body text to 11px.
+
+  Regenerate after edits:
 
     "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
-      --hide-scrollbars --force-device-scale-factor=1 --window-size=1600,1200 \
+      --hide-scrollbars --force-device-scale-factor=3 --window-size=400,300 \
       --virtual-time-budget=4000 --screenshot=src/assets/frontend-tools.png \
       "file://$PWD/frontend-tools.source.html"
 
-  Keep the copy short enough to fit. Nothing scrolls; overflow is silently cropped.
+  Rules that keep it legible at this size: nothing under 15px, no 1px borders,
+  and roughly a dozen words on the whole card.
 -->
 <html lang="en">
 <head>
 <meta charset="utf-8" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400..700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+<link rel="preconnect" href="https://api.fontshare.com" />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@800&display=swap" rel="stylesheet" />
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@500&display=swap" rel="stylesheet" />
 <style>
-  /* Mirrors the light-theme colour tokens in src/styles/tokens.css. The card
-     image is a fixed raster behind an <img>, so it cannot follow the site's
-     theme toggle. Both existing project shots are light, so this one is too. */
+  /* Light-theme colour tokens from src/styles/tokens.css. The card image is a
+     fixed raster behind an <img>, so it cannot follow the site's theme toggle.
+     Both other project shots are light, so this one is too. */
   :root {
     --bg: #faf9f6;
-    --surface: #f3f1ec;
-    --elevated: #ffffff;
-    --border: #e6e3dc;
     --border-strong: #d6d2c8;
-    --text: #1a1a1a;
     --muted: #6b6b6b;
-    --subtle: #6e6e6b;
     --accent: #b8472d;
-    --badge: #f0ece2;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  html { width: 1600px; height: 1200px; background: #faf9f6; }
-  body { zoom: 2; }
+  html, body { width: 400px; height: 300px; }
 
-  .canvas {
-    width: 800px;
-    height: 600px;
+  body {
     background: var(--bg);
-    font-family: "Inter", system-ui, sans-serif;
-    color: var(--text);
+    /* JetBrains Mono ligates some ASCII pairs; the command names should read
+       exactly as they are typed. */
+    font-variant-ligatures: none;
+    font-feature-settings: "liga" 0, "calt" 0;
     -webkit-font-smoothing: antialiased;
-    display: grid;
-    grid-template-columns: 296px 1fr;
-    column-gap: 30px;
-    padding: 34px;
-  }
-
-  .micro {
-    font-family: "JetBrains Mono", monospace;
-    font-weight: 700;
-    font-size: 18px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--subtle);
-  }
-
-  /* ---------------- left rail: what goes in ---------------- */
-  .rail { display: flex; flex-direction: column; }
-
-  .chips { display: flex; gap: 8px; margin-top: 12px; }
-  .chip {
-    font-family: "JetBrains Mono", monospace;
-    font-weight: 500;
-    font-size: 21px;
-    color: var(--muted);
-    background: var(--surface);
-    border: 1px solid var(--border-strong);
-    border-radius: 7px;
-    padding: 6px 11px;
-  }
-
-  .stem {
-    width: 2px;
-    background: var(--border-strong);
-    margin-left: 21px;
-  }
-  .stem.a { height: 26px; }
-  /* Grows so the panel below bottom-aligns with the finding card. */
-  .stem.b { flex: 1; min-height: 26px; }
-
-  .panel {
-    background: var(--elevated);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 20px 22px;
-  }
-
-  /* No accent side-tab here. The commands are already the boldest, largest,
-     only-accent-coloured thing in the rail; a thick left border would add no
-     information and is the loudest AI-UI tell there is. */
-  .commands {
+    padding: 34px 32px;
     display: flex;
     flex-direction: column;
-    gap: 11px;
+    justify-content: center;
   }
+
   .cmd {
-    font-family: "JetBrains Mono", monospace;
-    font-weight: 700;
-    font-size: 26px;
+    font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    font-weight: 800;
+    font-size: 35px;
+    line-height: 1.33;
+    letter-spacing: -0.022em;
     color: var(--accent);
-    letter-spacing: -0.01em;
   }
+  /* The slash is structure, not name. Dropping it back lets the three words
+     line up as a column the eye reads first. */
+  .cmd span { color: var(--border-strong); }
 
-  .engine { display: flex; flex-direction: column; gap: 10px; }
-  .engine .micro { margin-bottom: 4px; }
-  .erow {
-    font-size: 19px;
-    line-height: 1.3;
-    color: var(--muted);
-  }
-  .erow b { font-weight: 600; color: var(--text); }
-
-  /* ---------------- right: what comes out ---------------- */
-  .out { display: flex; flex-direction: column; }
-
-  .card {
-    flex: 1;
-    background: var(--elevated);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    margin-top: 12px;
-    padding: 26px 28px;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 2px 10px rgba(26, 26, 26, 0.04);
-  }
-
-  .badge {
-    align-self: flex-start;
-    font-family: "JetBrains Mono", monospace;
-    font-weight: 700;
-    font-size: 19px;
-    letter-spacing: 0.08em;
-    color: #ffffff;
-    background: var(--accent);
-    border-radius: 6px;
-    padding: 5px 11px;
-  }
-
-  .principle {
-    font-family: "Bricolage Grotesque", system-ui, sans-serif;
-    font-weight: 700;
-    font-size: 30px;
-    line-height: 1.14;
-    letter-spacing: -0.02em;
-    margin-top: 16px;
-  }
-
-  .why {
-    font-size: 23px;
-    line-height: 1.45;
-    color: var(--muted);
-    margin-top: 13px;
-  }
-  .why code {
-    font-family: "JetBrains Mono", monospace;
+  .foot {
+    margin-top: 21px;
+    font-family: "Switzer", system-ui, sans-serif;
     font-weight: 500;
-    font-size: 21px;
-    color: var(--text);
-    background: var(--badge);
-    border-radius: 4px;
-    padding: 1px 5px;
-  }
-
-  .rule {
-    height: 1px;
-    background: var(--border);
-    margin: 20px 0 18px;
-  }
-
-  .fixrow { display: flex; gap: 13px; align-items: baseline; }
-  .fixlabel {
-    font-family: "JetBrains Mono", monospace;
-    font-weight: 700;
-    font-size: 18px;
-    letter-spacing: 0.16em;
-    color: var(--accent);
-    flex: none;
-  }
-  .fix {
-    font-size: 22px;
+    font-size: 15px;
     line-height: 1.42;
-    color: var(--text);
-  }
-  .fix code {
-    font-family: "JetBrains Mono", monospace;
-    font-weight: 500;
-    font-size: 20px;
-    background: var(--badge);
-    border-radius: 4px;
-    padding: 1px 5px;
+    color: var(--muted);
+    max-width: 31ch;
+    text-wrap: balance;
   }
 </style>
 </head>
 <body>
-<div class="canvas">
-  <div class="rail">
-    <div class="micro">Your interface</div>
-    <div class="chips">
-      <span class="chip">.tsx</span>
-      <span class="chip">.jsx</span>
-      <span class="chip">.css</span>
-    </div>
-
-    <div class="stem a"></div>
-
-    <div class="panel commands">
-      <div class="cmd">/ux-check</div>
-      <div class="cmd">/design-audit</div>
-      <div class="cmd">/tokenize</div>
-    </div>
-
-    <div class="stem b"></div>
-
-    <div class="panel engine">
-      <div class="micro">Scored against</div>
-      <div class="erow"><b>30 UX laws</b> + motion model</div>
-      <div class="erow"><b>WCAG 2.2 AA</b> via axe-core</div>
-      <div class="erow">At <b>1280px</b> and <b>390px</b></div>
-    </div>
-  </div>
-
-  <div class="out">
-    <div class="micro">What comes back</div>
-    <div class="card">
-      <span class="badge">P2</span>
-      <div class="principle">Von Restorff +<br />Recognition over Recall</div>
-      <div class="why">
-        The primary action is muted at rest and only gains the accent on
-        <code>:hover</code>. Touch has no hover, so on mobile it is the
-        quietest thing in the tile.
-      </div>
-      <div class="rule"></div>
-      <div class="fixrow">
-        <span class="fixlabel">FIX</span>
-        <span class="fix">
-          Render it in the accent at rest under
-          <code>@media (hover: none)</code>.
-        </span>
-      </div>
-    </div>
-  </div>
-</div>
+  <div class="cmd"><span>/</span>ux-check</div>
+  <div class="cmd"><span>/</span>design-audit</div>
+  <div class="cmd"><span>/</span>tokenize</div>
+  <p class="foot">Three commands that audit a UI against named principles.</p>
 </body>
 </html>

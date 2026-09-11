@@ -133,7 +133,7 @@ const screenshotOrientations: Record<string, Screenshot["orientation"]> = {
 // A diagram does not, so it supplies its own alt.
 const screenshotAlts: Record<string, string> = {
   "frontend-tools":
-    "Diagram: the /ux-check, /design-audit, and /tokenize commands read .tsx, .jsx, and .css files and score them against 30 UX laws and WCAG 2.2 AA at 1280px and 390px. What comes back is a finding that names the principle, states the consequence, and gives the fix.",
+    "The three commands set large: /ux-check, /design-audit and /tokenize, over the line “Three commands that audit a UI against named principles.”",
 };
 
 function resolveScreenshot(slug: string, name: string): Screenshot | undefined {
