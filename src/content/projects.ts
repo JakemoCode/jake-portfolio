@@ -92,7 +92,7 @@ export const projects: Project[] = [
     ],
     liveUrl: null,
     liveLabel: "Runs in Claude Code",
-    repoUrl: "https://github.com/Jakemo136/frontend-tools",
+    repoUrl: "https://github.com/JakemoCode/frontend-tools",
     status: "live",
   },
 ];
