@@ -25,7 +25,7 @@ Light/dark mode is driven by a `data-theme` attribute on `<html>`. The initial v
 
 ## Screenshots
 
-Screenshots are picked up automatically from `src/assets/` by filename. Drop a file matching the project slug and it will replace the placeholder on the next build.
+Screenshots are picked up from `src/assets/` by filename, but only for slugs listed in the orientation map below. A file alone is not enough; without a map entry the card keeps the dashed placeholder.
 
 | Project | Filename | Capture viewport | Final image | Orientation |
 |---|---|---|---|---|
@@ -34,7 +34,7 @@ Screenshots are picked up automatically from `src/assets/` by filename. Drop a f
 
 Supported extensions: `png`, `jpg`, `jpeg`, `webp`, `gif`.
 
-Wiring lives in `src/content/projects.ts` (`screenshotsBySlug`). To add a new project's screenshot, add an entry to that map with the desired orientation (`"landscape"` or `"phone"`).
+Wiring lives in `src/content/projects.ts` (`screenshotOrientations`). To add a new project's screenshot, drop the image in `src/assets/<slug>.png` and add an entry to that map with the desired orientation (`"landscape"` or `"phone"`).
 
 ## Deploy
 
