@@ -1,0 +1,136 @@
+<!doctype html>
+<!--
+  Source for src/assets/docs-distillation-gate.png (the project card image).
+
+  The gate counts the prose words of a document at every commit on a branch.
+  That series is the curve, and the curve is the whole idea, so the card draws
+  it: bars falling, a dashed line at the pass mark, the last bar clearing it.
+
+  AUTHORED AT THE SIZE IT SHIPS. The card renders in a 4:3 media box about
+  390px wide, so this page is 400x300 CSS px and every size below is roughly
+  the real on-screen size. Export at 3x for retina. Do not author it large and
+  let the browser shrink it; that aliases hairlines and shrinks labels below
+  readable size.
+
+  Regenerate after edits:
+
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
+      --hide-scrollbars --force-device-scale-factor=3 --window-size=400,300 \
+      --virtual-time-budget=4000 --screenshot=src/assets/docs-distillation-gate.png \
+      "file://$PWD/docs-distillation-gate.source.html"
+
+  Rules that keep it legible at this size: nothing under 15px, no 1px borders,
+  and roughly a dozen words on the whole card. The bar heights are a real
+  passing curve: 351 prose words down to 172, which is 49 per cent.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://api.fontshare.com" />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700;800&display=swap" rel="stylesheet" />
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@500&display=swap" rel="stylesheet" />
+<style>
+  /* Light-theme colour tokens from src/styles/tokens.css. The card image is a
+     fixed raster behind an <img>, so it cannot follow the site's theme toggle.
+     The other project shots are light, so this one is too. */
+  :root {
+    --bg: #faf9f6;
+    --border-strong: #d6d2c8;
+    --muted: #6b6b6b;
+    --accent: #b8472d;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body { width: 400px; height: 300px; }
+
+  body {
+    background: var(--bg);
+    font-variant-ligatures: none;
+    font-feature-settings: "liga" 0, "calt" 0;
+    -webkit-font-smoothing: antialiased;
+    padding: 28px 30px 26px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chart {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+    gap: 11px;
+    position: relative;
+  }
+
+  .bar {
+    flex: 1;
+    background: var(--border-strong);
+    border-radius: 3px 3px 0 0;
+  }
+  /* The commit that clears the pass mark. */
+  .bar.cleared { background: var(--accent); }
+
+  /* 2px, not a hairline: a 1px rule disappears at this size. */
+  .target {
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-top: 2px dashed var(--muted);
+  }
+  .tlabel {
+    position: absolute;
+    right: 0;
+    transform: translateY(-100%);
+    padding-bottom: 4px;
+    font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--muted);
+  }
+
+  .read {
+    margin-top: 17px;
+    font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    font-weight: 800;
+    font-size: 40px;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+  .read .from { color: var(--border-strong); }
+  .read .arrow { color: var(--muted); }
+  .read .to { color: var(--accent); }
+
+  .foot {
+    margin-top: 11px;
+    font-family: "Switzer", system-ui, sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.42;
+    color: var(--muted);
+    max-width: 34ch;
+    text-wrap: balance;
+  }
+</style>
+</head>
+<body>
+  <div class="chart">
+    <div class="target" style="bottom: 49%"></div>
+    <div class="tlabel" style="bottom: 49%">50%</div>
+    <div class="bar" style="height: 100%"></div>
+    <div class="bar" style="height: 86%"></div>
+    <div class="bar" style="height: 70%"></div>
+    <div class="bar" style="height: 56%"></div>
+    <div class="bar cleared" style="height: 47%"></div>
+  </div>
+
+  <div class="read">
+    <span class="from">351</span>
+    <span class="arrow">&rarr;</span>
+    <span class="to">172</span>
+  </div>
+
+  <p class="foot">Prose words. Remove half of them, or the document does not ship.</p>
+</body>
+</html>

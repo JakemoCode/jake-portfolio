@@ -72,6 +72,50 @@ export const projects: Project[] = [
     repoUrl: "https://github.com/JakemoCode/baby-day-planner",
     status: "live",
   },
+  {
+    slug: "frontend-tools",
+    name: "Frontend Tools",
+    summary:
+      "Three Claude Code commands that audit a frontend for accessibility, interaction psychology, motion, and token discipline, plus the reference files and browser tooling they run on.",
+    problem:
+      "Ask a coding agent to review a UI and you get taste assertions. \"Feels cramped.\" \"Consider more contrast.\" Nothing you can act on, and nothing you can argue with either, because no principle was named. A review worth reading says which rule the code broke, what the user loses because of it, and a fix specific enough to paste. That needs two things an agent does not have by default: reference material it reads at review time, and a real browser measuring the page that actually rendered rather than the source it guessed from.",
+    built:
+      "Three slash commands and the machinery under them. /ux-check runs a Laws of UX pass for cognition and interaction alongside a motion pass that asks whether each animation does a usability job or is decoration, measured at 1280px and 390px when a browser is available. /design-audit dispatches three subagents in parallel and drives Chromium through a small MCP server running axe-core against the rendered DOM, so violations come from the markup the user gets. The auto-fix pass for Critical and Major issues is rollback-safe. It checkpoints before editing and reverts on any new violation or failing test. /tokenize sweeps hard-coded CSS and confirms every surviving literal uses a deliberate unit. A PostToolUse hook blocks a newly written clamp() on a layout property until it carries a marker naming the width at which deleting the value would change the render. Each of the four rules files declares a paths pattern in its frontmatter, so they load on .tsx, .jsx, and .css files and stay out of context everywhere else.",
+    tech: [
+      "Claude Code",
+      "Model Context Protocol",
+      "Node.js",
+      "Playwright",
+      "axe-core",
+      "Python",
+      "Markdown",
+    ],
+    liveUrl: null,
+    liveLabel: "Runs in Claude Code",
+    repoUrl: "https://github.com/JakemoCode/frontend-tools",
+    status: "live",
+  },
+  {
+    slug: "docs-distillation-gate",
+    name: "Docs Distillation Gate",
+    summary:
+      "A pre-push and CI check that measures how far a document fell between its draft and its final commit, and blocks the ones that never fell.",
+    problem:
+      "Most documentation standards are a sentence in a contributing guide asking for brevity, and nothing reads it. A repository I work in had a stated 50 per cent compression target, several agents writing documents into it, and no enforcement whatsoever. Asking a model to be concise gets you a document that sounds concise. Reading the result will not tell you whether anything was actually cut, because the draft it came from is gone. The one place that evidence survives is the commit history.",
+    built:
+      "The gate walks every commit on the branch, counts the prose words of each gated document at each point, and treats that series as a curve. Prose means what a reader reads: fenced blocks, inline code, HTML comments and markdown syntax are all free, and a token has to carry a letter to count, so a table of numbers costs nothing while the words in its cells still do. A document passes on one of three grounds: it reached half its baseline, its curve flattened out, or it was too short to be worth gating. The baseline is the curve's highest point rather than its first, because the grammar pass the method prescribes adds words before it removes any, and billing the writer for that would punish following the instructions. Each distilled document carries its curve in a stamp on its first line, and the check resolves the revision named there back through the history, so a squash merge cannot orphan the evidence. A commit trailer clears a block, and every override is reported against the author who wrote it. One file, no dependencies, 70 tests.",
+    tech: [
+      "Node.js",
+      "ESM",
+      "GitHub Actions",
+      "husky",
+      "node:test",
+    ],
+    liveUrl: null,
+    liveLabel: "Runs in CI and pre-push",
+    repoUrl: "https://github.com/JakemoCode/docs-distillation-gate",
+    status: "live",
+  },
 ];
 
 const screenshotModules = import.meta.glob<{ default: string }>(
@@ -82,6 +126,17 @@ const screenshotModules = import.meta.glob<{ default: string }>(
 const screenshotOrientations: Record<string, Screenshot["orientation"]> = {
   "coffee-roast-tracker": "landscape",
   "baby-day-planner": "phone",
+  "frontend-tools": "landscape",
+  "docs-distillation-gate": "landscape",
+};
+
+// Product screenshots describe themselves well enough from the project name.
+// A diagram does not, so it supplies its own alt.
+const screenshotAlts: Record<string, string> = {
+  "frontend-tools":
+    "The three commands set large: /ux-check, /design-audit and /tokenize, over the line “Three commands that audit a UI against named principles.”",
+  "docs-distillation-gate":
+    "A falling bar chart of one document's prose word count across five commits, with a dashed line at the 50 per cent pass mark. The last bar clears it. Below: 351 to 172 prose words, remove half of them or the document does not ship.",
 };
 
 function resolveScreenshot(slug: string, name: string): Screenshot | undefined {
@@ -93,7 +148,8 @@ function resolveScreenshot(slug: string, name: string): Screenshot | undefined {
   );
   if (!entry) return undefined;
 
-  return { src: entry[1].default, alt: `${name} screenshot`, orientation };
+  const alt = screenshotAlts[slug] ?? `${name} screenshot`;
+  return { src: entry[1].default, alt, orientation };
 }
 
 for (const project of projects) {

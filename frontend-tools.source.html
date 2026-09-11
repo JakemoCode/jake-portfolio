@@ -1,0 +1,91 @@
+<!doctype html>
+<!--
+  Source for src/assets/frontend-tools.png (the Frontend Tools project card image).
+
+  The project is a set of Claude Code commands with no UI, so there is no
+  product screenshot to take. The commands are the thing you actually type,
+  so the card sets them at the size they deserve and says one sentence.
+
+  AUTHORED AT THE SIZE IT SHIPS. The card renders in a 4:3 media box about
+  390px wide, so this page is 400x300 CSS px and every size below is roughly
+  the real on-screen size. Export at 3x for retina. Do NOT author this large
+  and let the browser shrink it: an earlier version was built at 800x600 and
+  the 0.49 downscale aliased every hairline and dropped body text to 11px.
+
+  Regenerate after edits:
+
+    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" --headless=new \
+      --hide-scrollbars --force-device-scale-factor=3 --window-size=400,300 \
+      --virtual-time-budget=4000 --screenshot=src/assets/frontend-tools.png \
+      "file://$PWD/frontend-tools.source.html"
+
+  Rules that keep it legible at this size: nothing under 15px, no 1px borders,
+  and roughly a dozen words on the whole card.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="preconnect" href="https://api.fontshare.com" />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@800&display=swap" rel="stylesheet" />
+<link href="https://api.fontshare.com/v2/css?f[]=switzer@500&display=swap" rel="stylesheet" />
+<style>
+  /* Light-theme colour tokens from src/styles/tokens.css. The card image is a
+     fixed raster behind an <img>, so it cannot follow the site's theme toggle.
+     Both other project shots are light, so this one is too. */
+  :root {
+    --bg: #faf9f6;
+    --border-strong: #d6d2c8;
+    --muted: #6b6b6b;
+    --accent: #b8472d;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body { width: 400px; height: 300px; }
+
+  body {
+    background: var(--bg);
+    /* JetBrains Mono ligates some ASCII pairs; the command names should read
+       exactly as they are typed. */
+    font-variant-ligatures: none;
+    font-feature-settings: "liga" 0, "calt" 0;
+    -webkit-font-smoothing: antialiased;
+    padding: 34px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .cmd {
+    font-family: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    font-weight: 800;
+    font-size: 35px;
+    line-height: 1.33;
+    letter-spacing: -0.022em;
+    color: var(--accent);
+  }
+  /* The slash is structure, not name. Dropping it back lets the three words
+     line up as a column the eye reads first. */
+  .cmd span { color: var(--border-strong); }
+
+  .foot {
+    margin-top: 21px;
+    font-family: "Switzer", system-ui, sans-serif;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 1.42;
+    color: var(--muted);
+    max-width: 31ch;
+    text-wrap: balance;
+  }
+</style>
+</head>
+<body>
+  <div class="cmd"><span>/</span>ux-check</div>
+  <div class="cmd"><span>/</span>design-audit</div>
+  <div class="cmd"><span>/</span>tokenize</div>
+  <p class="foot">Three commands that audit a UI against named principles.</p>
+</body>
+</html>

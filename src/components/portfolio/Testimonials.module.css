@@ -52,6 +52,7 @@
   font-size: var(--font-size-md);
   font-style: italic;
   line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-serif-italic);
   color: var(--color-text);
 }
 

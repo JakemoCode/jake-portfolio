@@ -47,8 +47,8 @@
   /* ---- Font families ---- */
   --font-display: "Bricolage Grotesque Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-body: "Switzer", system-ui, -apple-system, sans-serif;
-  --font-serif: "Fraunces Variable", Georgia, "Times New Roman", serif;
-  --font-sans: "Inter Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif: "Vollkorn Variable", Georgia, "Times New Roman", serif;
+  --font-sans: "Switzer", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
 
   /* ---- Font sizes — rem so type tracks the user's base size. Fluid display
@@ -70,6 +70,12 @@
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
+
+  /* ---- Letter spacing ---- */
+  /* Vollkorn's drawn italic sets tighter than its roman. A hair of tracking
+     gives it room without reading as letter-spaced. em, not px, so it stays
+     proportional from the 1.125rem card summary up to the hero tagline. */
+  --letter-spacing-serif-italic: 0.011em;
 
   --line-height-none: 1; /* glyph-centering (icons, single-line controls) */
   --line-height-tight: 1.15;
