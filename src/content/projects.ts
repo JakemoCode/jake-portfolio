@@ -127,6 +127,7 @@ const screenshotOrientations: Record<string, Screenshot["orientation"]> = {
   "coffee-roast-tracker": "landscape",
   "baby-day-planner": "phone",
   "frontend-tools": "landscape",
+  "docs-distillation-gate": "landscape",
 };
 
 // Product screenshots describe themselves well enough from the project name.
@@ -134,6 +135,8 @@ const screenshotOrientations: Record<string, Screenshot["orientation"]> = {
 const screenshotAlts: Record<string, string> = {
   "frontend-tools":
     "The three commands set large: /ux-check, /design-audit and /tokenize, over the line “Three commands that audit a UI against named principles.”",
+  "docs-distillation-gate":
+    "A falling bar chart of one document's prose word count across five commits, with a dashed line at the 50 per cent pass mark. The last bar clears it. Below: 351 to 172 prose words, remove half of them or the document does not ship.",
 };
 
 function resolveScreenshot(slug: string, name: string): Screenshot | undefined {
