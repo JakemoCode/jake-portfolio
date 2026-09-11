@@ -105,6 +105,14 @@ const screenshotModules = import.meta.glob<{ default: string }>(
 const screenshotOrientations: Record<string, Screenshot["orientation"]> = {
   "coffee-roast-tracker": "landscape",
   "baby-day-planner": "phone",
+  "frontend-tools": "landscape",
+};
+
+// Product screenshots describe themselves well enough from the project name.
+// A diagram does not, so it supplies its own alt.
+const screenshotAlts: Record<string, string> = {
+  "frontend-tools":
+    "Diagram: the /ux-check, /design-audit, and /tokenize commands read .tsx, .jsx, and .css files and score them against 30 UX laws and WCAG 2.2 AA at 1280px and 390px. What comes back is a finding that names the principle, states the consequence, and gives the fix.",
 };
 
 function resolveScreenshot(slug: string, name: string): Screenshot | undefined {
@@ -116,7 +124,8 @@ function resolveScreenshot(slug: string, name: string): Screenshot | undefined {
   );
   if (!entry) return undefined;
 
-  return { src: entry[1].default, alt: `${name} screenshot`, orientation };
+  const alt = screenshotAlts[slug] ?? `${name} screenshot`;
+  return { src: entry[1].default, alt, orientation };
 }
 
 for (const project of projects) {
