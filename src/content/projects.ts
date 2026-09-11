@@ -72,6 +72,29 @@ export const projects: Project[] = [
     repoUrl: "https://github.com/JakemoCode/baby-day-planner",
     status: "live",
   },
+  {
+    slug: "frontend-tools",
+    name: "Frontend Tools",
+    summary:
+      "Three Claude Code commands that audit a frontend for accessibility, interaction psychology, motion, and token discipline, plus the reference files and browser tooling they run on.",
+    problem:
+      "Ask a coding agent to review a UI and you get taste assertions. \"Feels cramped.\" \"Consider more contrast.\" Nothing you can act on, and nothing you can argue with either, because no principle was named. A review worth reading says which rule the code broke, what the user loses because of it, and a fix specific enough to paste. That needs two things an agent does not have by default: reference material it reads at review time, and a real browser measuring the page that actually rendered rather than the source it guessed from.",
+    built:
+      "Three slash commands and the machinery under them. /ux-check runs a Laws of UX pass for cognition and interaction alongside a motion pass that asks whether each animation does a usability job or is decoration, measured at 1280px and 390px when a browser is available. /design-audit dispatches three subagents in parallel and drives Chromium through a small MCP server running axe-core against the rendered DOM, so violations come from the markup the user gets; auto-fix for Critical and Major checkpoints first and reverts on any new violation or failing test. /tokenize sweeps hard-coded CSS and confirms every surviving literal uses a deliberate unit. A PostToolUse hook blocks a newly written clamp() on a layout property until it carries a marker naming the width at which deleting the value would change the render. The four rules files carry paths: frontmatter, so they load on .tsx, .jsx, and .css and stay out of context everywhere else.",
+    tech: [
+      "Claude Code",
+      "Model Context Protocol",
+      "Node.js",
+      "Playwright",
+      "axe-core",
+      "Python",
+      "Markdown",
+    ],
+    liveUrl: null,
+    liveLabel: "Runs in Claude Code",
+    repoUrl: "https://github.com/Jakemo136/frontend-tools",
+    status: "live",
+  },
 ];
 
 const screenshotModules = import.meta.glob<{ default: string }>(
