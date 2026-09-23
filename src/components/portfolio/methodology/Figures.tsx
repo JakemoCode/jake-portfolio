@@ -104,7 +104,9 @@ function Decisions() {
   );
 }
 
-const friction: Array<["compiled" | "in-progress" | "open", string]> = [
+type FrictionStatus = "compiled" | "in-progress" | "open";
+
+const friction: Array<[FrictionStatus, string]> = [
   ["in-progress", "F-001"],
   ["compiled", "F-002"],
   ["compiled", "F-003"],
@@ -128,6 +130,9 @@ const statusText = {
   open: "open",
 } as const;
 
+const frictionCount = (status: FrictionStatus) =>
+  friction.filter(([entryStatus]) => entryStatus === status).length;
+
 function Friction() {
   return (
     <Plate label="Friction log on my current build">
@@ -142,9 +147,9 @@ function Friction() {
         ))}
       </ol>
       <p className={styles.legend} aria-hidden="true">
-        <span data-status="compiled">11 compiled</span>
-        <span data-status="in-progress">1 in progress</span>
-        <span data-status="open">3 open</span>
+        <span data-status="compiled">{frictionCount("compiled")} compiled</span>
+        <span data-status="in-progress">{frictionCount("in-progress")} in progress</span>
+        <span data-status="open">{frictionCount("open")} open</span>
       </p>
       <p className={styles.note}>
         F-004: docs kept pointing at files a reorganization had moved. The second
@@ -298,7 +303,10 @@ function Split() {
         <ol className={styles.parts} aria-label="WP-17 split into four PRs">
           {parts.map((part, i) => (
             <li key={part} className={styles.part} style={at(i)}>
-              <code>/wp {part}</code>
+              <code>
+                <span className={styles.partCommand}>/wp </span>
+                {part}
+              </code>
             </li>
           ))}
         </ol>
@@ -385,23 +393,24 @@ function Redline() {
 }
 
 function Page() {
+  const title = "How distillation works";
   const steps = ["Rewrite in Simplified Technical English", "Cut filler", "Reshape into tables", "Cut again"];
+  const markdown = [
+    `## ${title}`,
+    "",
+    ...steps.map((step, i) => `${i + 1}. ${step}`),
+    "",
+    "Passes at half its prose, or once",
+    "the cuts stop coming.",
+  ].join("\n");
   return (
     <Plate label="A brief for a collaborator, as markdown and as a page">
       <div className={styles.page}>
         <pre className={styles.markdown} aria-hidden="true">
-          {`## How distillation works
-
-1. Rewrite in Simplified Technical English
-2. Cut filler
-3. Reshape into tables
-4. Cut again
-
-Passes at half its prose, or once
-the cuts stop coming.`}
+          {markdown}
         </pre>
         <div className={styles.rendered}>
-          <p className={styles.renderedTitle}>How distillation works</p>
+          <p className={styles.renderedTitle}>{title}</p>
           <ol className={styles.renderedSteps}>
             {steps.map((step) => (
               <li key={step}>{step}</li>

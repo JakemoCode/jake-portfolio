@@ -20,16 +20,23 @@
   --dot-size: 0.5rem;          /* pipeline dot */
   --split-gap: var(--spacing-xs);
   --tap-target: 2.75rem;       /* comfortable touch target (Fitts's law) */
+  --font-size-code-inline: 0.92em; /* mono sets large; optically matches the surrounding text */
 
   margin: 0;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-lg);
-  padding: var(--spacing-xl);
+  padding: var(--spacing-md);
   background: var(--color-bg-elevated);
   border: var(--border-width-thin) solid var(--color-border);
   border-radius: var(--radius-lg);
   container-type: inline-size;
+}
+
+@media (min-width: 30em) {
+  .plate {
+    padding: var(--spacing-xl);
+  }
 }
 
 @media (min-width: 48em) {
@@ -53,10 +60,9 @@
 }
 
 .note code,
-.script code,
 .reply code {
   font-family: var(--font-mono);
-  font-size: 0.92em;
+  font-size: var(--font-size-code-inline);
 }
 
 .srOnly {
@@ -188,7 +194,9 @@
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(7, var(--cell-size)); /* 49 questions, a 7 by 7 square */
+  /* 49 questions, a 7 by 7 square. minmax(0, …) lets cells shrink square on
+     phones narrower than the 7 full-size cells need */
+  grid-template-columns: repeat(7, minmax(0, var(--cell-size)));
   gap: var(--spacing-2xs);
 }
 
@@ -449,24 +457,17 @@
   color: var(--color-text-muted);
 }
 
+/* A drawn strike, painted as a background line rather than an absolute
+   ::after: an inline background is sliced across line fragments, so the line
+   still runs through the text, in reading order, when a struck phrase wraps */
 .taste s,
 .draft del,
 .uninstalled del {
-  position: relative;
-  text-decoration: none;
-}
+  --strike-width: var(--border-width-thick);
 
-.taste s::after,
-.draft del::after,
-.uninstalled del::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 55%;
-  height: var(--border-width-thick);
-  background: var(--color-accent);
-  transform-origin: left;
+  text-decoration: none;
+  background: linear-gradient(var(--color-accent), var(--color-accent)) 0 55% / 100%
+    var(--strike-width) no-repeat;
 }
 
 .finding {
@@ -657,9 +658,6 @@
   border-radius: var(--radius-sm);
   background: var(--color-surface);
   border: var(--border-width-thin) solid var(--color-border-strong);
-}
-
-.meterStep {
   position: relative;
   overflow: clip;
 }
@@ -669,6 +667,21 @@
   position: absolute;
   inset: 0;
   background: var(--color-accent);
+}
+
+/* The meter repeats the effort word, so it is the first thing to go when the
+   table would otherwise overflow a phone-width plate */
+@container (max-width: 17rem) {
+  .meter {
+    display: none;
+  }
+}
+
+/* The four PRs keep their numbers; the command prefix is what drops */
+@container (max-width: 20rem) {
+  .partCommand {
+    display: none;
+  }
 }
 
 @container (max-width: 26rem) {
@@ -847,8 +860,8 @@
   margin-right: var(--spacing-xs);
 }
 
-.uninstalled del::after {
-  height: var(--border-width-thin);
+.uninstalled del {
+  --strike-width: var(--border-width-thin);
 }
 
 /* ---- Funnel: the pipeline narrows to one read ---- */
@@ -1101,7 +1114,7 @@
     }
 
     /* Principle: the taste call is struck, the finding assembles */
-    .taste s::after {
+    .taste s {
       animation: strike linear both;
       animation-timeline: --self;
       animation-range: cover 10vh cover 30vh;
@@ -1147,7 +1160,7 @@
     }
 
     /* Redline: strike the claim, then write the correction */
-    .draft del::after {
+    .draft del {
       animation: strike linear both;
       animation-timeline: --self;
       animation-range: cover 10vh cover 28vh;
@@ -1186,7 +1199,7 @@
       animation-range: cover 10vh cover 40vh;
     }
 
-    .uninstalled del::after {
+    .uninstalled del {
       animation: strike linear both;
       animation-timeline: --self;
       animation-range: cover 15vh cover 40vh;
@@ -1296,7 +1309,7 @@
 
 @keyframes strike {
   from {
-    transform: scaleX(0);
+    background-size: 0% var(--strike-width);
   }
 }
 

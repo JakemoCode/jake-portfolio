@@ -82,7 +82,8 @@
 }
 
 .countNum {
-  --lines: 15;
+  /* --lines (the habit count) and --lines-from (the doc's line count) are set
+     inline from the content, so a regenerated doc can't leave them stale */
   counter-reset: lines var(--lines);
   font-variant-numeric: tabular-nums;
   color: var(--color-accent);
@@ -336,7 +337,7 @@
 
 @keyframes count-down {
   from {
-    --lines: 1168;
+    --lines: var(--lines-from);
   }
 }
 

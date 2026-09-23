@@ -41,8 +41,9 @@ const minimapPath = minimapLengths
   })
   .join("");
 
+const habitCount = methodologyActs.reduce((habits, act) => habits + act.themes.length, 0);
 // Rows in the finished index: one per act label, one per habit.
-const rowCount = methodologyActs.reduce((rows, act) => rows + 1 + act.themes.length, 0);
+const rowCount = methodologyActs.length + habitCount;
 
 const groups = (() => {
   let row = 0;
@@ -83,7 +84,10 @@ export function DistillIndex() {
             Fifteen habits, pulled from a month of my own Claude Code sessions.
           </p>
           <p className={styles.count} aria-hidden="true">
-            <span className={styles.countNum} />
+            <span
+              className={styles.countNum}
+              style={{ "--lines": habitCount, "--lines-from": evidenceLineCount } as CSSProperties}
+            />
             <span className={styles.countUnits}>
               <span className={styles.unitLines}>lines of evidence</span>
               <span className={styles.unitHabits}>habits</span>

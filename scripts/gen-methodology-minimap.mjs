@@ -5,7 +5,9 @@
 //   node scripts/gen-methodology-minimap.mjs ../docs/how-i-work-with-ai.md
 import { readFileSync, writeFileSync } from "node:fs";
 
-const src = process.argv[2] ?? "../docs/how-i-work-with-ai.md";
+// Paths resolve from this file, so the script works from any cwd.
+const src = process.argv[2] ?? new URL("../../docs/how-i-work-with-ai.md", import.meta.url);
+const dest = new URL("../src/content/methodologyMinimap.ts", import.meta.url);
 const lines = readFileSync(src, "utf8").replace(/\n$/, "").split("\n");
 
 const starts = [];
@@ -29,5 +31,5 @@ export const minimapLengths: readonly number[] = ${JSON.stringify(lengths)};
 /** Theme number (as numbered in the doc) to the line its heading sits on. */
 export const minimapThemeLines: Readonly<Record<number, number>> = ${JSON.stringify(themeLines)};
 `;
-writeFileSync("src/content/methodologyMinimap.ts", out);
+writeFileSync(dest, out);
 console.log(`${lines.length} lines, ${Object.keys(themeLines).length} theme headings`);

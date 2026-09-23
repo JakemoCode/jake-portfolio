@@ -2,6 +2,7 @@
 // evidence doc (docs/how-i-work-with-ai.md in the Workspace root, outside this
 // repo). Every figure and quote traces to that doc or to the repo it cites;
 // numbers were checked on 2026-09-23 and move weekly.
+import { minimapLengths } from "./methodologyMinimap";
 
 export type FigureKey =
   | "harden"
@@ -239,5 +240,6 @@ export const methodologyActs: Act[] = [
   },
 ];
 
-/** Lines in the evidence doc, for the opener's count-down. */
-export const evidenceLineCount = 1168;
+/** Lines in the evidence doc, for the opener's count-down. Read from the
+    generated minimap so a regenerated doc can't leave it stale. */
+export const evidenceLineCount = minimapLengths.length;
