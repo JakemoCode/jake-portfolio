@@ -40,6 +40,12 @@
 }
 
 :root {
+  /* Derived from the themed accent, so both resolve per theme without a
+     second dark-mode entry. Tint is a fill behind body text; on-accent is
+     text set on a solid accent fill (the page bg clears AA on both accents). */
+  --color-accent-tint: color-mix(in srgb, var(--color-accent) 14%, transparent);
+  --color-on-accent: var(--color-bg);
+
   /* ---- Primitives (surface-agnostic) ---- */
   --color-white: #ffffff;
   --color-black: #000000;
