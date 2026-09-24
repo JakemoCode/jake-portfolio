@@ -1,0 +1,83 @@
+/* Only where the margin can hold it; below this the habit index covers the
+   longest section and the page is short enough to scroll. */
+.rail {
+  display: none;
+}
+
+@media (min-width: 75em) {
+  .rail {
+    display: block;
+    position: sticky;
+    top: 0;
+    align-self: start;
+    padding-top: var(--spacing-6xl);
+  }
+}
+
+.track {
+  /* Every entry is one line, so each sits a fixed pitch below the last and
+     the tick's edges can be computed from an index alone */
+  --pad: var(--spacing-xs);
+  --gap: var(--spacing-2xs);
+  --label: calc(var(--font-size-sm) * var(--line-height-tight));
+  --pitch: calc(var(--label) + 2 * var(--pad) + var(--gap));
+
+  position: relative;
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap);
+  border-left: var(--border-width-thin) solid var(--color-border-strong);
+}
+
+.link {
+  display: block;
+  padding: var(--pad) 0;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-tight);
+  white-space: nowrap;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color var(--duration-fast) ease;
+}
+
+.link:hover,
+.link[aria-current] {
+  color: var(--color-text);
+}
+
+.link[aria-current] {
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Sits on the list's rule, spanning the current entry's label and reaching
+   one pitch further by the time the next section takes over */
+.tick {
+  --index: 0;
+  --progress: 0;
+
+  position: absolute;
+  left: 0;
+  width: var(--border-width-thick);
+  top: calc(var(--pad) + var(--index) * var(--pitch));
+  bottom: calc(100% - var(--pad) - var(--index) * var(--pitch) - var(--label) - var(--progress) * var(--pitch));
+  background: var(--color-signal);
+  border-radius: var(--radius-pill);
+}
+
+.track:not(:has([aria-current])) .tick {
+  visibility: hidden;
+}
+
+.tick[data-glide="down"] {
+  transition: top var(--duration-glide) var(--ease-out-quint);
+}
+
+.tick[data-glide="up"] {
+  transition: bottom var(--duration-glide) var(--ease-out-quint);
+}
