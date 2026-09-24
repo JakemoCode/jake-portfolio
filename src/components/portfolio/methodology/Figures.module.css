@@ -1,0 +1,706 @@
+/* Evidence figures for the "How I work with AI" section.
+
+   Every rule outside the motion block below styles the FINISHED state, so
+   reduced motion, browsers without scroll-driven animations, and screenshots
+   that never scroll all get the complete figure. The motion block only adds
+   the scroll-scrubbed "before" through animation fill.
+
+   Each animated element rides its own view timeline: it starts once it is
+   10% of the viewport up from the bottom and lands by about 55%, so nothing
+   plays below the fold. Text is revealed with clip-path and transform, never
+   opacity, so an axe scan at any scroll position measures full-contrast text.
+   Wipes are linear (a constant-speed front); spatial moves use ease-out. */
+
+.plate {
+  /* Component-scoped tokens: fixed sizes with no global rung */
+  --tick-size: 0.625rem;       /* review tick and rail dot; between --spacing-xs and --spacing-sm */
+  --meter-step: 0.875rem;      /* one effort step */
+  --split-gap: var(--spacing-xs);
+  --font-size-code-inline: 0.92em; /* mono sets large; optically matches the surrounding text */
+
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background: var(--color-bg-elevated);
+  border: var(--border-width-thin) solid var(--color-border);
+  border-radius: var(--radius-lg);
+  container-type: inline-size;
+  /* Keeps a figure's scaled-up "before" state (the stamps) inside the plate.
+     clip, not hidden, so descendants' view() timelines still see the page. */
+  overflow: clip;
+}
+
+@media (min-width: 30em) {
+  .plate {
+    padding: var(--spacing-xl);
+  }
+}
+
+@media (min-width: 48em) {
+  .plate {
+    padding: var(--spacing-2xl);
+  }
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-2xs);
+  color: var(--color-text-muted);
+  overflow-wrap: anywhere;
+}
+
+.note {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+.note code {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-code-inline);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: clip;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---- Harden: review passes, then frozen ---- */
+
+.passes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.pass {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+
+.passTick {
+  width: var(--tick-size);
+  height: var(--tick-size);
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+}
+
+.stamp {
+  align-self: flex-end;
+  padding: var(--spacing-2xs) var(--spacing-sm);
+  font-family: var(--font-display);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-accent);
+  border: var(--border-width-thick) solid var(--color-accent);
+  border-radius: var(--radius-sm);
+  transform: rotate(-4deg);
+}
+
+/* ---- Red: a red only counts when it fails on the behavior ---- */
+
+.runs {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.run {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--spacing-2xs) var(--spacing-sm);
+}
+
+.runState {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-2xs);
+  padding: 0 var(--spacing-xs);
+  border: var(--border-width-thin) solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  color: var(--color-text);
+}
+
+.run[data-state="red"] .runState {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.runOutput {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text);
+  overflow-wrap: anywhere;
+}
+
+.run:not([data-counts]) .runOutput {
+  color: var(--color-text-muted);
+}
+
+/* A text-decoration strike, not a drawn line, because the mono output wraps */
+.run s {
+  text-decoration: line-through var(--border-width-thick) var(--color-accent);
+}
+
+.verdict {
+  grid-column: 2;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  color: var(--color-text);
+}
+
+.run:not([data-counts]) .verdict {
+  color: var(--color-text-muted);
+}
+
+.kinds {
+  list-style: none;
+  margin: 0;
+  padding: var(--spacing-md) 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+  border-top: var(--border-width-thin) solid var(--color-border);
+}
+
+.kinds li {
+  padding: var(--spacing-2xs) var(--spacing-sm);
+  background: var(--color-accent-tint);
+  border-radius: var(--radius-pill);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+}
+
+/* ---- Principle: a taste call becomes a finding ---- */
+
+.taste {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--font-size-xl);
+  letter-spacing: var(--letter-spacing-serif-italic);
+  color: var(--color-text-muted);
+}
+
+/* A drawn strike, painted as a background line rather than an absolute
+   ::after: an inline background is sliced across line fragments, so the line
+   still runs through the text, in reading order, when a struck phrase wraps */
+.taste s {
+  --strike-width: var(--border-width-thick);
+
+  text-decoration: none;
+  background: linear-gradient(var(--color-accent), var(--color-accent)) 0 55% / 100%
+    var(--strike-width) no-repeat;
+}
+
+.finding {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  border-top: var(--border-width-thin) solid var(--color-border);
+}
+
+.findingRow {
+  display: grid;
+  grid-template-columns: 6.5em 1fr;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) 0;
+  border-bottom: var(--border-width-thin) solid var(--color-border);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+}
+
+.findingRow dt {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-2xs);
+  padding-top: var(--spacing-3xs);
+  color: var(--color-text-muted);
+}
+
+.findingRow dd {
+  margin: 0;
+  color: var(--color-text);
+}
+
+.findingRow:first-child dd {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent);
+}
+
+/* ---- Split: one work package, four PRs ---- */
+
+.split {
+  position: relative;
+}
+
+.parts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--split-gap);
+}
+
+.part {
+  display: grid;
+  place-items: center;
+  padding: var(--spacing-md) var(--spacing-2xs);
+  background: var(--color-accent-tint);
+  border: var(--border-width-thin) solid var(--color-accent);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.whole {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  pointer-events: none;
+  clip-path: inset(0 0 0 100%);
+}
+
+/* ---- Budget: the model matrix ---- */
+
+.matrix {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+}
+
+.matrix th,
+.matrix td {
+  padding: var(--spacing-xs) var(--spacing-sm) var(--spacing-xs) 0;
+  text-align: left;
+  border-bottom: var(--border-width-thin) solid var(--color-border);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-text);
+  white-space: nowrap;
+}
+
+.matrix thead th {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-2xs);
+  color: var(--color-text-muted);
+}
+
+.matrix code {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+}
+
+.meter {
+  display: inline-flex;
+  gap: var(--spacing-3xs);
+  margin-right: var(--spacing-xs);
+  vertical-align: middle;
+}
+
+.meterStep {
+  flex: none;
+  width: var(--meter-step);
+  height: var(--tick-size);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  border: var(--border-width-thin) solid var(--color-border-strong);
+  position: relative;
+  overflow: clip;
+}
+
+.meterStep[data-on]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent);
+}
+
+/* The meter repeats the effort word, so it is the first thing to go when the
+   table would otherwise overflow a phone-width plate */
+@container (max-width: 17rem) {
+  .meter {
+    display: none;
+  }
+}
+
+/* The four PRs keep their numbers; the command prefix is what drops */
+@container (max-width: 20rem) {
+  .partCommand {
+    display: none;
+  }
+}
+
+@container (max-width: 26rem) {
+  .matrix th,
+  .matrix td {
+    padding-right: var(--spacing-xs);
+  }
+
+  .matrix td {
+    font-size: var(--font-size-xs);
+  }
+
+  .meterStep {
+    width: var(--spacing-xs);
+  }
+}
+
+/* ---- Gate: an ask becomes a hook ---- */
+
+.incident {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xs);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  color: var(--color-text);
+}
+
+.incidentText {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--font-size-md);
+  letter-spacing: var(--letter-spacing-serif-italic);
+}
+
+.incidentTag {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-2xs);
+  color: var(--color-accent);
+}
+
+.ruleFile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md);
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+}
+
+.ruleHeading {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
+}
+
+.ruleLines {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xs);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  color: var(--color-text);
+}
+
+.ruleLines li {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.ruleLines li::before {
+  content: "-";
+  font-family: var(--font-mono);
+  color: var(--color-text-muted);
+}
+
+/* ---- Gauntlet: every check green, then an outside reviewer ---- */
+
+.checks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.check {
+  display: grid;
+  grid-template-columns: 1.25em minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  color: var(--color-text);
+}
+
+.checkMark {
+  font-family: var(--font-mono);
+  color: var(--color-text-muted);
+}
+
+.check:not([data-passed]) {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent);
+}
+
+.check:not([data-passed]) .checkMark {
+  color: var(--color-accent);
+}
+
+/* A rule between the green run and what the outside reviewer found */
+.check[data-passed] + .check:not([data-passed]) {
+  margin-top: var(--spacing-xs);
+  padding-top: var(--spacing-sm);
+  border-top: var(--border-width-thin) solid var(--color-border);
+}
+
+.lesson {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-serif-italic);
+  color: var(--color-text);
+  text-wrap: pretty;
+}
+
+/* =============================================================================
+   Scroll-scrubbed "before" states. Each figure plays as one sequence on its
+   own --fig timeline, and only once the whole figure is on screen: "contain
+   10vh" is the moment its bottom edge is 10% of the viewport up from the
+   bottom, and every sequence lands by "contain 46vh". Because a figure can't
+   start until it is fully in view, the next figure down never starts while
+   this one is still playing. --i orders the pieces inside a figure.
+   ========================================================================== */
+
+/* min-height: a figure only plays once it is fully in view, so on a screen
+   too short to show all of one (a landscape phone) it would play off screen.
+   Those screens get the finished figure, like the pinned opener does. */
+@media (prefers-reduced-motion: no-preference) and (min-height: 40em) {
+  @supports (animation-timeline: view()) {
+    .plate {
+      view-timeline: --fig block;
+    }
+
+    :where(.plate) :where(
+        .pass,
+        .passTick,
+        .stamp,
+        .taste s,
+        .findingRow,
+        .run,
+        .run s,
+        .verdict,
+        .kinds li,
+        .whole,
+        .part,
+        .part code,
+        .incident,
+        .ruleHeading,
+        .ruleLines li,
+        .check,
+        .lesson
+      ),
+    /* Pseudo-elements can't sit inside :where(), so the meter fill is listed apart */
+    :where(.plate) .meterStep[data-on]::before {
+      animation-timeline: --fig;
+      animation-fill-mode: both;
+      animation-timing-function: linear;
+    }
+
+    /* Harden: each review lens is stamped in, then the freeze */
+    .pass,
+    .passTick {
+      animation-range: contain calc(10vh + var(--i) * 4vh) contain calc(18vh + var(--i) * 4vh);
+    }
+
+    .pass {
+      animation-name: wipe-in;
+    }
+
+    .passTick {
+      animation-name: pop;
+      animation-timing-function: var(--ease-out-quint);
+    }
+
+    .stamp {
+      animation-name: stamp;
+      animation-timing-function: var(--ease-out-quint);
+      animation-range: contain 34vh contain 44vh;
+    }
+
+    /* Principle: the taste call is struck, the finding assembles */
+    .taste s {
+      animation-name: strike;
+      animation-range: contain 10vh contain 20vh;
+    }
+
+    .findingRow {
+      animation-name: wipe-in;
+      animation-range: contain calc(20vh + var(--i) * 6vh) contain calc(26vh + var(--i) * 6vh);
+    }
+
+    /* Red: each run lands in order; the import error is struck */
+    .run {
+      animation-name: wipe-in;
+      animation-range: contain calc(10vh + var(--i) * 8vh) contain calc(15vh + var(--i) * 8vh);
+    }
+
+    .run s {
+      animation-name: strike-text;
+      animation-range: contain 15vh contain 19vh;
+    }
+
+    .verdict {
+      animation-name: wipe-in;
+      animation-range: contain calc(14vh + var(--i) * 8vh) contain calc(19vh + var(--i) * 8vh);
+    }
+
+    .kinds li {
+      animation-name: wipe-in;
+      animation-range: contain calc(36vh + var(--i) * 2vh) contain calc(40vh + var(--i) * 2vh);
+    }
+
+    /* Split: one block breaks into four PRs */
+    .whole {
+      animation-name: wipe-away;
+      animation-range: contain 12vh contain 20vh;
+    }
+
+    .part {
+      animation-name: split;
+      animation-timing-function: var(--ease-out-quint);
+      animation-range: contain 12vh contain 32vh;
+    }
+
+    .part code {
+      animation-name: wipe-in;
+      animation-range: contain 26vh contain 38vh;
+    }
+
+    /* Gate: the ask, then the guardrail it became */
+    .incident {
+      animation-name: wipe-in;
+      animation-range: contain 10vh contain 20vh;
+    }
+
+    .ruleHeading {
+      animation-name: wipe-in;
+      animation-range: contain 22vh contain 28vh;
+    }
+
+    .ruleLines li {
+      animation-name: wipe-in;
+      animation-range: contain calc(28vh + var(--i) * 7vh) contain calc(35vh + var(--i) * 7vh);
+    }
+
+    /* Gauntlet: the checks go green one by one, then the two that got through */
+    .check {
+      animation-name: wipe-in;
+      animation-range: contain calc(10vh + var(--i) * 3.5vh) contain calc(14vh + var(--i) * 3.5vh);
+    }
+
+    .check:not([data-passed]) {
+      animation-name: stamp-in;
+      animation-timing-function: var(--ease-out-quint);
+      animation-range: contain calc(14vh + var(--i) * 3.5vh) contain calc(20vh + var(--i) * 3.5vh);
+    }
+
+    .lesson {
+      animation-name: wipe-in;
+      animation-range: contain 38vh contain 46vh;
+    }
+
+    /* Budget: meters fill row by row, left to right */
+    .meterStep[data-on]::before {
+      animation-name: pop;
+      animation-timing-function: var(--ease-out-quint);
+      animation-range: contain calc(10vh + var(--row) * 5vh + var(--i) * 1vh)
+        contain calc(14vh + var(--row) * 5vh + var(--i) * 1vh);
+    }
+  }
+}
+
+@keyframes wipe-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+
+@keyframes wipe-away {
+  from {
+    clip-path: inset(0);
+  }
+  to {
+    clip-path: inset(0 0 0 100%);
+  }
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0);
+  }
+}
+
+@keyframes stamp {
+  from {
+    transform: scale(1.8) rotate(-14deg);
+    clip-path: inset(0 0 100% 0);
+  }
+  30% {
+    clip-path: inset(0);
+  }
+}
+
+@keyframes strike-text {
+  from {
+    text-decoration-color: transparent;
+  }
+}
+
+@keyframes strike {
+  from {
+    background-size: 0% var(--strike-width);
+  }
+}
+
+@keyframes split {
+  from {
+    transform: translateX(calc((1.5 - var(--i)) * var(--split-gap)));
+  }
+}
+
+@keyframes stamp-in {
+  from {
+    transform: scale(1.15);
+    clip-path: inset(0 100% 0 0);
+  }
+  40% {
+    clip-path: inset(0);
+  }
+}

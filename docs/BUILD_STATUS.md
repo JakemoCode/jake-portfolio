@@ -4,14 +4,14 @@ Running status of the portfolio build — what's in flight, whether it's
 green, and what's queued. Update after any build activity (per the
 workspace `frontend-standards.md`).
 
-_Last updated: 2026-07-07_
+_Last updated: 2026-09-23_
 
 ## Gates
 
 | Check | Command | Status |
 |-------|---------|--------|
 | Types | `npx tsc --noEmit` | ✅ clean |
-| Unit/RTL | `npx vitest run` | ✅ 22 passing |
+| Unit/RTL | `npx vitest run` | ✅ 60 passing |
 | Build | `npx vite build` | ✅ clean |
 | Dev | `npm run dev` | serves at `localhost:5173` |
 
@@ -25,6 +25,16 @@ Reworked the landing's "proof" zone into two dark-surface sections: the
 `_archive/responsive-preview/`.
 
 ## In flight
+
+**"How I work with AI" section on `/portfolio`** · branch `feat/how-i-work-with-ai`,
+PR #40, in review. Seven habits from the Workspace evidence docs
+(`docs/how-i-work-with-ai*.md`, outside this repo), each with an evidence
+figure that plays as one scroll sequence once the whole figure is in view. The
+opener pins while a minimap of the 1,168-line doc distills into the habit
+index. The doc-gate project card now draws live distillation stamps in place
+of its screenshot. Axe clean at 390/768/1280/1440 × light/dark ×
+motion/reduced; no horizontal overflow from 320px up. Line data regenerates
+with `scripts/gen-methodology-minimap.mjs`.
 
 **Victoria Grace testimonial** · branch `feat/victoria-testimonial`.
 Fourth testimonial (the flagship gallery client) — every gallery site now has a

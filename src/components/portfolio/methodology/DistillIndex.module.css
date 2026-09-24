@@ -1,0 +1,359 @@
+/* The opener. Outside the pinned block this is a plain intro plus an index of
+   links, which is what phones, reduced motion, and browsers without
+   scroll-driven animations get. The pinned block turns the index into a
+   sheet: the evidence doc's minimap fades out top to bottom while the line
+   count runs down, then the habits' headings leave their place in the
+   doc and gather into the index. */
+
+@property --lines {
+  syntax: "<integer>";
+  inherits: false;
+  initial-value: 0;
+}
+
+.distill {
+  /* Component-scoped tokens */
+  --font-size-method-heading: clamp(2.25rem, 4.5vw, 3.5rem); /* section display; between --font-size-h2 and the hero name */
+  --mark-width: 1.75rem;       /* index mark in the static list */
+  --mark-height: var(--spacing-3xs);
+  --tap-target: 2.75rem;       /* comfortable touch target (Fitts's law) */
+}
+
+.distill {
+  position: relative;
+}
+
+/* Where "Back to the seven habits" lands: the top of the section, or, when
+   pinned, the scroll offset where the index has finished assembling */
+.indexAnchor {
+  position: absolute;
+  top: 0;
+}
+
+.stage {
+  display: grid;
+  gap: var(--spacing-3xl);
+}
+
+@media (min-width: 56em) {
+  .stage {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    align-items: center;
+    gap: var(--spacing-5xl);
+  }
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  max-width: 34rem;
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: var(--font-size-method-heading);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.03em;
+  color: var(--color-text);
+  text-wrap: balance;
+}
+
+.lede {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--font-size-lead);
+  line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-serif-italic);
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+.framing {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-body);
+  color: var(--color-text);
+  text-wrap: pretty;
+}
+
+.count {
+  display: flex;
+  align-items: baseline;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-md);
+  font-family: var(--font-display);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+}
+
+.countNum {
+  /* --lines (the habit count) and --lines-from (the doc's line count) are set
+     inline from the content, so a regenerated doc can't leave them stale */
+  counter-reset: lines var(--lines);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-accent);
+}
+
+.countNum::before {
+  content: counter(lines);
+}
+
+.countUnits {
+  display: grid;
+}
+
+.unitLines,
+.unitHabits {
+  grid-area: 1 / 1;
+}
+
+.unitLines {
+  display: none;
+}
+
+.note {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+.minimap {
+  display: none;
+}
+
+.index {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xs);
+}
+
+.link {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  padding-block: var(--spacing-xs);
+  color: var(--color-text);
+  line-height: var(--line-height-tight);
+}
+
+.link:hover {
+  color: var(--color-accent);
+}
+
+.mark {
+  flex: none;
+  /* Centred on the first line, so a wrapped title keeps its mark on top */
+  margin-top: calc(0.5lh - var(--mark-height) / 2);
+  width: var(--mark-width);
+  height: var(--mark-height);
+  background: var(--color-accent);
+  transform-origin: left center;
+  /* scale, not transform: the pinned gather animation owns transform */
+  transition: scale var(--duration-fast) var(--ease-out-quint);
+}
+
+.link:hover .mark {
+  scale: 1.4 1;
+}
+
+.title {
+  font-size: var(--font-size-base);
+  text-wrap: pretty;
+}
+
+@media (pointer: coarse) {
+  .link {
+    min-height: var(--tap-target);
+    align-items: center;
+  }
+
+  .mark {
+    margin-top: 0;
+  }
+}
+
+/* =============================================================================
+   Pinned distillation
+   ========================================================================== */
+
+@media (prefers-reduced-motion: no-preference) and (min-width: 56em) and (min-height: 40em) {
+  @supports (animation-timeline: view()) {
+    .distill {
+      height: 220vh;
+      view-timeline: --distill block;
+    }
+
+    .indexAnchor {
+      top: auto;
+      bottom: 100vh;
+    }
+
+    .stage {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+
+    .unitLines {
+      display: block;
+    }
+
+    .sheet {
+      --mark-width: 6cqw; /* MARK_SHARE in DistillIndex.tsx */
+
+      position: relative;
+      /* fluid-ok: removing it collapses the sheet to 0 (all rows are
+         absolute); below a ~944px-tall viewport, 46rem alone overflows the
+         pinned 100vh stage */
+      height: min(78vh, 46rem);
+      container-type: size;
+    }
+
+    .minimap {
+      display: block;
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+      mask-image: linear-gradient(
+        to bottom,
+        color-mix(in srgb, var(--color-black) 10%, transparent) 42%,
+        var(--color-black) 58%
+      );
+      mask-size: 100% 250%;
+      mask-position: 0 0;
+    }
+
+    .minimap path {
+      fill: none;
+      stroke: var(--color-text-muted);
+      stroke-opacity: 0.55;
+      stroke-width: var(--border-width-thin);
+      vector-effect: non-scaling-stroke;
+    }
+
+    .index {
+      display: block;
+    }
+
+    .habit {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: calc(var(--y1) * 100%);
+      translate: 0 -50%;
+    }
+
+    .link {
+      align-items: center;
+      padding-block: var(--spacing-2xs);
+    }
+
+    .mark {
+      margin-top: 0;
+    }
+
+    .title {
+      /* Titles never wrap here: every row is pinned to its own line */
+      font-size: clamp(var(--font-size-xs), 3.4cqw, var(--font-size-lg));
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .minimap,
+    .countNum,
+    .unitLines,
+    .unitHabits,
+    .mark,
+    .title {
+      animation-timeline: --distill;
+      animation-fill-mode: both;
+      animation-timing-function: linear;
+    }
+
+    .minimap {
+      animation-name: erase;
+      animation-range: contain 5% contain 38%;
+    }
+
+    .countNum {
+      animation-name: count-down;
+      animation-range: contain 5% contain 38%;
+    }
+
+    .unitLines {
+      animation-name: wipe-away;
+      animation-range: contain 34% contain 40%;
+    }
+
+    .unitHabits {
+      animation-name: wipe-in;
+      animation-range: contain 38% contain 44%;
+    }
+
+    .mark {
+      animation-name: gather;
+      animation-timing-function: ease-in-out;
+      animation-range: contain 40% contain 64%;
+    }
+
+    .title {
+      animation-name: wipe-in;
+      animation-range: contain calc(55% + var(--y1) * 18%) contain calc(59% + var(--y1) * 18%);
+    }
+
+    /* A keyboard user tabbing in lands on the finished index, count included */
+    .stage:focus-within :is(.minimap, .countNum, .unitHabits, .mark, .title) {
+      animation: none;
+    }
+
+    .stage:focus-within .unitLines {
+      display: none;
+    }
+  }
+}
+
+@keyframes erase {
+  from {
+    mask-position: 0 100%;
+  }
+}
+
+@keyframes count-down {
+  from {
+    --lines: var(--lines-from);
+  }
+}
+
+@keyframes gather {
+  from {
+    transform: translate(calc(var(--x0) * 100cqw), calc((var(--y0) - var(--y1)) * 100cqh))
+      scale(var(--sx0), 0.5);
+  }
+}
+
+@keyframes wipe-in {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0);
+  }
+}
+
+@keyframes wipe-away {
+  from {
+    clip-path: inset(0);
+  }
+  to {
+    clip-path: inset(0 0 0 100%);
+  }
+}

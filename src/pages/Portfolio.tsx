@@ -9,6 +9,7 @@ import { ThemeToggle } from "../components/portfolio/ThemeToggle";
 import { projects } from "../content/projects";
 import { CaseStudyTeaser } from "../components/portfolio/CaseStudyTeaser";
 import { caseStudies } from "../content/caseStudies";
+import { Methodology } from "../components/portfolio/methodology/Methodology";
 
 export function Portfolio() {
   return (
@@ -43,6 +44,8 @@ export function Portfolio() {
             <ProjectCard key={project.slug} project={project} />
           ))}
         </section>
+
+        <Methodology />
 
         <Testimonials />
 

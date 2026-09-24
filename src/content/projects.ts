@@ -16,6 +16,8 @@ export type Project = {
   repoUrl: string;
   status?: "live" | "coming-soon";
   screenshot?: Screenshot;
+  /** A live figure drawn in place of a screenshot. */
+  visual?: "distillation-stamps";
 };
 
 export const projects: Project[] = [
@@ -101,7 +103,7 @@ export const projects: Project[] = [
     summary:
       "A pre-push and CI check that measures how far a document fell between its draft and its final commit, and blocks the ones that never fell.",
     problem:
-      "Most documentation standards are a sentence in a contributing guide asking for brevity, and nothing reads it. A repository I work in had a stated 50 per cent compression target, several agents writing documents into it, and no enforcement whatsoever. Asking a model to be concise gets you a document that sounds concise. Reading the result will not tell you whether anything was actually cut, because the draft it came from is gone. The one place that evidence survives is the commit history.",
+      "Most documentation standards are a sentence in a contributing guide asking for brevity, and nothing reads it. A repository I work in had a stated 50% compression target, several agents writing documents into it, and no enforcement whatsoever. Asking a model to be concise gets you a document that sounds concise. Reading the result will not tell you whether anything was actually cut, because the draft it came from is gone. The one place that evidence survives is the commit history.",
     built:
       "The gate walks every commit on the branch, counts the prose words of each gated document at each point, and treats that series as a curve. Prose means what a reader reads: fenced blocks, inline code, HTML comments and markdown syntax are all free, and a token has to carry a letter to count, so a table of numbers costs nothing while the words in its cells still do. A document passes on one of three grounds: it reached half its baseline, its curve flattened out, or it was too short to be worth gating. The baseline is the curve's highest point rather than its first, because the grammar pass the method prescribes adds words before it removes any, and billing the writer for that would punish following the instructions. Each distilled document carries its curve in a stamp on its first line, and the check resolves the revision named there back through the history, so a squash merge cannot orphan the evidence. A commit trailer clears a block, and every override is reported against the author who wrote it. One file, no dependencies, 70 tests.",
     tech: [
@@ -115,6 +117,7 @@ export const projects: Project[] = [
     liveLabel: "Runs in CI and pre-push",
     repoUrl: "https://github.com/JakemoCode/docs-distillation-gate",
     status: "live",
+    visual: "distillation-stamps",
   },
 ];
 
@@ -127,7 +130,6 @@ const screenshotOrientations: Record<string, Screenshot["orientation"]> = {
   "coffee-roast-tracker": "landscape",
   "baby-day-planner": "phone",
   "frontend-tools": "landscape",
-  "docs-distillation-gate": "landscape",
 };
 
 // Product screenshots describe themselves well enough from the project name.
@@ -135,8 +137,6 @@ const screenshotOrientations: Record<string, Screenshot["orientation"]> = {
 const screenshotAlts: Record<string, string> = {
   "frontend-tools":
     "The three commands set large: /ux-check, /design-audit and /tokenize, over the line “Three commands that audit a UI against named principles.”",
-  "docs-distillation-gate":
-    "A falling bar chart of one document's prose word count across five commits, with a dashed line at the 50 per cent pass mark. The last bar clears it. Below: 351 to 172 prose words, remove half of them or the document does not ship.",
 };
 
 function resolveScreenshot(slug: string, name: string): Screenshot | undefined {

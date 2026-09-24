@@ -40,6 +40,12 @@
 }
 
 :root {
+  /* Derived from the themed accent, so it resolves per theme without a
+     second dark-mode entry. A fill behind body text. Computed on :root, so a
+     surface that overrides --color-accent lower down (the landing's .page)
+     does not change it. */
+  --color-accent-tint: color-mix(in srgb, var(--color-accent) 14%, transparent);
+
   /* ---- Primitives (surface-agnostic) ---- */
   --color-white: #ffffff;
   --color-black: #000000;
@@ -97,6 +103,7 @@
   --spacing-5xl: 4rem;
   --spacing-6xl: 6rem;
   --spacing-7xl: 8rem;
+  --spacing-8xl: 12rem; /* the break between habits in "How I work with AI"; one step past 7xl */
 
   /* ---- Radius — px; corners are a fixed visual, not type-relative.
      (Perfect circles use border-radius: 50% directly.) ---- */
