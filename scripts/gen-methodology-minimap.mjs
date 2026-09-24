@@ -2,10 +2,11 @@
 // the "How I work with AI" section. The doc lives outside this repo, so the
 // line data is committed and this script is only rerun when the doc changes.
 //
-//   node scripts/gen-methodology-minimap.mjs ../docs/how-i-work-with-ai.md
+//   node scripts/gen-methodology-minimap.mjs [path/to/evidence-doc.md]
 import { readFileSync, writeFileSync } from "node:fs";
 
-// Paths resolve from this file, so the script works from any cwd.
+// The default doc and the output resolve from this file, so they work from any
+// cwd. A doc path passed as an argument resolves from the cwd.
 const src = process.argv[2] ?? new URL("../../docs/how-i-work-with-ai.md", import.meta.url);
 const dest = new URL("../src/content/methodologyMinimap.ts", import.meta.url);
 const lines = readFileSync(src, "utf8").replace(/\n$/, "").split("\n");

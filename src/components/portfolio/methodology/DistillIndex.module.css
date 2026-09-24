@@ -2,13 +2,13 @@
    links, which is what phones, reduced motion, and browsers without
    scroll-driven animations get. The pinned block turns the index into a
    sheet: the evidence doc's minimap fades out top to bottom while the line
-   count runs down, then the fifteen theme headings leave their place in the
+   count runs down, then the habits' headings leave their place in the
    doc and gather into the index. */
 
 @property --lines {
   syntax: "<integer>";
   inherits: false;
-  initial-value: 15;
+  initial-value: 0;
 }
 
 .distill {
@@ -23,7 +23,7 @@
   position: relative;
 }
 
-/* Where "Back to the fifteen habits" lands: the top of the section, or, when
+/* Where "Back to the seven habits" lands: the top of the section, or, when
    pinned, the scroll offset where the index has finished assembling */
 .indexAnchor {
   position: absolute;
@@ -128,14 +128,10 @@
   list-style: none;
   margin: 0;
   padding: 0;
-}
-
-.index {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-2xs);
 }
-
 
 .link {
   display: flex;
@@ -158,11 +154,12 @@
   height: var(--mark-height);
   background: var(--color-accent);
   transform-origin: left center;
-  transition: transform var(--duration-fast) var(--ease-out-quint);
+  /* scale, not transform: the pinned gather animation owns transform */
+  transition: scale var(--duration-fast) var(--ease-out-quint);
 }
 
 .link:hover .mark {
-  transform: scaleX(1.4);
+  scale: 1.4 1;
 }
 
 .title {
@@ -313,9 +310,13 @@
       animation-range: contain calc(55% + var(--y1) * 18%) contain calc(59% + var(--y1) * 18%);
     }
 
-    /* A keyboard user tabbing in lands on the finished index */
-    .sheet:focus-within :is(.minimap, .mark, .title) {
+    /* A keyboard user tabbing in lands on the finished index, count included */
+    .stage:focus-within :is(.minimap, .countNum, .unitHabits, .mark, .title) {
       animation: none;
+    }
+
+    .stage:focus-within .unitLines {
+      display: none;
     }
   }
 }

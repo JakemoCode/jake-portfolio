@@ -9,12 +9,11 @@ import styles from "./Figures.module.css";
 type PlateProps = {
   label: string;
   children: ReactNode;
-  className?: string;
 };
 
-function Plate({ label, children, className }: PlateProps) {
+function Plate({ label, children }: PlateProps) {
   return (
-    <figure className={`${styles.plate} ${className ?? ""}`}>
+    <figure className={styles.plate}>
       <figcaption className={styles.label}>{label}</figcaption>
       {children}
     </figure>

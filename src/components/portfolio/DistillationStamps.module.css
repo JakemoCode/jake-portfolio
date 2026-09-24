@@ -102,7 +102,10 @@
 /* Plays as one sequence once the whole figure is on screen (its bottom edge
    10% up the viewport), top document first, landing by about 45%. ease-out
    because a bar shrinking is spatial. */
-@media (prefers-reduced-motion: no-preference) {
+/* min-height: a figure only plays once it is fully in view, so on a screen
+   too short to show all of one (a landscape phone) it would play off screen.
+   Those screens get the finished figure, like the pinned opener does. */
+@media (prefers-reduced-motion: no-preference) and (min-height: 40em) {
   @supports (animation-timeline: view()) {
     .stamps {
       view-timeline: --stamps block;

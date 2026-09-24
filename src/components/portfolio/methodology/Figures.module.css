@@ -88,7 +88,7 @@
 
 .pass {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto 1fr;
   align-items: center;
   gap: var(--spacing-sm);
   font-size: var(--font-size-sm);
@@ -102,29 +102,8 @@
   background: var(--color-accent);
 }
 
-.passDate {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-2xs);
-  color: var(--color-text-muted);
-}
-
-.versions {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--spacing-xs) var(--spacing-lg);
-  padding-top: var(--spacing-md);
-  border-top: var(--border-width-thin) solid var(--color-border);
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-}
-
 .stamp {
   align-self: flex-end;
-}
-
-.stamp {
   padding: var(--spacing-2xs) var(--spacing-sm);
   font-family: var(--font-display);
   font-size: var(--font-size-md);
@@ -455,7 +434,6 @@
   color: var(--color-text-muted);
 }
 
-
 /* ---- Gauntlet: every check green, then an outside reviewer ---- */
 
 .checks {
@@ -517,7 +495,10 @@
    this one is still playing. --i orders the pieces inside a figure.
    ========================================================================== */
 
-@media (prefers-reduced-motion: no-preference) {
+/* min-height: a figure only plays once it is fully in view, so on a screen
+   too short to show all of one (a landscape phone) it would play off screen.
+   Those screens get the finished figure, like the pinned opener does. */
+@media (prefers-reduced-motion: no-preference) and (min-height: 40em) {
   @supports (animation-timeline: view()) {
     .plate {
       view-timeline: --fig block;

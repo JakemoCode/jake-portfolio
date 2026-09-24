@@ -20,10 +20,11 @@ function renderScreenshot(screenshot: Screenshot) {
 export function ProjectCard({ project }: Props) {
   const isComingSoon = project.status === "coming-soon";
   const { screenshot } = project;
+  const drawsStamps = project.visual === "distillation-stamps";
   const mediaClass = [
     styles.media,
     screenshot?.orientation === "phone" && styles.mediaPhone,
-    project.visual && styles.mediaFigure,
+    drawsStamps && styles.mediaFigure,
   ]
     .filter(Boolean)
     .join(" ");
@@ -31,7 +32,7 @@ export function ProjectCard({ project }: Props) {
   return (
     <article className={styles.card}>
       <div className={mediaClass}>
-        {project.visual === "distillation-stamps" ? (
+        {drawsStamps ? (
           <DistillationStamps />
         ) : screenshot ? (
           renderScreenshot(screenshot)
