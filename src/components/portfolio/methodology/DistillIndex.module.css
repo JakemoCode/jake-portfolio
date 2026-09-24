@@ -70,6 +70,13 @@
   text-wrap: pretty;
 }
 
+.framing {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-body);
+  color: var(--color-text);
+  text-wrap: pretty;
+}
+
 .count {
   display: flex;
   align-items: baseline;
@@ -117,8 +124,7 @@
   display: none;
 }
 
-.index,
-.habits {
+.index {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -127,16 +133,9 @@
 .index {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-2xs);
 }
 
-.act {
-  display: block;
-  margin-bottom: var(--spacing-2xs);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-muted);
-}
 
 .link {
   display: flex;
@@ -247,18 +246,12 @@
       display: block;
     }
 
-    .act,
     .habit {
       position: absolute;
       left: 0;
       right: 0;
       top: calc(var(--y1) * 100%);
       translate: 0 -50%;
-    }
-
-    .act {
-      margin: 0;
-      padding-left: calc(var(--mark-width) + var(--spacing-sm));
     }
 
     .link {
@@ -272,7 +265,7 @@
 
     .title {
       /* Titles never wrap here: every row is pinned to its own line */
-      font-size: clamp(var(--font-size-2xs), 3cqw, var(--font-size-base));
+      font-size: clamp(var(--font-size-xs), 3.4cqw, var(--font-size-lg));
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -283,8 +276,7 @@
     .unitLines,
     .unitHabits,
     .mark,
-    .title,
-    .act {
+    .title {
       animation-timeline: --distill;
       animation-fill-mode: both;
       animation-timing-function: linear;
@@ -316,14 +308,13 @@
       animation-range: contain 40% contain 64%;
     }
 
-    .title,
-    .act {
+    .title {
       animation-name: wipe-in;
       animation-range: contain calc(55% + var(--y1) * 18%) contain calc(59% + var(--y1) * 18%);
     }
 
     /* A keyboard user tabbing in lands on the finished index */
-    .sheet:focus-within :is(.minimap, .mark, .title, .act) {
+    .sheet:focus-within :is(.minimap, .mark, .title) {
       animation: none;
     }
   }

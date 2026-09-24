@@ -14,12 +14,8 @@
 .plate {
   /* Component-scoped tokens: fixed sizes with no global rung */
   --tick-size: 0.625rem;       /* review tick and rail dot; between --spacing-xs and --spacing-sm */
-  --cell-size: 2.25rem;        /* friction-ledger square; fits a two-digit id at --font-size-xs */
-  --bar-height: 0.625rem;      /* distillation bar track */
   --meter-step: 0.875rem;      /* one effort step */
-  --dot-size: 0.5rem;          /* pipeline dot */
   --split-gap: var(--spacing-xs);
-  --tap-target: 2.75rem;       /* comfortable touch target (Fitts's law) */
   --font-size-code-inline: 0.92em; /* mono sets large; optically matches the surrounding text */
 
   margin: 0;
@@ -31,6 +27,9 @@
   border: var(--border-width-thin) solid var(--color-border);
   border-radius: var(--radius-lg);
   container-type: inline-size;
+  /* Keeps a figure's scaled-up "before" state (the stamps) inside the plate.
+     clip, not hidden, so descendants' view() timelines still see the page. */
+  overflow: clip;
 }
 
 @media (min-width: 30em) {
@@ -59,8 +58,7 @@
   text-wrap: pretty;
 }
 
-.note code,
-.reply code {
+.note code {
   font-family: var(--font-mono);
   font-size: var(--font-size-code-inline);
 }
@@ -123,11 +121,10 @@
 }
 
 .stamp {
-  margin-left: auto;
+  align-self: flex-end;
 }
 
-.stamp,
-.established {
+.stamp {
   padding: var(--spacing-2xs) var(--spacing-sm);
   font-family: var(--font-display);
   font-size: var(--font-size-md);
@@ -136,237 +133,6 @@
   border: var(--border-width-thick) solid var(--color-accent);
   border-radius: var(--radius-sm);
   transform: rotate(-4deg);
-}
-
-/* ---- Authority: a ranked chain ---- */
-
-.chain {
-  position: relative;
-  list-style: none;
-  margin: 0;
-  padding: 0 0 0 var(--spacing-xl);
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-}
-
-/* The rail the ranks hang from */
-.chain::before {
-  content: "";
-  position: absolute;
-  top: var(--spacing-xs);
-  bottom: var(--spacing-xs);
-  left: calc(var(--tick-size) / 2 - var(--border-width-thin));
-  width: var(--border-width-thick);
-  background: var(--color-accent);
-  transform-origin: top;
-}
-
-.node {
-  position: relative;
-  font-family: var(--font-display);
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text);
-}
-
-.node::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: calc(-1 * var(--spacing-xl));
-  width: var(--tick-size);
-  height: var(--tick-size);
-  border-radius: 50%;
-  background: var(--color-accent);
-  border: var(--border-width-thick) solid var(--color-accent);
-  translate: 0 -50%;
-}
-
-.node:first-child {
-  color: var(--color-accent);
-}
-
-/* ---- Decisions: 49 questions answered ---- */
-
-.questions {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  /* 49 questions, a 7 by 7 square. minmax(0, …) lets cells shrink square on
-     phones narrower than the 7 full-size cells need */
-  grid-template-columns: repeat(7, minmax(0, var(--cell-size)));
-  gap: var(--spacing-2xs);
-}
-
-.question {
-  position: relative;
-  display: grid;
-  place-items: center;
-  aspect-ratio: 1;
-  font-family: var(--font-mono);
-  font-size: var(--font-size-2xs);
-  color: var(--color-text);
-  border: var(--border-width-thin) solid var(--color-border-strong);
-  border-radius: var(--radius-sm);
-}
-
-/* The answered fill is its own layer so the scroll animation is opacity only */
-.question::before {
-  content: "";
-  position: absolute;
-  inset: calc(-1 * var(--border-width-thin));
-  z-index: var(--z-base);
-  background: var(--color-accent-tint);
-  border: var(--border-width-thin) solid var(--color-accent);
-  border-radius: inherit;
-}
-
-.question span {
-  position: relative;
-  z-index: var(--z-raised);
-}
-
-.reply {
-  display: flex;
-  align-items: baseline;
-  gap: var(--spacing-sm);
-  font-size: var(--font-size-md);
-}
-
-.replyWho {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-2xs);
-  color: var(--color-text-muted);
-}
-
-/* ---- Friction: the ledger's fifteen entries ---- */
-
-.ledger {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-2xs);
-}
-
-.entry,
-.legend span::before {
-  border: var(--border-width-thin) solid var(--color-border-strong);
-  border-radius: var(--radius-sm);
-}
-
-.entry {
-  display: grid;
-  place-items: center;
-  width: var(--cell-size);
-  height: var(--cell-size);
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-}
-
-.entry[data-status="compiled"],
-.legend [data-status="compiled"]::before {
-  background: var(--color-accent);
-  border-color: var(--color-accent);
-  color: var(--color-on-accent);
-}
-
-.entry[data-status="in-progress"],
-.legend [data-status="in-progress"]::before {
-  background: var(--color-accent-tint);
-  border-color: var(--color-accent);
-  color: var(--color-text);
-}
-
-.entry[data-status="open"],
-.legend [data-status="open"]::before {
-  border-style: dashed;
-  border-color: var(--color-text-muted);
-}
-
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-2xs) var(--spacing-lg);
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-}
-
-.legend span {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--spacing-xs);
-}
-
-.legend span::before {
-  content: "";
-  width: var(--tick-size);
-  height: var(--tick-size);
-}
-
-/* ---- Provenance: a miss becomes a rule that remembers it ---- */
-
-.incident {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-2xs);
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-snug);
-  color: var(--color-text);
-}
-
-.incidentTag {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-2xs);
-  color: var(--color-accent);
-}
-
-.ruleFile {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
-  padding: var(--spacing-md);
-  background: var(--color-surface);
-  border-radius: var(--radius-md);
-}
-
-.ruleHeading {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text);
-}
-
-.ruleLines {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-2xs);
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-snug);
-  color: var(--color-text);
-}
-
-.ruleLines li {
-  display: flex;
-  gap: var(--spacing-xs);
-}
-
-.ruleLines li::before {
-  content: "-";
-  font-family: var(--font-mono);
-  color: var(--color-text-muted);
-}
-
-.established {
-  align-self: flex-end;
-  font-size: var(--font-size-base);
 }
 
 /* ---- Red: a red only counts when it fails on the behavior ---- */
@@ -460,9 +226,7 @@
 /* A drawn strike, painted as a background line rather than an absolute
    ::after: an inline background is sliced across line fragments, so the line
    still runs through the text, in reading order, when a struck phrase wraps */
-.taste s,
-.draft del,
-.uninstalled del {
+.taste s {
   --strike-width: var(--border-width-thick);
 
   text-decoration: none;
@@ -502,77 +266,6 @@
 .findingRow:first-child dd {
   font-weight: var(--font-weight-semibold);
   color: var(--color-accent);
-}
-
-/* ---- Distill: five documents, cut toward half ---- */
-
-.bars {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-}
-
-.bar {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  grid-template-areas:
-    "name value"
-    "track track"
-    "words words";
-  gap: var(--spacing-2xs) var(--spacing-sm);
-  font-size: var(--font-size-sm);
-}
-
-.barName {
-  grid-area: name;
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  color: var(--color-text);
-}
-
-.barValue {
-  grid-area: value;
-  font-variant-numeric: tabular-nums;
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-accent);
-}
-
-.barWords {
-  grid-area: words;
-  font-size: var(--font-size-2xs);
-  color: var(--color-text-muted);
-}
-
-.barTrack {
-  grid-area: track;
-  position: relative;
-  height: var(--bar-height);
-  background: var(--color-surface);
-  border-radius: var(--radius-pill);
-  overflow: clip;
-}
-
-/* The halfway mark the gate asks for */
-.barTrack::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: var(--border-width-thick);
-  background: var(--color-text-muted);
-}
-
-.barFill {
-  position: absolute;
-  inset: 0;
-  background: var(--color-accent);
-  border-radius: var(--radius-pill);
-  transform-origin: left;
-  transform: scaleX(var(--pct));
 }
 
 /* ---- Split: one work package, four PRs ---- */
@@ -699,545 +392,272 @@
   }
 }
 
-/* ---- Redline: corrections on a draft ---- */
+/* ---- Gate: an ask becomes a hook ---- */
 
-.draft {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.incident {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: var(--spacing-2xs);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  color: var(--color-text);
+}
+
+.incidentText {
   font-family: var(--font-serif);
-  font-size: var(--font-size-lg);
-  line-height: var(--line-height-snug);
-  color: var(--color-text);
-}
-
-.draft del {
-  color: var(--color-text-muted);
-}
-
-.draft ins {
-  text-decoration: underline var(--border-width-thick) var(--color-accent);
-  text-underline-offset: 0.2em;
-  color: var(--color-accent);
-}
-
-.margin {
-  display: inline-block;
-  margin-left: var(--spacing-sm);
   font-style: italic;
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-md);
   letter-spacing: var(--letter-spacing-serif-italic);
+}
+
+.incidentTag {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-2xs);
   color: var(--color-accent);
 }
 
-/* ---- Page: the same content as markdown, then as a page ---- */
-
-.page {
-  position: relative;
-  display: grid;
-  container-type: inline-size;
-  border-radius: var(--radius-md);
-  overflow: clip;
-}
-
-.markdown,
-.rendered {
-  grid-area: 1 / 1;
-  margin: 0;
-  padding: var(--spacing-lg);
-}
-
-.markdown {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-2xs);
-  line-height: var(--line-height-body);
-  color: var(--color-text-muted);
+.ruleFile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md);
   background: var(--color-surface);
-  white-space: pre-wrap;
-}
-
-.rendered {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-  background: var(--color-bg);
-  border: var(--border-width-thin) solid var(--color-border);
   border-radius: var(--radius-md);
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-snug);
-  color: var(--color-text);
 }
 
-.renderedTitle {
-  font-family: var(--font-display);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-tight);
-  color: var(--color-accent);
-}
-
-.renderedSteps {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
-  counter-reset: step;
-}
-
-.renderedSteps li {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  font-weight: var(--font-weight-medium);
-  counter-increment: step;
-}
-
-.renderedSteps li::before {
-  content: counter(step);
-  flex: none;
-  display: grid;
-  place-items: center;
-  width: var(--spacing-xl);
-  height: var(--spacing-xl);
-  border-radius: 50%;
-  background: var(--color-accent);
-  color: var(--color-on-accent);
-  font-size: var(--font-size-2xs);
-  font-weight: var(--font-weight-bold);
-}
-
-.renderedNote {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-}
-
-/* The wipe front, parked off the right edge once the page is revealed */
-.page::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: var(--border-width-thick);
-  background: var(--color-accent);
-  translate: 100cqw 0;
-}
-
-/* ---- Why: my own questions ---- */
-
-.asks {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: var(--spacing-xs);
-}
-
-.ask {
-  max-width: 34ch;
-  padding: var(--spacing-sm) var(--spacing-md);
-  background: var(--color-accent-tint);
-  border-radius: var(--radius-lg) var(--radius-lg) var(--radius-sm) var(--radius-lg);
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-snug);
-  color: var(--color-text);
-}
-
-.uninstalled {
+.ruleHeading {
   font-family: var(--font-mono);
   font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text);
 }
 
-.uninstalled del {
-  margin-right: var(--spacing-xs);
-}
-
-.uninstalled del {
-  --strike-width: var(--border-width-thin);
-}
-
-/* ---- Funnel: the pipeline narrows to one read ---- */
-
-.stages {
+.ruleLines {
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
-}
-
-.stage {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: var(--spacing-md);
+  gap: var(--spacing-2xs);
   font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
   color: var(--color-text);
 }
 
-.dots {
+.ruleLines li {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  gap: var(--spacing-3xs);
-  max-width: calc(12 * (var(--dot-size) + var(--spacing-3xs)));
+  gap: var(--spacing-xs);
 }
 
-.dot {
-  width: var(--dot-size);
-  height: var(--dot-size);
-  border-radius: 50%;
-  background: var(--color-text-muted);
+.ruleLines li::before {
+  content: "-";
+  font-family: var(--font-mono);
+  color: var(--color-text-muted);
 }
 
-.stage:last-child {
+
+/* ---- Gauntlet: every check green, then an outside reviewer ---- */
+
+.checks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.check {
+  display: grid;
+  grid-template-columns: 1.25em minmax(0, 1fr);
+  align-items: baseline;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  color: var(--color-text);
+}
+
+.checkMark {
+  font-family: var(--font-mono);
+  color: var(--color-text-muted);
+}
+
+.check:not([data-passed]) {
   font-weight: var(--font-weight-semibold);
   color: var(--color-accent);
 }
 
-.stage:last-child .dot {
-  --dot-size: var(--spacing-md);
-  background: var(--color-accent);
-}
-
-/* ---- Extract: screenshot to merged PR ---- */
-
-@property --clock-min {
-  syntax: "<integer>";
-  inherits: false;
-  initial-value: 1219; /* 20:19, minutes past midnight */
-}
-
-.clock {
-  display: flex;
-  align-items: baseline;
-  gap: var(--spacing-sm);
-  font-family: var(--font-display);
-  font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-none);
-  font-variant-numeric: tabular-nums;
+.check:not([data-passed]) .checkMark {
   color: var(--color-accent);
 }
 
-.clockTime::after {
-  content: "20:19";
-}
-
-.timeline {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
-}
-
-.tick {
-  display: grid;
-  grid-template-columns: 5.5em 1fr;
-  gap: var(--spacing-sm);
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-snug);
-  color: var(--color-text);
-}
-
-.tickWhen {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  color: var(--color-text-muted);
-}
-
-.repos {
-  list-style: none;
-  margin: 0;
-  padding: var(--spacing-md) 0 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-sm);
+/* A rule between the green run and what the outside reviewer found */
+.check[data-passed] + .check:not([data-passed]) {
+  margin-top: var(--spacing-xs);
+  padding-top: var(--spacing-sm);
   border-top: var(--border-width-thin) solid var(--color-border);
 }
 
-.repos a {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--tap-target);
-  padding: 0 var(--spacing-lg);
-  font-family: var(--font-mono);
-  font-size: var(--font-size-xs);
-  color: var(--color-accent);
-  border: var(--border-width-thin) solid var(--color-border-strong);
-  border-radius: var(--radius-pill);
-  transition:
-    border-color var(--duration-fast) ease,
-    background-color var(--duration-fast) ease;
-}
-
-.repos a:hover {
-  border-color: var(--color-accent);
-  background: var(--color-surface);
-}
-
-.repos a:focus-visible {
-  border-radius: var(--radius-pill);
+.lesson {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-serif-italic);
+  color: var(--color-text);
+  text-wrap: pretty;
 }
 
 /* =============================================================================
-   Scroll-scrubbed "before" states. Ranges are measured from each element's
-   own position: "cover 10vh" is the moment its top edge is 10% of the
-   viewport up from the bottom. Pseudo-elements, and inline pieces that ride
-   their line, use --self, a timeline named on the element that owns them.
-   --i nudges siblings that share a row so they still read left to right.
+   Scroll-scrubbed "before" states. Each figure plays as one sequence on its
+   own --fig timeline, and only once the whole figure is on screen: "contain
+   10vh" is the moment its bottom edge is 10% of the viewport up from the
+   bottom, and every sequence lands by "contain 46vh". Because a figure can't
+   start until it is fully in view, the next figure down never starts while
+   this one is still playing. --i orders the pieces inside a figure.
    ========================================================================== */
 
 @media (prefers-reduced-motion: no-preference) {
   @supports (animation-timeline: view()) {
-    .chain,
-    .node,
-    .question,
-    .meterStep,
-    .taste,
-    .run,
-    .draft li,
-    .uninstalled,
-    .page {
-      view-timeline: --self block;
+    .plate {
+      view-timeline: --fig block;
     }
 
-    /* Harden: each review pass is stamped in, then the freeze */
+    :where(.plate) :where(
+        .pass,
+        .passTick,
+        .stamp,
+        .taste s,
+        .findingRow,
+        .run,
+        .run s,
+        .verdict,
+        .kinds li,
+        .whole,
+        .part,
+        .part code,
+        .incident,
+        .ruleHeading,
+        .ruleLines li,
+        .check,
+        .lesson
+      ),
+    /* Pseudo-elements can't sit inside :where(), so the meter fill is listed apart */
+    :where(.plate) .meterStep[data-on]::before {
+      animation-timeline: --fig;
+      animation-fill-mode: both;
+      animation-timing-function: linear;
+    }
+
+    /* Harden: each review lens is stamped in, then the freeze */
+    .pass,
+    .passTick {
+      animation-range: contain calc(10vh + var(--i) * 4vh) contain calc(18vh + var(--i) * 4vh);
+    }
+
     .pass {
-      animation: wipe-in linear both;
-      animation-timeline: view();
-      animation-range: cover 10vh cover 40vh;
+      animation-name: wipe-in;
     }
 
     .passTick {
-      animation: pop var(--ease-out-quint) both;
-      animation-timeline: view();
-      animation-range: cover 10vh cover 30vh;
+      animation-name: pop;
+      animation-timing-function: var(--ease-out-quint);
     }
 
-    .stamp,
-    .established {
-      animation: stamp var(--ease-out-quint) both;
-      animation-timeline: view();
-      animation-range: cover 20vh cover 50vh;
-    }
-
-    /* Authority: the rail draws down and each rank lights as it passes */
-    .chain::before {
-      animation: draw-down linear both;
-      animation-timeline: --self;
-      animation-range: cover 10vh cover 55vh;
-    }
-
-    .node {
-      animation: rank linear both;
-      animation-timeline: view();
-      animation-range: cover 10vh cover 40vh;
-    }
-
-    .node::before {
-      animation: dot-fill linear both;
-      animation-timeline: --self;
-      animation-range: cover 10vh cover 40vh;
-    }
-
-    /* Decisions: questions get answered row by row, left to right */
-    .question::before {
-      animation: fade-in linear both;
-      animation-timeline: --self;
-      animation-range: cover calc(10vh + var(--i) * 2vh) cover calc(25vh + var(--i) * 2vh);
-    }
-
-    .reply {
-      animation: wipe-in linear both;
-      animation-timeline: view();
-      animation-range: cover 10vh cover 40vh;
-    }
-
-    /* Friction: entries resolve to their status in id order. Stepped: a
-       cross-fade from outline to solid passes through low-contrast
-       mid-tones, so each entry flips instead */
-    .entry {
-      animation: resolve step-end both;
-      animation-timeline: view();
-      animation-range: cover calc(10vh + var(--i) * 2.5vh) cover calc(11vh + var(--i) * 2.5vh);
-    }
-
-    /* Provenance: the miss, then the rule it produced, then its date */
-    .incident {
-      animation: wipe-in linear both;
-      animation-timeline: view();
-      animation-range: cover 10vh cover 35vh;
-    }
-
-    .ruleHeading,
-    .ruleLines li {
-      animation: wipe-in linear both;
-      animation-timeline: view();
-      animation-range: cover 20vh cover 45vh;
-    }
-
-    /* Red: the import error is struck, the real red and the green land */
-    .run {
-      animation: wipe-in linear both;
-      animation-timeline: view();
-      animation-range: cover 10vh cover 30vh;
-    }
-
-    .run s {
-      animation: strike-text linear both;
-      animation-timeline: --self;
-      animation-range: cover 30vh cover 42vh;
-    }
-
-    .verdict {
-      animation: wipe-in linear both;
-      animation-timeline: --self;
-      animation-range: cover 30vh cover 50vh;
-    }
-
-    .kinds li {
-      animation: wipe-in linear both;
-      animation-timeline: view();
-      animation-range: cover calc(10vh + var(--i) * 4vh) cover calc(25vh + var(--i) * 4vh);
+    .stamp {
+      animation-name: stamp;
+      animation-timing-function: var(--ease-out-quint);
+      animation-range: contain 34vh contain 44vh;
     }
 
     /* Principle: the taste call is struck, the finding assembles */
     .taste s {
-      animation: strike linear both;
-      animation-timeline: --self;
-      animation-range: cover 10vh cover 30vh;
+      animation-name: strike;
+      animation-range: contain 10vh contain 20vh;
     }
 
     .findingRow {
-      animation: wipe-in linear both;
-      animation-timeline: view();
-      animation-range: cover 15vh cover 45vh;
+      animation-name: wipe-in;
+      animation-range: contain calc(20vh + var(--i) * 6vh) contain calc(26vh + var(--i) * 6vh);
     }
 
-    /* Distill: every document starts whole and gets cut */
-    .barFill {
-      animation: distill var(--ease-out-quint) both;
-      animation-timeline: view();
-      animation-range: cover 10vh cover 45vh;
+    /* Red: each run lands in order; the import error is struck */
+    .run {
+      animation-name: wipe-in;
+      animation-range: contain calc(10vh + var(--i) * 8vh) contain calc(15vh + var(--i) * 8vh);
+    }
+
+    .run s {
+      animation-name: strike-text;
+      animation-range: contain 15vh contain 19vh;
+    }
+
+    .verdict {
+      animation-name: wipe-in;
+      animation-range: contain calc(14vh + var(--i) * 8vh) contain calc(19vh + var(--i) * 8vh);
+    }
+
+    .kinds li {
+      animation-name: wipe-in;
+      animation-range: contain calc(36vh + var(--i) * 2vh) contain calc(40vh + var(--i) * 2vh);
     }
 
     /* Split: one block breaks into four PRs */
     .whole {
-      animation: wipe-away linear both;
-      animation-timeline: view();
-      animation-range: cover 15vh cover 28vh;
+      animation-name: wipe-away;
+      animation-range: contain 12vh contain 20vh;
     }
 
     .part {
-      animation: split var(--ease-out-quint) both;
-      animation-timeline: view();
-      animation-range: cover 15vh cover 45vh;
+      animation-name: split;
+      animation-timing-function: var(--ease-out-quint);
+      animation-range: contain 12vh contain 32vh;
     }
 
     .part code {
-      animation: wipe-in linear both;
-      animation-timeline: view();
-      animation-range: cover 30vh cover 50vh;
-    }
-
-    /* Budget: effort meters fill left to right */
-    .meterStep[data-on]::before {
-      animation: pop var(--ease-out-quint) both;
-      animation-timeline: --self;
-      animation-range: cover calc(10vh + var(--i) * 3vh) cover calc(22vh + var(--i) * 3vh);
-    }
-
-    /* Redline: strike the claim, then write the correction */
-    .draft del {
-      animation: strike linear both;
-      animation-timeline: --self;
-      animation-range: cover 10vh cover 28vh;
-    }
-
-    .draft ins,
-    .margin {
-      animation: wipe-in linear both;
-      animation-timeline: --self;
-      animation-range: cover 28vh cover 48vh;
-    }
-
-    /* Page: the rendered page wipes over its own markdown */
-    .rendered,
-    .page::after {
-      animation-timeline: --self;
-      animation-range: cover 10vh cover 50vh;
-    }
-
-    .rendered {
       animation-name: wipe-in;
-      animation-timing-function: linear;
-      animation-fill-mode: both;
+      animation-range: contain 26vh contain 38vh;
     }
 
-    .page::after {
-      animation-name: front;
-      animation-timing-function: linear;
-      animation-fill-mode: both;
+    /* Gate: the ask, then the guardrail it became */
+    .incident {
+      animation-name: wipe-in;
+      animation-range: contain 10vh contain 20vh;
     }
 
-    /* Why: questions arrive like messages */
-    .ask {
-      animation: message var(--ease-out-quint) both;
-      animation-timeline: view();
-      animation-range: cover 10vh cover 40vh;
+    .ruleHeading {
+      animation-name: wipe-in;
+      animation-range: contain 22vh contain 28vh;
     }
 
-    .uninstalled del {
-      animation: strike linear both;
-      animation-timeline: --self;
-      animation-range: cover 15vh cover 40vh;
+    .ruleLines li {
+      animation-name: wipe-in;
+      animation-range: contain calc(28vh + var(--i) * 7vh) contain calc(35vh + var(--i) * 7vh);
     }
 
-    /* Funnel: each stage keeps fewer */
-    .stage {
-      animation: wipe-in linear both;
-      animation-timeline: view();
-      animation-range: cover 10vh cover 35vh;
+    /* Gauntlet: the checks go green one by one, then the two that got through */
+    .check {
+      animation-name: wipe-in;
+      animation-range: contain calc(10vh + var(--i) * 3.5vh) contain calc(14vh + var(--i) * 3.5vh);
     }
 
-    .dot {
-      animation: pop var(--ease-out-quint) both;
-      animation-timeline: view();
-      animation-range: cover 15vh cover 40vh;
+    .check:not([data-passed]) {
+      animation-name: stamp-in;
+      animation-timing-function: var(--ease-out-quint);
+      animation-range: contain calc(14vh + var(--i) * 3.5vh) contain calc(20vh + var(--i) * 3.5vh);
     }
 
-    /* Extract: the clock runs from the screenshot to the merge */
-    .tick {
-      animation: wipe-in linear both;
-      animation-timeline: view();
-      animation-range: cover 10vh cover 35vh;
+    .lesson {
+      animation-name: wipe-in;
+      animation-range: contain 38vh contain 46vh;
     }
 
-    @supports (width: round(down, 1px, 1px)) {
-      .clockTime {
-        counter-reset:
-          hh round(down, var(--clock-min) / 60, 1)
-          mm mod(var(--clock-min), 60);
-        animation: clock linear both;
-        animation-timeline: view();
-        animation-range: cover 10vh cover 50vh;
-      }
-
-      .clockTime::after {
-        content: counter(hh) ":" counter(mm, decimal-leading-zero);
-      }
+    /* Budget: meters fill row by row, left to right */
+    .meterStep[data-on]::before {
+      animation-name: pop;
+      animation-timing-function: var(--ease-out-quint);
+      animation-range: contain calc(10vh + var(--row) * 5vh + var(--i) * 1vh)
+        contain calc(14vh + var(--row) * 5vh + var(--i) * 1vh);
     }
   }
 }
@@ -1276,31 +696,6 @@
   }
 }
 
-@keyframes draw-down {
-  from {
-    transform: scaleY(0);
-  }
-}
-
-@keyframes rank {
-  from {
-    color: var(--color-text-muted);
-  }
-}
-
-@keyframes dot-fill {
-  from {
-    background: var(--color-bg-elevated);
-    border-color: var(--color-border-strong);
-  }
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-}
-
 @keyframes strike-text {
   from {
     text-decoration-color: transparent;
@@ -1313,52 +708,18 @@
   }
 }
 
-@keyframes resolve {
-  from {
-    background: transparent;
-    border-color: var(--color-border-strong);
-    border-style: dashed;
-    color: var(--color-text-muted);
-  }
-}
-
-@keyframes distill {
-  from {
-    transform: scaleX(1);
-  }
-}
-
 @keyframes split {
   from {
     transform: translateX(calc((1.5 - var(--i)) * var(--split-gap)));
   }
 }
 
-@keyframes front {
+@keyframes stamp-in {
   from {
-    translate: 0 0;
+    transform: scale(1.15);
+    clip-path: inset(0 100% 0 0);
   }
-  95% {
-    opacity: 1;
-  }
-  to {
-    translate: 100cqw 0;
-    opacity: 0;
-  }
-}
-
-@keyframes message {
-  from {
-    transform: translateY(var(--spacing-md));
-    clip-path: inset(100% 0 0 0 round var(--radius-lg));
-  }
-  to {
-    clip-path: inset(0 round var(--radius-lg));
-  }
-}
-
-@keyframes clock {
-  from {
-    --clock-min: 1051; /* 17:31, when the screenshot was pasted */
+  40% {
+    clip-path: inset(0);
   }
 }

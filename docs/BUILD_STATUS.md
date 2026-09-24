@@ -27,12 +27,14 @@ Reworked the landing's "proof" zone into two dark-surface sections: the
 ## In flight
 
 **"How I work with AI" section on `/portfolio`** · branch `feat/how-i-work-with-ai`,
-in review. Fifteen habits from the Workspace evidence doc
-(`docs/how-i-work-with-ai.md`, outside this repo), in four acts, each with a
-scroll-scrubbed evidence figure. The opener pins while a minimap of the
-1,168-line doc distills into the habit index. Axe clean at 390/768/1280/1440 ×
-light/dark × motion/reduced, scanned at six scroll depths; `/ux-check` findings
-applied. Line data regenerates with `scripts/gen-methodology-minimap.mjs`.
+PR #40, in review. Seven habits from the Workspace evidence docs
+(`docs/how-i-work-with-ai*.md`, outside this repo), each with an evidence
+figure that plays as one scroll sequence once the whole figure is in view. The
+opener pins while a minimap of the 1,168-line doc distills into the habit
+index. The doc-gate project card now draws live distillation stamps in place
+of its screenshot. Axe clean at 390/768/1280/1440 × light/dark ×
+motion/reduced; no horizontal overflow from 320px up. Line data regenerates
+with `scripts/gen-methodology-minimap.mjs`.
 
 **Victoria Grace testimonial** · branch `feat/victoria-testimonial`.
 Fourth testimonial (the flagship gallery client) — every gallery site now has a

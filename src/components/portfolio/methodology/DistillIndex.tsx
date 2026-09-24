@@ -1,12 +1,16 @@
 // The section opener: the evidence doc drawn as a minimap, distilled on scroll
-// into the index of the fifteen habits. Markup is the finished index; the
+// into the index of the habits. Markup is the finished index; the
 // pinned, scroll-scrubbed distillation lives entirely in the stylesheet.
 import type { CSSProperties } from "react";
-import { evidenceLineCount, methodologyActs } from "../../../content/methodology";
+import {
+  evidenceLineCount,
+  methodologyHabits,
+  methodologyIntro,
+} from "../../../content/methodology";
 import {
   minimapLengths,
+  minimapHeadingLines,
   minimapStarts,
-  minimapThemeLines,
 } from "../../../content/methodologyMinimap";
 import styles from "./DistillIndex.module.css";
 
@@ -41,35 +45,22 @@ const minimapPath = minimapLengths
   })
   .join("");
 
-const habitCount = methodologyActs.reduce((habits, act) => habits + act.themes.length, 0);
-// Rows in the finished index: one per act label, one per habit.
-const rowCount = methodologyActs.length + habitCount;
+const habitCount = methodologyHabits.length;
 
-const groups = (() => {
-  let row = 0;
-  return methodologyActs.map((act) => {
-    const actRow = row++;
-    return {
-      act,
-      style: { "--y1": (actRow + 0.5) / rowCount } as CSSProperties,
-      habits: act.themes.map((theme) => {
-        const habitRow = row++;
-        const docLine = minimapThemeLines[theme.docNumber] ?? 0;
-        const docLength = Math.min(minimapLengths[docLine] ?? 0, COLUMNS);
-        const { x, y } = place(docLine);
-        return {
-          theme,
-          style: {
-            "--y1": (habitRow + 0.5) / rowCount,
-            "--x0": x / 100,
-            "--y0": y / LINES_PER_COLUMN,
-            "--sx0": (docLength * charWidth) / 100 / MARK_SHARE,
-          } as CSSProperties,
-        };
-      }),
-    };
-  });
-})();
+const rows = methodologyHabits.map((habit, row) => {
+  const docLine = minimapHeadingLines[habit.docHeading] ?? 0;
+  const docLength = Math.min(minimapLengths[docLine] ?? 0, COLUMNS);
+  const { x, y } = place(docLine);
+  return {
+    habit,
+    style: {
+      "--y1": (row + 0.5) / habitCount,
+      "--x0": x / 100,
+      "--y0": y / LINES_PER_COLUMN,
+      "--sx0": (docLength * charWidth) / 100 / MARK_SHARE,
+    } as CSSProperties,
+  };
+});
 
 export function DistillIndex() {
   return (
@@ -81,8 +72,10 @@ export function DistillIndex() {
             How I work with AI
           </h2>
           <p className={styles.lede}>
-            Fifteen habits, pulled from a month of my own Claude Code sessions.
+            Seven habits, pulled from my own Claude Code sessions and the rules I've built
+            around them.
           </p>
+          <p className={styles.framing}>{methodologyIntro}</p>
           <p className={styles.count} aria-hidden="true">
             <span
               className={styles.countNum}
@@ -99,7 +92,7 @@ export function DistillIndex() {
           </p>
         </div>
 
-        <nav className={styles.sheet} aria-label="The fifteen habits">
+        <nav className={styles.sheet} aria-label="The seven habits">
           <svg
             className={styles.minimap}
             viewBox={`0 0 100 ${LINES_PER_COLUMN}`}
@@ -110,21 +103,12 @@ export function DistillIndex() {
             <path d={minimapPath} />
           </svg>
           <ol className={styles.index}>
-            {groups.map(({ act, style, habits }) => (
-              <li key={act.slug}>
-                <span className={styles.act} style={style}>
-                  {act.title}
-                </span>
-                <ol className={styles.habits}>
-                  {habits.map(({ theme, style: habitStyle }) => (
-                    <li key={theme.slug} className={styles.habit} style={habitStyle}>
-                      <a href={`#${theme.slug}`} className={styles.link}>
-                        <span className={styles.mark} aria-hidden="true" />
-                        <span className={styles.title}>{theme.title}</span>
-                      </a>
-                    </li>
-                  ))}
-                </ol>
+            {rows.map(({ habit, style }) => (
+              <li key={habit.slug} className={styles.habit} style={style}>
+                <a href={`#${habit.slug}`} className={styles.link}>
+                  <span className={styles.mark} aria-hidden="true" />
+                  <span className={styles.title}>{habit.title}</span>
+                </a>
               </li>
             ))}
           </ol>

@@ -1,50 +1,32 @@
 .section {
+  /* Component-scoped token */
+  --tap-target: 2.75rem; /* comfortable touch target (Fitts's law) */
+
   display: flex;
   flex-direction: column;
   gap: var(--spacing-6xl);
 }
 
-.act {
+.habits {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-5xl);
+  gap: var(--spacing-7xl);
 }
 
-.actHeader {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--spacing-xs) var(--spacing-xl);
-  padding-top: var(--spacing-xl);
-  border-top: var(--border-width-thin) solid var(--color-border-strong);
+@media (min-width: 48em) {
+  .habits {
+    gap: var(--spacing-8xl);
+  }
 }
 
-.actTitle {
-  font-family: var(--font-display);
-  font-size: var(--font-size-h2);
-  font-weight: var(--font-weight-semibold);
-  letter-spacing: -0.025em;
-  color: var(--color-text);
-  text-wrap: balance;
-}
-
-.actLine {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: var(--font-size-lead);
-  letter-spacing: var(--letter-spacing-serif-italic);
-  color: var(--color-text-muted);
-  text-wrap: pretty;
-}
-
-.theme {
+.habit {
   display: grid;
   gap: var(--spacing-2xl);
   scroll-margin-top: var(--spacing-5xl);
 }
 
 @media (min-width: 56em) {
-  .theme {
+  .habit {
     grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
     align-items: start;
     gap: var(--spacing-5xl);
@@ -75,15 +57,8 @@
 }
 
 .quote {
-  margin: var(--spacing-xs) 0 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
-}
-
-.quote blockquote {
   position: relative;
-  margin: 0;
+  margin: var(--spacing-xs) 0 0;
   font-family: var(--font-serif);
   font-style: italic;
   font-size: var(--font-size-md);
@@ -94,7 +69,7 @@
 }
 
 /* Hanging open-quote, so the quote's text aligns with the body above it */
-.quote blockquote::before {
+.quote::before {
   content: "\201C";
   position: absolute;
   right: 100%;
@@ -102,6 +77,55 @@
   font-size: var(--font-size-xl);
   line-height: var(--line-height-none);
   color: var(--color-accent);
+}
+
+.closing {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  padding-top: var(--spacing-2xl);
+  border-top: var(--border-width-thin) solid var(--color-border-strong);
+}
+
+.closingLine {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: var(--font-size-lead);
+  letter-spacing: var(--letter-spacing-serif-italic);
+  color: var(--color-text-muted);
+}
+
+.tools {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.tools a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-target);
+  padding: 0 var(--spacing-lg);
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-accent);
+  border: var(--border-width-thin) solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  transition:
+    border-color var(--duration-fast) ease,
+    background-color var(--duration-fast) ease;
+}
+
+.tools a:hover {
+  border-color: var(--color-accent);
+  background: var(--color-surface);
+}
+
+.tools a:focus-visible {
+  border-radius: var(--radius-pill);
 }
 
 .backLink {
@@ -114,8 +138,14 @@
   min-height: var(--spacing-3xl);
 }
 
-.source {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-2xs);
-  color: var(--color-text-muted);
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: clip;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }

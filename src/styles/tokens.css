@@ -103,6 +103,7 @@
   --spacing-5xl: 4rem;
   --spacing-6xl: 6rem;
   --spacing-7xl: 8rem;
+  --spacing-8xl: 12rem; /* the break between habits in "How I work with AI"; one step past 7xl */
 
   /* ---- Radius — px; corners are a fixed visual, not type-relative.
      (Perfect circles use border-radius: 50% directly.) ---- */

@@ -1,39 +1,36 @@
 import { cleanup, render, screen, within } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vitest";
-import { methodologyActs } from "../../../content/methodology";
-import { minimapThemeLines } from "../../../content/methodologyMinimap";
+import { methodologyHabits } from "../../../content/methodology";
+import { minimapHeadingLines } from "../../../content/methodologyMinimap";
 import { Methodology } from "./Methodology";
-
-const themes = methodologyActs.flatMap((act) => act.themes);
 
 afterEach(cleanup);
 
 describe("Methodology", () => {
-  it("covers each of the fifteen themes in the evidence doc exactly once", () => {
-    const numbers = themes.map((theme) => theme.docNumber).sort((a, b) => a - b);
-    expect(numbers).toEqual(Array.from({ length: 15 }, (_, i) => i + 1));
-    for (const n of numbers) expect(minimapThemeLines[n]).toBeTypeOf("number");
+  it("places every habit's mark on its own heading in the evidence doc", () => {
+    const headings = methodologyHabits.map((habit) => habit.docHeading);
+    for (const heading of headings) expect(minimapHeadingLines[heading], heading).toBeTypeOf("number");
+    expect(new Set(headings).size).toBe(headings.length);
   });
 
   it("links every index entry to a habit article on the page", () => {
     const { container } = render(<Methodology />);
-    const index = screen.getByRole("navigation", { name: "The fifteen habits" });
+    const index = screen.getByRole("navigation", { name: "The seven habits" });
     const links = within(index).getAllByRole("link");
-    expect(links).toHaveLength(15);
+    expect(links).toHaveLength(methodologyHabits.length);
     for (const link of links) {
       const id = link.getAttribute("href")!.slice(1);
       const article = container.querySelector(`article#${id}`);
       expect(article, id).not.toBeNull();
-      expect(within(article as HTMLElement).getByRole("heading", { level: 4 }).textContent).toBe(
+      expect(within(article as HTMLElement).getByRole("heading", { level: 3 }).textContent).toBe(
         link.textContent,
       );
     }
   });
 
-  it("keeps the heading order section, act, habit", () => {
+  it("keeps the heading order section, then habit", () => {
     render(<Methodology />);
     expect(screen.getByRole("heading", { level: 2, name: "How I work with AI" })).toBeTruthy();
-    expect(screen.getAllByRole("heading", { level: 3 })).toHaveLength(methodologyActs.length);
-    expect(screen.getAllByRole("heading", { level: 4 })).toHaveLength(15);
+    expect(screen.getAllByRole("heading", { level: 3 })).toHaveLength(methodologyHabits.length);
   });
 });
