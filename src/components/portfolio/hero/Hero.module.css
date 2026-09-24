@@ -1,0 +1,226 @@
+/* Component-scoped tokens: clamp endpoints outside the global font-size scale */
+.hero {
+  --font-size-hero-name-min: 2.75rem; /* above --font-size-xl */
+  --font-size-hero-name-max: 5rem;
+  --font-size-title-max: 1.625rem; /* between --font-size-xl and the h3 max */
+  --tap-target: 2.75rem; /* comfortable touch target (Fitts's law) */
+  --hero-measure: 46rem; /* the name and title column */
+  --scrim-strong: color-mix(in srgb, var(--color-hero-bg) 92%, transparent);
+  --scrim-mid: color-mix(in srgb, var(--color-hero-bg) 75%, transparent);
+  --scrim-clear: color-mix(in srgb, var(--color-hero-bg) 0%, transparent);
+
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  /* The band fills the first screen exactly. svh, not vh: on a phone, vh is
+     measured with the toolbars hidden, so it runs taller than the screen at
+     first paint and pushes the scroll cue below the fold. It also stays put
+     when the toolbar collapses, so the field isn't reseeded mid-scroll. */
+  min-height: 100svh;
+  overflow: clip;
+  background: var(--color-hero-bg);
+  color: var(--color-hero-ink);
+}
+
+/* Keeps the text column at AA over any frame the field can draw */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, var(--scrim-strong) 0%, var(--scrim-mid) 38%, var(--scrim-clear) 70%),
+    linear-gradient(0deg, var(--scrim-mid), var(--scrim-clear) 45%);
+  pointer-events: none;
+}
+
+@media (max-width: 48em) {
+  /* The text runs the full width on phones, so the scrim rises from the bottom */
+  .hero::after {
+    background: linear-gradient(0deg, var(--scrim-strong) 0%, var(--scrim-mid) 55%, var(--scrim-clear) 90%);
+  }
+}
+
+.field {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.inner {
+  position: relative;
+  z-index: var(--z-raised);
+  align-self: end;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  max-width: var(--hero-measure);
+  padding: var(--spacing-6xl) var(--gutter) var(--spacing-4xl);
+}
+
+.name {
+  font-family: var(--font-display);
+  font-size: clamp(var(--font-size-hero-name-min), 7vw, var(--font-size-hero-name-max));
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-none);
+  letter-spacing: -0.035em;
+}
+
+.title {
+  max-width: 36ch;
+  font-family: var(--font-serif);
+  font-size: clamp(var(--font-size-lg), 2.4vw, var(--font-size-title-max));
+  font-style: italic;
+  line-height: var(--line-height-snug);
+  letter-spacing: var(--letter-spacing-serif-italic);
+  color: var(--color-hero-ink-muted);
+  text-wrap: pretty;
+}
+
+.availability {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-body);
+}
+
+/* A status light, held still: it reports a state, so it doesn't pulse */
+.availability::before {
+  content: "";
+  align-self: start;
+  margin-top: calc((1lh - var(--spacing-xs)) / 2); /* centered on the first line */
+  width: var(--spacing-xs);
+  height: var(--spacing-xs);
+  border-radius: 50%;
+  background: var(--color-hero-signal);
+  box-shadow: 0 0 0 var(--spacing-3xs) color-mix(in srgb, var(--color-hero-signal) 25%, transparent);
+}
+
+.status {
+  color: var(--color-hero-ink);
+}
+
+/* Every fact carries a leading separator. The inner row is pulled left by one
+   separator and the outer box clips it, hiding whichever dot starts a line, so
+   a dot only ever sits between two facts. */
+.detail {
+  grid-column: 2;
+  overflow: clip;
+  color: var(--color-hero-ink-muted);
+}
+
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: calc(-1 * var(--spacing-lg));
+}
+
+.fact {
+  white-space: nowrap;
+}
+
+.fact::before {
+  content: "·";
+  display: inline-block;
+  width: var(--spacing-lg);
+  text-align: center;
+}
+
+.links {
+  list-style: none;
+  margin: var(--spacing-xs) 0 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs) var(--spacing-2xl);
+}
+
+.links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap-target);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-hero-signal);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--color-hero-signal) 45%, transparent);
+  text-underline-offset: 0.3em;
+  transition: text-decoration-color var(--duration-fast) ease;
+}
+
+.links a:hover {
+  text-decoration-color: var(--color-hero-signal);
+}
+
+/* The one filled control in the band: the thing a recruiter came for */
+.links .resume {
+  gap: var(--spacing-xs);
+  padding: 0 var(--spacing-lg);
+  color: var(--color-hero-bg);
+  background: var(--color-hero-signal);
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  transition: background-color var(--duration-fast) ease;
+}
+
+.links .resume:hover {
+  background: var(--color-hero-ink);
+}
+
+.fileType {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-3xs);
+  font-weight: var(--font-weight-medium);
+  padding: 0 var(--spacing-2xs);
+  border: var(--border-width-thin) solid currentColor;
+  border-radius: var(--radius-sm);
+}
+
+.links a:focus-visible,
+.next:focus-visible,
+.motion:focus-visible {
+  outline: var(--border-width-thick) solid var(--color-hero-signal);
+  outline-offset: var(--spacing-2xs);
+}
+
+.foot {
+  position: relative;
+  z-index: var(--z-raised);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  padding: 0 var(--gutter) var(--spacing-xl);
+}
+
+.next {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  min-height: var(--tap-target);
+  font-size: var(--font-size-sm);
+  color: var(--color-hero-ink-muted);
+  transition: color var(--duration-fast) ease;
+}
+
+.next:hover {
+  color: var(--color-hero-signal);
+}
+
+.motion {
+  min-height: var(--tap-target);
+  padding: 0 var(--spacing-md);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-xs);
+  color: var(--color-hero-ink);
+  background: var(--scrim-mid);
+  border: var(--border-width-thin) solid color-mix(in srgb, var(--color-hero-signal) 35%, transparent);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: border-color var(--duration-fast) ease;
+}
+
+.motion:hover {
+  border-color: var(--color-hero-signal);
+}

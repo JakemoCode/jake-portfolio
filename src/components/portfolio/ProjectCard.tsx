@@ -45,24 +45,24 @@ export function ProjectCard({ project }: Props) {
 
       <div className={styles.body}>
         <div className={styles.header}>
-          <h2 className={styles.name}>{project.name}</h2>
+          <h3 className={styles.name}>{project.name}</h3>
           {isComingSoon && <span className={styles.badge}>Coming soon</span>}
         </div>
 
         <p className={styles.summary}>{project.summary}</p>
 
         <div className={styles.section}>
-          <h3 className={styles.sectionHeading}>Problem</h3>
+          <h4 className={styles.sectionHeading}>Problem</h4>
           <p className={styles.sectionBody}>{project.problem}</p>
         </div>
 
         <div className={styles.section}>
-          <h3 className={styles.sectionHeading}>What I built</h3>
+          <h4 className={styles.sectionHeading}>What I built</h4>
           <p className={styles.sectionBody}>{project.built}</p>
         </div>
 
         <div className={styles.section}>
-          <h3 className={styles.sectionHeading}>Tech</h3>
+          <h4 className={styles.sectionHeading}>Tech</h4>
           <ul className={styles.techList}>
             {project.tech.map((item) => (
               <li key={item} className={styles.tech}>

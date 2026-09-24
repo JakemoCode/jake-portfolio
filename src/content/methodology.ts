@@ -17,7 +17,7 @@ export type Habit = {
 };
 
 export const methodologyIntro =
-  "I mostly build solo, so the agent is the only other set of hands on the code. These habits are the checks a team would normally give me: design review, test discipline, small reviewable changes, and rules that enforce themselves. The final calls stay mine. Quotes are verbatim from my sessions.";
+  "I mostly build solo, so the agent is the only other set of hands on the code. I build my own layer on top of it: skills, a rules architecture, and subagents that run real workflows, with accessibility and responsive layout required from the first commit. These habits are the checks a team would normally give me: design review, test discipline, small reviewable changes, and rules that enforce themselves. The final calls stay mine. Quotes are verbatim from my sessions.";
 
 export const methodologyHabits: Habit[] = [
   {

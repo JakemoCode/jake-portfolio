@@ -6,7 +6,7 @@ export function Testimonials() {
 
   return (
     <section className={styles.section} aria-labelledby="testimonials-heading">
-      <h2 id="testimonials-heading" className={styles.eyebrow}>
+      <h2 id="testimonials-heading" className={styles.heading}>
         Testimonials
       </h2>
 

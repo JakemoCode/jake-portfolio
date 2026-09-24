@@ -179,6 +179,7 @@ export function CaseStudy() {
         </article>
 
         <ContactLinks
+          resume="/jake-mosher-resume.pdf"
           github="https://github.com/JakemoCode"
           linkedin="https://www.linkedin.com/in/the-real-jake-mosher/"
           email="jake@jakemosher.dev"
