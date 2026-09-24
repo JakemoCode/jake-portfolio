@@ -37,12 +37,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  /* clip, not hidden: hidden makes this a scroll container, and a figure
+     inside would bind its view() scroll timeline to a box that never scrolls.
+     clip doesn't zero the grid item's automatic minimum width the way hidden
+     does, so min-width: 0 keeps a large screenshot from widening the track. */
+  overflow: clip;
+  min-width: 0;
 }
 
-.media:not(:has(img)) {
+.media:not(:has(img, figure)) {
   border-style: dashed;
   border-color: var(--color-border-strong);
+}
+
+/* A live figure sizes to its content and sits on the card surface */
+.mediaFigure {
+  align-self: start;
+  aspect-ratio: auto;
+  padding: var(--spacing-xl);
 }
 
 .mediaPhone {

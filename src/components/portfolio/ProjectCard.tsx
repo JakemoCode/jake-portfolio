@@ -1,5 +1,6 @@
 import styles from "./ProjectCard.module.css";
 import type { Project, Screenshot } from "../../content/projects";
+import { DistillationStamps } from "./DistillationStamps";
 
 type Props = {
   project: Project;
@@ -19,14 +20,20 @@ function renderScreenshot(screenshot: Screenshot) {
 export function ProjectCard({ project }: Props) {
   const isComingSoon = project.status === "coming-soon";
   const { screenshot } = project;
-  const mediaClass = [styles.media, screenshot?.orientation === "phone" && styles.mediaPhone]
+  const mediaClass = [
+    styles.media,
+    screenshot?.orientation === "phone" && styles.mediaPhone,
+    project.visual && styles.mediaFigure,
+  ]
     .filter(Boolean)
     .join(" ");
 
   return (
     <article className={styles.card}>
       <div className={mediaClass}>
-        {screenshot ? (
+        {project.visual === "distillation-stamps" ? (
+          <DistillationStamps />
+        ) : screenshot ? (
           renderScreenshot(screenshot)
         ) : (
           <span className={styles.mediaLabel} aria-hidden="true">

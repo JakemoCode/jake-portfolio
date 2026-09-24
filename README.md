@@ -32,13 +32,17 @@ Screenshots are picked up from `src/assets/` by filename, but only for slugs lis
 | Coffee Roast Tracker | `coffee-roast-tracker.png` | 1440 × 1080 (4:3) | ≥ 1200 × 900 px | Landscape, fills the 4:3 slot |
 | Baby Day Planner | `baby-day-planner.png` | 390 × 844 (iPhone) | 780 × 1688 px (2×) | Mobile portrait, rendered inside a phone-frame mockup |
 | Frontend Tools | `frontend-tools.png` | 400 × 300 (4:3) | 1200 × 900 px (3×) | Landscape, fills the 4:3 slot |
-| Docs Distillation Gate | `docs-distillation-gate.png` | 400 × 300 (4:3) | 1200 × 900 px (3×) | Landscape, fills the 4:3 slot |
 
 Supported extensions: `png`, `jpg`, `jpeg`, `webp`, `gif`.
 
 Wiring lives in `src/content/projects.ts` (`screenshotOrientations`). To add a new project's screenshot, drop the image in `src/assets/<slug>.png` and add an entry to that map with the desired orientation (`"landscape"` or `"phone"`).
 
 Alt text defaults to "<project name> screenshot". That works for a product screenshot and not for anything else, so a diagram or other non-obvious image should add a `screenshotAlts` entry describing what it shows.
+
+Docs Distillation Gate has no screenshot. Its card draws a live figure
+(`src/components/portfolio/DistillationStamps.tsx`), selected by the
+project's `visual` field. The old card image and its source are in
+`_archive/docs-distillation-gate-card/`.
 
 Frontend Tools is not a product screenshot. It is authored as HTML in
 `frontend-tools.source.html` and rendered with headless Chrome; the regeneration

@@ -1,0 +1,123 @@
+/* Finished state outside the motion block, so reduced motion, unsupported
+   browsers and screenshots all get the complete chart. */
+
+.stamps {
+  /* Component-scoped token */
+  --bar-height: 0.625rem; /* distillation bar track */
+
+  width: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.caption {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-2xs);
+  color: var(--color-text-muted);
+}
+
+.bars {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.bar {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-areas:
+    "name value"
+    "track track"
+    "words words";
+  gap: var(--spacing-2xs) var(--spacing-sm);
+  font-size: var(--font-size-sm);
+}
+
+.name {
+  grid-area: name;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text);
+}
+
+.value {
+  grid-area: value;
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-accent);
+}
+
+.words {
+  grid-area: words;
+  font-size: var(--font-size-2xs);
+  color: var(--color-text-muted);
+}
+
+.track {
+  grid-area: track;
+  position: relative;
+  height: var(--bar-height);
+  background: var(--color-bg-elevated);
+  border-radius: var(--radius-pill);
+  overflow: clip;
+}
+
+/* The halfway mark the gate asks for */
+.track::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: var(--border-width-thick);
+  background: var(--color-text-muted);
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent);
+  border-radius: var(--radius-pill);
+  transform-origin: left;
+  transform: scaleX(var(--pct));
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: clip;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Plays as one sequence once the whole figure is on screen (its bottom edge
+   10% up the viewport), top document first, landing by about 45%. ease-out
+   because a bar shrinking is spatial. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .stamps {
+      view-timeline: --stamps block;
+    }
+
+    .fill {
+      animation: distill var(--ease-out-quint) both;
+      animation-timeline: --stamps;
+      animation-range: contain calc(10vh + var(--i) * 5vh) contain calc(25vh + var(--i) * 5vh);
+    }
+  }
+}
+
+@keyframes distill {
+  from {
+    transform: scaleX(1);
+  }
+}
