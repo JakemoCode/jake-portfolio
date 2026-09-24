@@ -13,7 +13,6 @@
 
 .distill {
   /* Component-scoped tokens */
-  --font-size-method-heading: clamp(2.25rem, 4.5vw, 3.5rem); /* section display; between --font-size-h2 and the hero name */
   --mark-width: 1.75rem;       /* index mark in the static list */
   --mark-height: var(--spacing-3xs);
   --tap-target: 2.75rem;       /* comfortable touch target (Fitts's law) */
@@ -52,7 +51,7 @@
 
 .heading {
   font-family: var(--font-display);
-  font-size: var(--font-size-method-heading);
+  font-size: var(--font-size-section);
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
   letter-spacing: -0.03em;

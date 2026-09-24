@@ -20,6 +20,7 @@
   --color-text-subtle: #6e6e6b;
   --color-accent: #b8472d;
   --color-accent-hover: #9c3a23;
+  --color-signal: #0f5e54; /* pine: the teal that passes AA as text on the light ground */
   --color-badge-bg: #f0ece2;
   --color-badge-text: #6b6b6b;
 }
@@ -35,6 +36,7 @@
   --color-text-subtle: #8a877f;
   --color-accent: #e87856;
   --color-accent-hover: #f08e6f;
+  --color-signal: #5ee8cf;
   --color-badge-bg: #26241f;
   --color-badge-text: #a09d94;
 }
@@ -45,6 +47,18 @@
      surface that overrides --color-accent lower down (the landing's .page)
      does not change it. */
   --color-accent-tint: color-mix(in srgb, var(--color-accent) 14%, transparent);
+
+  /* ---- Hero field: a dark teal band in both themes. The canvas reads these
+     at mount, so they are the only copy of its palette. ---- */
+  --color-hero-bg: #041615;
+  --color-hero-bg-deep: #06201e;
+  --color-hero-well: #085a54; /* the deepest veil behind the nodes */
+  --color-hero-glow: #14b8a6;
+  --color-hero-signal: #5ee8cf; /* aquamarine: links, nodes, text accents on the band */
+  --color-hero-spark: #ebfffa; /* the head of a travelling pulse */
+  --color-hero-ember: #e87856; /* the rare terracotta pulse; the dark-theme accent */
+  --color-hero-ink: #eef6f3;
+  --color-hero-ink-muted: #a9c4bd;
 
   /* ---- Primitives (surface-agnostic) ---- */
   --color-white: #ffffff;
@@ -71,6 +85,7 @@
   --font-size-h3: clamp(1.6rem, 3vw, 2.25rem);
   --font-size-h2: clamp(1.9rem, 3.5vw, 2.75rem);
   --font-size-h1: clamp(2.75rem, 7vw, 5rem);
+  --font-size-section: clamp(2.25rem, 4.5vw, 3.5rem); /* top-level section headings on /portfolio; between h2 and h1 */
 
   --font-weight-normal: 400;
   --font-weight-medium: 500;
@@ -138,5 +153,6 @@
   --duration-medium: 220ms;
   --duration-base: 260ms;
   --duration-slow: 300ms;
+  --duration-glide: 450ms; /* an edge travelling across several rail entries; longer than one control's feedback */
   --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }
