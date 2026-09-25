@@ -17,7 +17,6 @@ body {
   font-family: var(--font-sans);
   font-size: var(--font-size-base);
   line-height: var(--line-height-body);
-  transition: background var(--duration-base) ease, color var(--duration-base) ease;
 }
 
 h1, h2, h3, h4 {

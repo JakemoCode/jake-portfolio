@@ -1,6 +1,13 @@
 /* Self-contained sandbox page. Brings its own slice of the landing palette so
    FacetBanner (which reads --surface/--border/--teal/--pine/--teal-deep/--rust/
    --facet-stone) renders identically here, with no nav and no other sections. */
+/* Light on a dark-rooted site, so the ground goes on <html> too (see
+   Landing.module.css) */
+:global(html):has(.page) {
+  color-scheme: light;
+  --color-bg: #f6f5f3;
+}
+
 .page {
   --paper: #f6f5f3;
   --surface: #efece7;

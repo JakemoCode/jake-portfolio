@@ -1,4 +1,7 @@
 .section {
+  /* Component-scoped token */
+  --tap-target: 2.75rem; /* comfortable touch target (Fitts's law) */
+
   display: flex;
   flex-direction: column;
   gap: var(--spacing-3xl);
@@ -114,4 +117,30 @@
 .became a:hover {
   color: var(--color-signal);
   text-decoration-color: var(--color-signal);
+}
+
+/* Grow the links' tap targets on touch without changing how they look, the
+   same way the project cards do */
+@media (pointer: coarse), (max-width: 40em) {
+  .name a,
+  .became a {
+    position: relative;
+  }
+
+  /* An inline link that wraps would give the ::after a box running from its
+     first line's start to its last line's end, which can be zero wide. Kept
+     on one line, the tap area stays whole. */
+  .became a {
+    display: inline-block;
+  }
+
+  .name a::after,
+  .became a::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    top: 50%;
+    translate: 0 -50%;
+    height: var(--tap-target);
+  }
 }

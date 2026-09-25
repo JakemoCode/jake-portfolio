@@ -200,7 +200,11 @@ export function Hero({ name, title, availability, resume, email, github, linkedi
           className={styles.motion}
           onClick={() => setPaused((p) => !p)}
         >
-          {paused ? "Play animation" : "Pause animation"}
+          {/* Phones show only the symbol; the label stays as the button's name */}
+          <svg className={styles.motionIcon} viewBox="0 0 16 16" aria-hidden="true">
+            {paused ? <path d="M4 2.5v11l9.5-5.5z" /> : <path d="M3.5 2.5h3v11h-3zM9.5 2.5h3v11h-3z" />}
+          </svg>
+          <span className={styles.motionLabel}>{paused ? "Play animation" : "Pause animation"}</span>
         </button>
       </div>
       {FieldTuner && (

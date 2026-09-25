@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { Link } from "react-router-dom";
 import styles from "./Portfolio.module.css";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { Hero } from "../components/portfolio/hero/Hero";
@@ -7,7 +6,6 @@ import { ProjectCard } from "../components/portfolio/ProjectCard";
 import { ExperienceStrip } from "../components/portfolio/ExperienceStrip";
 import { Recommendations } from "../components/portfolio/Recommendations";
 import { ContactLinks } from "../components/portfolio/ContactLinks";
-import { ThemeToggle } from "../components/portfolio/ThemeToggle";
 import { projects } from "../content/projects";
 import { CaseStudyTeaser } from "../components/portfolio/CaseStudyTeaser";
 import { caseStudies } from "../content/caseStudies";
@@ -51,17 +49,6 @@ export function Portfolio() {
 
   return (
     <div className={styles.page}>
-      {/* Fixed utility controls, wrapped in a banner landmark so all content
-          lives inside a landmark (a11y: axe "region"). The children are
-          position:fixed, so the header itself takes no layout space. */}
-      <header>
-        {/* Already on "/", so the navigation alone changes no pathname and
-            ScrollToTop never fires; scroll here or the mark does nothing */}
-        <Link to="/" className={styles.home} aria-label="Jake Mosher, home" onClick={() => window.scrollTo(0, 0)}>
-          <span aria-hidden="true">&#10022;</span>
-        </Link>
-        <ThemeToggle />
-      </header>
       <main>
         <Hero
           name="Jake Mosher"

@@ -214,24 +214,6 @@
   justify-self: end;
 }
 
-/* Too narrow for three columns: the pause control takes its own row above */
-@media (max-width: 40em) {
-  .foot {
-    grid-template-columns: 1fr;
-    justify-items: center;
-  }
-
-  .next,
-  .motion {
-    grid-column: 1;
-  }
-
-  .motion {
-    grid-row: 1;
-    justify-self: end;
-  }
-}
-
 .next {
   display: inline-flex;
   align-items: center;
@@ -246,15 +228,16 @@
   color: var(--color-hero-ink);
 }
 
-/* A small bob under the scroll cue. It loops, so the hero's pause control
-   stops it along with the field (WCAG 2.2.2), and reduced motion never
-   starts it */
+/* A small bob under the scroll cue: three times, then it rests, so it isn't
+   still moving while the headline is being read. Three bobs run past five
+   seconds, so the hero's pause control stops it along with the field
+   (WCAG 2.2.2), and reduced motion never starts it */
 .nudge {
   --nudge-period: 1.8s;
 
   display: inline-block;
   color: var(--color-hero-ember);
-  animation: nudge var(--nudge-period) ease-in-out infinite;
+  animation: nudge var(--nudge-period) ease-in-out 3;
 }
 
 .hero[data-paused] .nudge {
@@ -282,4 +265,42 @@
 
 .motion:hover {
   border-color: var(--color-hero-signal);
+}
+
+.motionIcon {
+  display: none;
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+}
+
+/* Phones: the pause control shrinks to its symbol and sits beside the cue,
+   which stays centered. Each side column keeps a full tap target, so below
+   about 330px the cue wraps onto two lines instead of running into the icon. */
+@media (max-width: 40em) {
+  .foot {
+    grid-template-columns: minmax(var(--tap-target), 1fr) auto minmax(var(--tap-target), 1fr);
+    gap: 0;
+  }
+
+  .motion {
+    display: inline-grid;
+    place-items: center;
+    inline-size: var(--tap-target);
+    padding: 0;
+    font-size: var(--font-size-md);
+  }
+
+  .motionIcon {
+    display: block;
+  }
+
+  .motionLabel {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: clip;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
 }
