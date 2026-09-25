@@ -3,12 +3,12 @@
    Intent-named, never value-named. Components reference these exclusively.
 
    Colour tokens are SEMANTIC and themed per surface: :root holds the
-   portfolio's dark palette; .page (the landing) overrides the same roles
-   with its own light brand in Landing.module.css.
+   portfolio's dark palette; each light page (the landing, legal pages)
+   overrides the same roles on its .page, and its ground on <html>.
    ========================================================================== */
 
 :root {
-  /* Surfaces & text: the portfolio, case study and legal pages, dark only */
+  /* Surfaces & text: the portfolio, dark only */
   color-scheme: dark;
   --color-bg: #111110;
   --color-bg-elevated: #1a1a18;
@@ -31,7 +31,7 @@
      does not change it. */
   --color-accent-tint: color-mix(in srgb, var(--color-accent) 14%, transparent);
 
-  /* ---- Hero field: a dark teal band in both themes. The canvas reads these
+  /* ---- Hero field: a dark teal band. The canvas reads these
      at mount, so they are the only copy of its palette. ---- */
   --color-hero-bg: #041615;
   --color-hero-bg-deep: #06201e;
@@ -39,7 +39,7 @@
   --color-hero-glow: #14b8a6;
   --color-hero-signal: #5ee8cf; /* aquamarine: links, nodes, text accents on the band */
   --color-hero-spark: #ebfffa; /* the head of a travelling pulse */
-  --color-hero-ember: #e87856; /* the rare terracotta pulse; the dark-theme accent */
+  --color-hero-ember: #e87856; /* the rare terracotta pulse; the portfolio accent */
   --color-hero-ink: #eef6f3;
   --color-hero-ink-muted: #a9c4bd;
 

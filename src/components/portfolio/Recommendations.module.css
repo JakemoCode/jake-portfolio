@@ -127,6 +127,13 @@
     position: relative;
   }
 
+  /* An inline link that wraps would give the ::after a box running from its
+     first line's start to its last line's end, which can be zero wide. Kept
+     on one line, the tap area stays whole. */
+  .became a {
+    display: inline-block;
+  }
+
   .name a::after,
   .became a::after {
     content: "";

@@ -1,16 +1,18 @@
 /* Landing surface theme. The non-color scales live globally in tokens.css;
    here we override the semantic color roles with the landing's brand (and add
-   the brand-only roles), scoped to .page so /portfolio keeps its own palette. */
+   the brand-only roles), scoped to .page so the portfolio keeps its own palette. */
 /* The site's root palette is dark (tokens.css). This page is light, so its
-   ground is set on <html>: the canvas an overscroll reveals, the scrollbar
-   and native form controls then match the page, and .page inherits it. */
+   ground is also set on <html>: the canvas an overscroll reveals, the
+   scrollbar and native form controls then match the page. */
 :global(html):has(.page) {
   color-scheme: light;
   --color-bg: #f6f5f3;
 }
 
 .page {
-  /* Surfaces & text */
+  /* Surfaces & text. --color-bg repeats the <html> ground so a browser
+     without :has() still paints this page light. */
+  --color-bg: #f6f5f3;
   --color-bg-elevated: #ffffff;
   --color-surface: #efece7;
   --color-border: #e4e1db;
