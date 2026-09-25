@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Portfolio.module.css";
 import { Hero } from "../components/portfolio/hero/Hero";
@@ -43,6 +43,11 @@ function Stop({ id, children }: { id: SectionId; children: ReactNode }) {
 
 export function Portfolio() {
   const caseStudy = caseStudies[0];
+  // Matches index.html, which crawlers read; set here too because the legal
+  // pages set their own title and never put it back
+  useEffect(() => {
+    document.title = "Jake Mosher · Front-end and product engineer";
+  }, []);
   // The rail lists only the stops that render, or a missing one is a dead link
   const stops = caseStudy ? sections : sections.filter(({ id }) => id !== "case-study");
 

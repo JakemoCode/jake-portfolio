@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Hero } from "../components/landing/Hero";
 import { FacetBanner } from "../components/landing/FacetBanner";
 import { Offer } from "../components/landing/Offer";
@@ -14,6 +15,10 @@ import { CONTACT_EMAIL } from "../components/landing/contactForm";
 import styles from "./Landing.module.css";
 
 export function Landing() {
+  useEffect(() => {
+    document.title = "Jake Mosher · Crafted websites";
+  }, []);
+
   return (
     <div className={styles.page}>
       <a className={styles.skip} href="#main">

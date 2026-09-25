@@ -10,7 +10,7 @@ export function LegalPage({ doc }: { doc: LegalDoc }) {
 
   return (
     <div className={styles.page}>
-      <Link to="/" className={styles.home}>
+      <Link to="/mosher-web-dev" className={styles.home}>
         ← Back
       </Link>
 
@@ -42,7 +42,7 @@ export function LegalPage({ doc }: { doc: LegalDoc }) {
       <footer className={styles.foot}>
         <Link to="/privacy">Privacy</Link>
         <Link to="/terms">Terms</Link>
-        <Link to="/">Home</Link>
+        <Link to="/mosher-web-dev">Home</Link>
       </footer>
     </div>
   );

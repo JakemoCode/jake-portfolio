@@ -26,14 +26,14 @@ export function CaseStudy() {
     };
   }, [study]);
 
-  if (!study) return <Navigate to="/portfolio" replace />;
+  if (!study) return <Navigate to="/" replace />;
 
   return (
     <div className={styles.page}>
       <div className={styles.progress} aria-hidden="true" />
 
       <header>
-        <Link to="/portfolio" className={styles.back}>
+        <Link to="/" className={styles.back}>
           <span aria-hidden="true">&#8592;</span> Back to portfolio
         </Link>
       </header>

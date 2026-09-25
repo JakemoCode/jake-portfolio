@@ -22,7 +22,7 @@ export function SiteFooter() {
           >
             LinkedIn
           </a>
-          <Link to="/portfolio">Engineering portfolio</Link>
+          <Link to="/">Engineering portfolio</Link>
         </nav>
       </div>
 
