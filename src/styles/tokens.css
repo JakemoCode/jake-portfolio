@@ -3,29 +3,13 @@
    Intent-named, never value-named. Components reference these exclusively.
 
    Colour tokens are SEMANTIC and themed per surface: :root holds the
-   /portfolio palette (+ a [data-theme="dark"] variant); .page (the landing)
-   overrides the same roles with its own brand in Landing.module.css.
+   portfolio's dark palette; .page (the landing) overrides the same roles
+   with its own light brand in Landing.module.css.
    ========================================================================== */
 
-:root,
-[data-theme="light"] {
-  /* Surfaces & text — /portfolio (light) */
-  --color-bg: #faf9f6;
-  --color-bg-elevated: #ffffff;
-  --color-surface: #f3f1ec;
-  --color-border: #e6e3dc;
-  --color-border-strong: #d6d2c8;
-  --color-text: #1a1a1a;
-  --color-text-muted: #6b6b6b;
-  --color-text-subtle: #6e6e6b;
-  --color-accent: #b8472d;
-  --color-accent-hover: #9c3a23;
-  --color-signal: #0f5e54; /* pine: the teal that passes AA as text on the light ground */
-  --color-badge-bg: #f0ece2;
-  --color-badge-text: #6b6b6b;
-}
-
-[data-theme="dark"] {
+:root {
+  /* Surfaces & text: the portfolio, case study and legal pages, dark only */
+  color-scheme: dark;
   --color-bg: #111110;
   --color-bg-elevated: #1a1a18;
   --color-surface: #1f1f1d;
@@ -42,9 +26,8 @@
 }
 
 :root {
-  /* Derived from the themed accent, so it resolves per theme without a
-     second dark-mode entry. A fill behind body text. Computed on :root, so a
-     surface that overrides --color-accent lower down (the landing's .page)
+  /* Derived from the accent. A fill behind body text. Computed on :root, so
+     a surface that overrides --color-accent lower down (the landing's .page)
      does not change it. */
   --color-accent-tint: color-mix(in srgb, var(--color-accent) 14%, transparent);
 

@@ -1,8 +1,14 @@
+/* Light like the landing, on a dark-rooted site: the ground goes on <html>
+   so the overscroll canvas and native controls match (see Landing.module.css) */
+:global(html):has(.page) {
+  color-scheme: light;
+  --color-bg: #f6f5f3;
+}
+
 .page {
   /* Legal pages wear the landing brand (teal accent, pine link-hover), so this
      .page re-themes the semantic color roles the same way Landing.module.css
      does — scoped here because CSS-module .page can't be shared globally. */
-  --color-bg: #f6f5f3;
   --color-text: #1b201d;
   --color-text-muted: #45514b;
   --color-text-subtle: #6c766f;
