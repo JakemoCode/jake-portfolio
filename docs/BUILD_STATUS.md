@@ -39,8 +39,9 @@ page; the landing's `Proof` still uses them. A sticky side rail at 75em and
 up and the experience timeline share one scroll tick
 (`src/components/portfolio/scrollTick/`). A dev-only tuner sets every field
 parameter live. Axe clean at 390/768/1280/1440 × light/dark ×
-motion/reduced; hero text measured at AA against the brightest canvas pixel
-over eight frames. The impeccable detector's remaining flags are deliberate
+motion/reduced; hero text measured at AA against the canvas over eight
+frames, excluding the brightest 0.1% of pixels (a passing signal can dip one
+pixel lower for a moment). The impeccable detector's remaining flags are deliberate
 (link color, shimmer) or false positives (screen-reader-only text). The
 route swap to `/` waits until the page is signed off.
 
