@@ -1,6 +1,9 @@
 /* The hero's generative field: a loose grid of nodes drifting on a slow flow
-   field, joined to near neighbours. A random node fires every second or so and
-   the signal hops two or three links before it dies out. */
+   field, joined to near neighbours. Every few seconds a random node fires and
+   the signal hops a link or two before it dies out. Nodes near the cursor
+   lean toward it, so the one you point at comes to meet you, and a click
+   fires the nearest node harder, spreading as a wave. The ambient firing is kept
+   sparse so a clicked wave reads as the reader's own. */
 
 type Rgb = readonly [number, number, number];
 
@@ -14,16 +17,64 @@ export type FieldPalette = {
   ember: Rgb;
 };
 
-export type DrawFrame = (ctx: CanvasRenderingContext2D, t: number, dt: number) => void;
+export type SynapseField = {
+  draw: (ctx: CanvasRenderingContext2D, t: number, dt: number) => void;
+  /** Fires the node nearest a point, in the field's CSS px. */
+  fireAt: (x: number, y: number) => void;
+  /** Where the cursor is, or null once it leaves. */
+  pointer: (at: { x: number; y: number } | null) => void;
+};
 
-type Node = { bx: number; by: number; x: number; y: number; act: number; links: number[] };
-type Pulse = { from: number; to: number; p: number; speed: number; depth: number; color: Rgb };
+/** Every tunable in the field. Read live on each frame, so a change shows at
+    once; gap and linkReach set the network's shape and only apply to a new
+    field. Distances are CSS px, times are seconds, odds are 0 to 1. */
+export type FieldParams = {
+  gap: number; // spacing between nodes
+  linkReach: number; // link any two nodes closer than gap × this
+  drift: number; // how far a node wanders from its home
+  ambientMin: number; // seconds between the field's own firings, least
+  ambientMax: number; // and most
+  ambientDepth: number; // hops an ambient signal can travel
+  ambientOdds: number; // chance it crosses each link at the first hop
+  ambientFalloff: number; // how much that chance drops per hop
+  clickDepth: number;
+  clickOdds: number;
+  clickFalloff: number;
+  refractory: number; // seconds before a node relays again, so a wave spreads instead of echoing back
+  emberAmbient: number; // share of ambient firings that run in the accent
+  emberClick: number; // share of clicks that do
+  speedMin: number; // links crossed per second, slowest pulse
+  speedSpread: number; // added at random on top of that
+  glowFade: number; // share of a node's glow left after one second
+  cursorRadius: number; // nodes this close to the cursor lean toward it
+  cursorPull: number; // how far the closest ones move; negative pushes them away
+};
 
-const GAP = 78; // node spacing in CSS px
-const LINK_REACH = GAP * 1.45;
-const DRIFT = 14; // how far a node wanders from its home, in CSS px
-const MAX_DEPTH = 3; // hops a signal can travel before it dies out
-const EMBER_SHARE = 0.08; // share of firings that run in the accent
+export const FIELD_DEFAULTS: FieldParams = {
+  gap: 78,
+  linkReach: 1.45,
+  drift: 14,
+  ambientMin: 2,
+  ambientMax: 3,
+  ambientDepth: 2,
+  ambientOdds: 0.45,
+  ambientFalloff: 0.12,
+  clickDepth: 5,
+  clickOdds: 0.9,
+  clickFalloff: 0.08,
+  refractory: 4,
+  emberAmbient: 0.08,
+  emberClick: 0.2,
+  speedMin: 0.55,
+  speedSpread: 0.4,
+  glowFade: 0.12,
+  cursorRadius: 140,
+  cursorPull: 12,
+};
+
+type Kind = "ambient" | "click";
+type Node = { bx: number; by: number; x: number; y: number; act: number; firedAt: number; links: number[] };
+type Pulse = { from: number; to: number; p: number; speed: number; depth: number; color: Rgb; kind: Kind };
 
 const rgba = (c: Rgb, a: number) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
 
@@ -77,19 +128,26 @@ function drawVeils(ctx: CanvasRenderingContext2D, w: number, h: number, t: numbe
   ctx.globalCompositeOperation = "source-over";
 }
 
-export function createSynapseField(w: number, h: number, palette: FieldPalette, random = Math.random): DrawFrame {
+export function createSynapseField(
+  w: number,
+  h: number,
+  palette: FieldPalette,
+  params: FieldParams = FIELD_DEFAULTS,
+  random = Math.random,
+): SynapseField {
+  const { gap } = params;
   const nodes: Node[] = [];
-  for (let y = -GAP / 2; y < h + GAP; y += GAP) {
-    for (let x = -GAP / 2; x < w + GAP; x += GAP) {
-      const bx = x + (random() - 0.5) * GAP * 0.7;
-      const by = y + (random() - 0.5) * GAP * 0.7;
-      nodes.push({ bx, by, x: bx, y: by, act: 0, links: [] });
+  for (let y = -gap / 2; y < h + gap; y += gap) {
+    for (let x = -gap / 2; x < w + gap; x += gap) {
+      const bx = x + (random() - 0.5) * gap * 0.7;
+      const by = y + (random() - 0.5) * gap * 0.7;
+      nodes.push({ bx, by, x: bx, y: by, act: 0, firedAt: -Infinity, links: [] });
     }
   }
   nodes.forEach((a, i) => {
     for (let j = i + 1; j < nodes.length; j++) {
       const b = nodes[j]!;
-      if (Math.hypot(a.bx - b.bx, a.by - b.by) < LINK_REACH) {
+      if (Math.hypot(a.bx - b.bx, a.by - b.by) < gap * params.linkReach) {
         a.links.push(j);
         b.links.push(i);
       }
@@ -98,26 +156,71 @@ export function createSynapseField(w: number, h: number, palette: FieldPalette, 
 
   const pulses: Pulse[] = [];
   let nextFire = 0;
+  let now = 0;
 
-  const fire = (i: number, depth: number, color: Rgb) => {
+  // The cursor eases in and out, so nodes glide toward it rather than snap
+  const cursor = { x: 0, y: 0, tx: 0, ty: 0, presence: 0, target: 0 };
+
+  const pointer: SynapseField["pointer"] = (at) => {
+    if (!at) {
+      cursor.target = 0;
+      return;
+    }
+    if (cursor.presence === 0) Object.assign(cursor, at);
+    Object.assign(cursor, { tx: at.x, ty: at.y, target: 1 });
+  };
+
+  const fire = (i: number, depth: number, color: Rgb, kind: Kind) => {
     const node = nodes[i]!;
+    if (depth > 0 && now - node.firedAt < params.refractory) return;
     node.act = 1;
-    if (depth > MAX_DEPTH) return;
+    node.firedAt = now;
+    const [maxDepth, odds, falloff] =
+      kind === "click"
+        ? [params.clickDepth, params.clickOdds, params.clickFalloff]
+        : [params.ambientDepth, params.ambientOdds, params.ambientFalloff];
+    if (depth >= maxDepth) return;
     for (const j of node.links) {
-      if (random() < 0.55 - depth * 0.1) {
-        pulses.push({ from: i, to: j, p: 0, speed: 0.55 + random() * 0.4, depth, color });
+      if (random() < odds - depth * falloff) {
+        pulses.push({ from: i, to: j, p: 0, speed: params.speedMin + random() * params.speedSpread, depth, color, kind });
       }
     }
   };
 
-  return (ctx, t, dt) => {
+  const colorFor = (share: number) => (random() < share ? palette.ember : palette.signal);
+
+  const fireAt = (x: number, y: number) => {
+    let nearest = -1;
+    let best = Infinity;
+    nodes.forEach((n, i) => {
+      const d = Math.hypot(n.x - x, n.y - y);
+      if (d < best) [nearest, best] = [i, d];
+    });
+    if (nearest >= 0) fire(nearest, 0, colorFor(params.emberClick), "click");
+  };
+
+  const draw: SynapseField["draw"] = (ctx, t, dt) => {
+    now = t;
     drawVeils(ctx, w, h, t, palette);
+
+    const ease = 1 - Math.pow(0.02, dt); // closes most of the gap in about a second
+    cursor.x += (cursor.tx - cursor.x) * ease;
+    cursor.y += (cursor.ty - cursor.y) * ease;
+    cursor.presence += (cursor.target - cursor.presence) * ease;
+    // 1 at the cursor, falling to 0 at the radius and beyond
+    const nearness = (x: number, y: number) =>
+      cursor.presence * Math.max(0, 1 - Math.hypot(x - cursor.x, y - cursor.y) / params.cursorRadius) ** 2;
 
     for (const n of nodes) {
       const angle = flow(n.bx, n.by, t);
-      n.x = n.bx + Math.cos(angle) * DRIFT;
-      n.y = n.by + Math.sin(angle) * DRIFT;
-      n.act *= Math.pow(0.12, dt);
+      const hx = n.bx + Math.cos(angle) * params.drift;
+      const hy = n.by + Math.sin(angle) * params.drift;
+      const d = Math.hypot(cursor.x - hx, cursor.y - hy) || 1;
+      // Never pulled past the cursor itself
+      const lean = Math.min(nearness(hx, hy) * params.cursorPull, d * 0.6);
+      n.x = hx + ((cursor.x - hx) / d) * lean;
+      n.y = hy + ((cursor.y - hy) / d) * lean;
+      n.act *= Math.pow(params.glowFade, dt);
     }
 
     ctx.lineWidth = 1;
@@ -125,7 +228,8 @@ export function createSynapseField(w: number, h: number, palette: FieldPalette, 
       for (const j of a.links) {
         if (j < i) continue;
         const b = nodes[j]!;
-        ctx.strokeStyle = rgba(palette.signal, 0.07 + Math.max(a.act, b.act) * 0.35);
+        const lit = Math.max(a.act, b.act, nearness((a.x + b.x) / 2, (a.y + b.y) / 2) * 0.4);
+        ctx.strokeStyle = rgba(palette.signal, 0.07 + lit * 0.35);
         ctx.beginPath();
         ctx.moveTo(a.x, a.y);
         ctx.lineTo(b.x, b.y);
@@ -134,8 +238,8 @@ export function createSynapseField(w: number, h: number, palette: FieldPalette, 
     });
 
     if (t > nextFire && nodes.length > 0) {
-      fire(Math.floor(random() * nodes.length), 0, random() < EMBER_SHARE ? palette.ember : palette.signal);
-      nextFire = t + 0.6 + random() * 0.9;
+      fire(Math.floor(random() * nodes.length), 0, colorFor(params.emberAmbient), "ambient");
+      nextFire = t + params.ambientMin + random() * Math.max(0, params.ambientMax - params.ambientMin);
     }
 
     for (let k = pulses.length - 1; k >= 0; k--) {
@@ -145,7 +249,7 @@ export function createSynapseField(w: number, h: number, palette: FieldPalette, 
       const b = nodes[q.to]!;
       if (q.p >= 1) {
         pulses.splice(k, 1);
-        fire(q.to, q.depth + 1, q.color);
+        fire(q.to, q.depth + 1, q.color, q.kind);
         continue;
       }
       const tail = Math.max(0, q.p - 0.18);
@@ -164,9 +268,10 @@ export function createSynapseField(w: number, h: number, palette: FieldPalette, 
     }
 
     for (const n of nodes) {
-      ctx.fillStyle = rgba(palette.signal, 0.25 + n.act * 0.75);
+      const glow = Math.max(n.act, nearness(n.x, n.y) * 0.3);
+      ctx.fillStyle = rgba(palette.signal, 0.25 + glow * 0.75);
       ctx.beginPath();
-      ctx.arc(n.x, n.y, 1.4 + n.act * 2.6, 0, Math.PI * 2);
+      ctx.arc(n.x, n.y, 1.4 + glow * 2.6, 0, Math.PI * 2);
       ctx.fill();
       if (n.act > 0.15) {
         const halo = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, 18 * n.act + 4);
@@ -177,4 +282,6 @@ export function createSynapseField(w: number, h: number, palette: FieldPalette, 
       }
     }
   };
+
+  return { draw, fireAt, pointer };
 }

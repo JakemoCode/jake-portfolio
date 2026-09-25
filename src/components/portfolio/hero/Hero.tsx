@@ -1,6 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState, type MouseEvent } from "react";
 import styles from "./Hero.module.css";
-import { createSynapseField, readPalette, type DrawFrame } from "./synapseField";
+import { createSynapseField, FIELD_DEFAULTS, readPalette, type FieldParams, type SynapseField } from "./synapseField";
+
+// Sliders for every field parameter, in dev only. Vite replaces DEV with
+// false in a production build, so the panel's code never ships.
+const FieldTuner = import.meta.env.DEV ? lazy(() => import("./FieldTuner")) : null;
 
 type Props = {
   name: string;
@@ -26,6 +30,9 @@ export function Hero({ name, title, availability, resume, email, github, linkedi
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [paused, setPaused] = useState(prefersReducedMotion);
   const pausedRef = useRef(paused);
+  const fieldRef = useRef<SynapseField | null>(null);
+  const paramsRef = useRef<FieldParams>({ ...FIELD_DEFAULTS });
+  const rebuildRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     pausedRef.current = paused;
@@ -38,7 +45,6 @@ export function Hero({ name, title, availability, resume, email, github, linkedi
     if (!host || !canvas || !ctx) return;
 
     const palette = readPalette(host);
-    let draw: DrawFrame | null = null;
     let t = Math.random() * 100;
     let last = performance.now();
     let visible = false;
@@ -50,20 +56,22 @@ export function Hero({ name, title, availability, resume, email, github, linkedi
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-      draw = createSynapseField(width, height, palette);
-      for (let i = 0; i < WARM_UP_FRAMES; i++) draw(ctx, (t += 1 / 30), 1 / 30);
+      const field = createSynapseField(width, height, palette, paramsRef.current);
+      for (let i = 0; i < WARM_UP_FRAMES; i++) field.draw(ctx, (t += 1 / 30), 1 / 30);
+      fieldRef.current = field;
     };
 
     const loop = (now: number) => {
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
-      if (draw && visible && !pausedRef.current && document.visibilityState === "visible") {
+      if (fieldRef.current && visible && !pausedRef.current && document.visibilityState === "visible") {
         t += dt;
-        draw(ctx, t, dt);
+        fieldRef.current.draw(ctx, t, dt);
       }
       frame = requestAnimationFrame(loop);
     };
 
+    rebuildRef.current = size;
     // Observing fires once straight away, which does the first size and draw
     const resize = new ResizeObserver(size);
     resize.observe(host);
@@ -80,8 +88,29 @@ export function Hero({ name, title, availability, resume, email, github, linkedi
     };
   }, []);
 
+  // Pointer only, and decorative: the field answers a click near it, but
+  // nothing on the page depends on it. A paused field stays still.
+  const fireAtPointer = (event: MouseEvent<HTMLElement>) => {
+    if (pausedRef.current || (event.target as Element).closest("a, button")) return;
+    const box = event.currentTarget.getBoundingClientRect();
+    fieldRef.current?.fireAt(event.clientX - box.left, event.clientY - box.top);
+  };
+
+  const follow = (event: MouseEvent<HTMLElement>) => {
+    if (!matchMedia("(pointer: fine)").matches) return;
+    const box = event.currentTarget.getBoundingClientRect();
+    fieldRef.current?.pointer({ x: event.clientX - box.left, y: event.clientY - box.top });
+  };
+
   return (
-    <header ref={hostRef} className={styles.hero}>
+    <header
+      ref={hostRef}
+      className={styles.hero}
+      data-paused={paused || undefined}
+      onClick={fireAtPointer}
+      onMouseMove={follow}
+      onMouseLeave={() => fieldRef.current?.pointer(null)}
+    >
       <canvas ref={canvasRef} className={styles.field} aria-hidden="true" />
       <div className={styles.inner}>
         <h1 className={styles.name}>{name}</h1>
@@ -105,15 +134,17 @@ export function Hero({ name, title, availability, resume, email, github, linkedi
             </a>
           </li>
           <li>
-            <a href={`mailto:${email}`}>{email}</a>
+            <a className={styles.link} href={`mailto:${email}`}>
+              {email}
+            </a>
           </li>
           <li>
-            <a href={github} target="_blank" rel="noreferrer">
+            <a className={styles.link} href={github} target="_blank" rel="noreferrer">
               GitHub<span aria-hidden="true"> ↗</span>
             </a>
           </li>
           <li>
-            <a href={linkedin} target="_blank" rel="noreferrer">
+            <a className={styles.link} href={linkedin} target="_blank" rel="noreferrer">
               LinkedIn<span aria-hidden="true"> ↗</span>
             </a>
           </li>
@@ -121,12 +152,24 @@ export function Hero({ name, title, availability, resume, email, github, linkedi
       </div>
       <div className={styles.foot}>
         <a className={styles.next} href={next.href}>
-          {next.label} <span aria-hidden="true">↓</span>
+          {next.label}{" "}
+          <span className={styles.nudge} aria-hidden="true">
+            ↓
+          </span>
         </a>
-        <button type="button" className={styles.motion} onClick={() => setPaused((p) => !p)}>
+        <button
+          type="button"
+          className={styles.motion}
+          onClick={() => setPaused((p) => !p)}
+        >
           {paused ? "Play animation" : "Pause animation"}
         </button>
       </div>
+      {FieldTuner && (
+        <Suspense fallback={null}>
+          <FieldTuner params={paramsRef.current} onRebuild={() => rebuildRef.current()} />
+        </Suspense>
+      )}
     </header>
   );
 }

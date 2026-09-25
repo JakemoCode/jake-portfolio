@@ -141,30 +141,41 @@
   align-items: center;
   min-height: var(--tap-target);
   font-weight: var(--font-weight-medium);
-  color: var(--color-hero-signal);
+}
+
+/* Ink text with a heavy aquamarine underline: the color comes from the
+   stroke, so there's no saturated cyan text on the dark band, and a hover
+   sends one aquamarine shimmer through the words */
+.link {
+  composes: text from "../../../styles/shimmer.module.css";
+  --shimmer-base: var(--color-hero-ink);
+  --shimmer-band: var(--color-hero-signal);
+
+  color: var(--color-hero-ink);
   text-decoration: underline;
-  text-decoration-color: color-mix(in srgb, var(--color-hero-signal) 45%, transparent);
-  text-underline-offset: 0.3em;
-  transition: text-decoration-color var(--duration-fast) ease;
-}
-
-.links a:hover {
   text-decoration-color: var(--color-hero-signal);
+  text-decoration-thickness: var(--border-width-thick);
+  text-underline-offset: 0.35em;
 }
 
-/* The one filled control in the band: the thing a recruiter came for */
-.links .resume {
+/* The one filled control in the band: the thing a recruiter came for. Its
+   hover shimmer is a white band across the fill. */
+.resume {
+  composes: surface from "../../../styles/shimmer.module.css";
+  --shimmer-band: color-mix(in srgb, var(--color-white) 70%, transparent);
+
   gap: var(--spacing-xs);
   padding: 0 var(--spacing-lg);
   color: var(--color-hero-bg);
   background: var(--color-hero-signal);
   border-radius: var(--radius-pill);
   text-decoration: none;
-  transition: background-color var(--duration-fast) ease;
 }
 
-.links .resume:hover {
-  background: var(--color-hero-ink);
+/* Outranks the site-wide link hover color, which would turn the label terracotta */
+.resume:hover,
+.resume:focus-visible {
+  color: var(--color-hero-bg);
 }
 
 .fileType {
@@ -183,15 +194,42 @@
   outline-offset: var(--spacing-2xs);
 }
 
+/* The cue sits centered in the band, with the pause control off to the right */
 .foot {
   position: relative;
   z-index: var(--z-raised);
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   align-items: center;
-  justify-content: space-between;
   gap: var(--spacing-sm);
   padding: 0 var(--gutter) var(--spacing-xl);
+}
+
+.next {
+  grid-column: 2;
+}
+
+.motion {
+  grid-column: 3;
+  justify-self: end;
+}
+
+/* Too narrow for three columns: the pause control takes its own row above */
+@media (max-width: 40em) {
+  .foot {
+    grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .next,
+  .motion {
+    grid-column: 1;
+  }
+
+  .motion {
+    grid-row: 1;
+    justify-self: end;
+  }
 }
 
 .next {
@@ -199,13 +237,34 @@
   align-items: center;
   gap: var(--spacing-xs);
   min-height: var(--tap-target);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   color: var(--color-hero-ink-muted);
   transition: color var(--duration-fast) ease;
 }
 
 .next:hover {
-  color: var(--color-hero-signal);
+  color: var(--color-hero-ink);
+}
+
+/* A small bob under the scroll cue. It loops, so the hero's pause control
+   stops it along with the field (WCAG 2.2.2), and reduced motion never
+   starts it */
+.nudge {
+  --nudge-period: 1.8s;
+
+  display: inline-block;
+  color: var(--color-hero-ember);
+  animation: nudge var(--nudge-period) ease-in-out infinite;
+}
+
+.hero[data-paused] .nudge {
+  animation-play-state: paused;
+}
+
+@keyframes nudge {
+  50% {
+    translate: 0 var(--spacing-xs);
+  }
 }
 
 .motion {
