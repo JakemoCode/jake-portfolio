@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { Hero } from "../components/landing/Hero";
 import { FacetBanner } from "../components/landing/FacetBanner";
 import { Offer } from "../components/landing/Offer";
@@ -13,11 +12,10 @@ import { EvasiveCta } from "../components/landing/EvasiveCta";
 import { BOUNDS_ATTRIBUTE } from "../components/landing/useEvasiveCta";
 import { CONTACT_EMAIL } from "../components/landing/contactForm";
 import styles from "./Landing.module.css";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 export function Landing() {
-  useEffect(() => {
-    document.title = "Jake Mosher · Crafted websites";
-  }, []);
+  useDocumentTitle("Jake Mosher · Crafted websites");
 
   return (
     <div className={styles.page}>

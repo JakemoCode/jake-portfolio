@@ -1,6 +1,6 @@
-import { useEffect } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import styles from "./CaseStudy.module.css";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { getCaseStudy } from "../content/caseStudies";
 import { NakshatraWheel } from "../components/case-study/NakshatraWheel";
 import { JuteMount } from "../components/case-study/JuteMount";
@@ -17,14 +17,8 @@ export function CaseStudy() {
   const { slug } = useParams<{ slug: string }>();
   const study = slug ? getCaseStudy(slug) : undefined;
 
-  useEffect(() => {
-    if (!study) return;
-    const previous = document.title;
-    document.title = `${study.title} · Jake Mosher`;
-    return () => {
-      document.title = previous;
-    };
-  }, [study]);
+  // An unknown slug redirects to the portfolio, which names itself
+  useDocumentTitle(study ? `${study.title} · Jake Mosher` : "Jake Mosher");
 
   if (!study) return <Navigate to="/" replace />;
 

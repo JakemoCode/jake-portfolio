@@ -65,4 +65,13 @@ describe("routes", () => {
     expect(screen.getByRole("link", { name: "Engineering portfolio" }).getAttribute("href")).toBe("/");
     expect(document.title).toBe("Jake Mosher · Crafted websites");
   });
+
+  it("names each page's tab as the reader moves between pages", () => {
+    visit("/privacy");
+    expect(document.title).toBe("Privacy Policy · Jake Mosher");
+    fireEvent.click(screen.getByRole("link", { name: "Home" }));
+    expect(document.title).toBe("Jake Mosher · Crafted websites");
+    fireEvent.click(screen.getByRole("link", { name: "Engineering portfolio" }));
+    expect(document.title).toBe("Jake Mosher · Front-end and product engineer");
+  });
 });
