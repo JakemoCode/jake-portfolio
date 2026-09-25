@@ -1,0 +1,20 @@
+/* The tick's span and glide. Each component adds its own color, width and
+   horizontal position. The track must be position: relative. */
+/* The top edge only moves when the current item changes, so it can always
+   glide without ever lagging the scroll. The bottom edge follows the scroll
+   directly. */
+.tick {
+  position: absolute;
+  top: var(--tick-top, 0);
+  bottom: calc(100% - var(--tick-bottom, 0px));
+  transition: top var(--duration-glide) var(--ease-out-quint);
+}
+
+/* A jump back up the track: the leading top edge glides faster than the
+   trailing bottom one, so the tick stretches and catches up rather than
+   passing through itself when the two start a frame apart */
+.tick[data-glide="jump-up"] {
+  transition:
+    top var(--duration-slow) var(--ease-out-quint),
+    bottom var(--duration-glide) var(--ease-out-quint);
+}
