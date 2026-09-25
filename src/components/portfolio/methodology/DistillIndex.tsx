@@ -72,8 +72,7 @@ export function DistillIndex() {
             How I work with AI
           </h2>
           <p className={styles.lede}>
-            Seven habits, pulled from my own Claude Code sessions and the rules I've built
-            around them.
+            Seven habits, and the rules I've built around them.
           </p>
           <p className={styles.framing}>{methodologyIntro}</p>
           <p className={styles.count} aria-hidden="true">
@@ -87,8 +86,8 @@ export function DistillIndex() {
             </span>
           </p>
           <p className={styles.note}>
-            The evidence file behind this section ran {evidenceLineCount.toLocaleString("en-US")}{" "}
-            lines, with a source for every claim. This is what survived distilling it.
+            The evidence behind these habits came from auditing my Claude Code session history
+            and pulling out the themes and principles that kept showing up.
           </p>
         </div>
 

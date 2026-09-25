@@ -14,6 +14,7 @@ function ToolList({ tools }: { tools: RecommendedTool[] }) {
             <span className={styles.by}>{tool.by}</span>
           </p>
           <p className={styles.note}>{tool.note}</p>
+          {tool.aside && <p className={styles.aside}>{tool.aside}</p>}
           {tool.became && (
             <p className={styles.became}>
               Went into{" "}

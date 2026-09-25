@@ -89,6 +89,14 @@
   text-wrap: pretty;
 }
 
+.aside {
+  max-width: 60ch;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-body);
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
 .became {
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);

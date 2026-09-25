@@ -7,6 +7,8 @@ export type RecommendedTool = {
   by: string;
   href: string;
   note: string;
+  /** A smaller line under the note. */
+  aside?: string;
   /** A public tool of mine this one went into. */
   became?: { name: string; href: string };
 };
@@ -18,7 +20,13 @@ export const toolsIUse: RecommendedTool[] = [
     name: "Claude Code",
     by: "Anthropic",
     href: "https://code.claude.com/docs/en/overview",
-    note: "The harness everything else runs in. Its built-in /code-review is the standing gate before every merge, and I've run it 109 times.",
+    note: "The harness everything else runs in. Its built-in /code-review is the standing gate before every merge.",
+  },
+  {
+    name: "Cursor",
+    by: "Anysphere",
+    href: "https://cursor.com",
+    note: "An AI code editor I use regularly alongside Claude Code.",
   },
   {
     name: "mattpocock-skills",
@@ -31,6 +39,8 @@ export const toolsIUse: RecommendedTool[] = [
     by: "Paul Bakaus",
     href: "https://impeccable.style",
     note: "A design skill for agents. I run it on every frontend build, including this page, and my /tokenize cleanup pass is built on its extract and polish commands.",
+    aside:
+      "If you run Impeccable on this site, it will flag a few things. Those were all deliberate calls on my part, and the flags show how much it catches on a real build.",
   },
   {
     name: "Claude in Chrome",
@@ -42,7 +52,7 @@ export const toolsIUse: RecommendedTool[] = [
     name: "Greptile",
     by: "Greptile",
     href: "https://www.greptile.com",
-    note: "An AI reviewer on a team project's pull requests. It caught the bug a full run of green checks missed, and my own PR-grading skill copies the shape of its reports.",
+    note: "An AI reviewer for pull requests. On a team project it caught the bug a full run of green checks missed, and of the review bots I've compared, it's the one I'd recommend.",
   },
   {
     name: "career-ops",
@@ -80,24 +90,6 @@ export const toolsIBuiltOn: RecommendedTool[] = [
     href: "https://www.asd-ste100.org",
     note: "Simplified Technical English, the controlled language behind the doc gate's conversion step.",
     became: { name: "docs-distillation-gate", href: "https://github.com/JakemoCode/docs-distillation-gate" },
-  },
-  {
-    name: "compound-engineering-plugin",
-    by: "Every",
-    href: "https://github.com/EveryInc/compound-engineering-plugin",
-    note: "Its loop, where each pass starts with more context than the last, is the model I'm adopting for what a project remembers: the symptom, the root cause, what failed, the fix, and how to prevent it.",
-  },
-  {
-    name: "disciplined-agentic-engineering",
-    by: "swingerman",
-    href: "https://github.com/swingerman/disciplined-agentic-engineering",
-    note: "Two ideas I'm building from it: a mutation cache keyed to the functions that changed, and a method kept separate from any one agent host.",
-  },
-  {
-    name: "pstack",
-    by: "Cursor",
-    href: "https://github.com/cursor/plugins/tree/main/pstack",
-    note: "My writing rules, which attempt to strip the tells of machine-written prose, are adapted from its unslop skill.",
   },
   {
     name: "Radiant",
