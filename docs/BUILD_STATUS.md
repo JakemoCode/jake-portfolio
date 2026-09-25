@@ -53,6 +53,12 @@ quote, from three distinct clients.
 - Product cards: tall captures of Coffee Roast Tracker and Baby Day Planner
   that pan inside their frame on scroll. Needs signed-in captures; both
   public URLs stop at a landing or sign-in page.
+- One shared section-heading style. The same seven declarations sit in
+  `ExperienceStrip`, `Recommendations`, `DistillIndex` and
+  `Portfolio.module.css` (PR #41 review).
+- Give gallery items a numeric count. `CaseStudyTeaser` scrapes it from the
+  note text with a regex, so a note without a digit renders an empty count
+  (PR #41 review).
 - Route swap: `/portfolio` to `/`, landing to `/mosher-web-dev`, 301 from
   `/portfolio`.
 
