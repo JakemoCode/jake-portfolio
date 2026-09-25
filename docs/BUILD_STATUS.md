@@ -11,7 +11,7 @@ _Last updated: 2026-09-25_
 | Check | Command | Status |
 |-------|---------|--------|
 | Types | `npx tsc --noEmit` | ✅ clean |
-| Unit/RTL | `npx vitest run` | ✅ 81 passing |
+| Unit/RTL | `npx vitest run` | ✅ 85 passing |
 | Build | `npx vite build` | ✅ clean |
 | Dev | `npm run dev` | serves at `localhost:5173` |
 
@@ -58,6 +58,10 @@ quote, from three distinct clients.
 - One shared section-heading style. The same seven declarations sit in
   `ExperienceStrip`, `Recommendations`, `DistillIndex` and
   `Portfolio.module.css` (PR #41 review).
+- One source for page titles and descriptions. The portfolio's live in both
+  `index.html` and `Portfolio.tsx`, the landing's in both
+  `scripts/emit-route-meta.mjs` and `Landing.tsx`, so editing one copy
+  leaves link previews stale without failing the build (PR #43 review).
 - Give gallery items a numeric count. `CaseStudyTeaser` scrapes it from the
   note text with a regex, so a note without a digit renders an empty count
   (PR #41 review).
