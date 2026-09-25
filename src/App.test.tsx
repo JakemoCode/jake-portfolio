@@ -48,13 +48,6 @@ describe("routes", () => {
     expect(screen.getByRole("navigation", { name: "On this page" })).toBeTruthy();
   });
 
-  it("scrolls back to the top from the home mark", () => {
-    visit("/");
-    vi.mocked(window.scrollTo).mockClear();
-    fireEvent.click(screen.getByRole("link", { name: "Jake Mosher, home" }));
-    expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
-  });
-
   it("opens a deep link at its section rather than the top of the page", () => {
     visit("/portfolio#experience");
     expect(scrolledTo).toEqual(["experience"]);

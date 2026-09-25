@@ -22,19 +22,6 @@
     <meta name="twitter:title" content="Jake Mosher · Front-end and product engineer" />
     <meta name="twitter:description" content="Front-end and product engineer. I hold AI-written code to the standards we set for human teammates: review, tests, and rules that enforce themselves." />
     <meta name="twitter:image" content="https://jakemosher.dev/og-portfolio.png" />
-    <script>
-      // Prevent theme flicker; runs before React hydrates.
-      (function () {
-        try {
-          var stored = localStorage.getItem("theme");
-          var prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-          var theme = stored || (prefersDark ? "dark" : "light");
-          document.documentElement.setAttribute("data-theme", theme);
-        } catch (_) {
-          document.documentElement.setAttribute("data-theme", "light");
-        }
-      })();
-    </script>
     <title>Jake Mosher · Front-end and product engineer</title>
   </head>
   <body>
