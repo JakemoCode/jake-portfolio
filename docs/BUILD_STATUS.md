@@ -27,17 +27,22 @@ Reworked the landing's "proof" zone into two dark-surface sections: the
 ## In flight
 
 **`/portfolio` restructure** · branch `feat/portfolio-restructure`. New order:
-a full-screen teal hero (Canvas2D "synaptic field", title, availability line,
-résumé PDF from `public/`, contact links, a cue into the first section, and a
-pause control), How I work with AI (the old "How I build" paragraph folded
-into its intro), the case-study teaser with the nakshatra wheel, "What I
-build" over the project cards, testimonials, a new "Tools I recommend"
-section (`src/content/recommendedTools.ts`, drawn from the Workspace
-`docs/how-i-work-with-ai-tools.md`), then contact. A sticky side rail
-at 75em and up tracks the section in view with scroll-driven CSS only. Axe
-clean at 390/768/1280/1440 × light/dark × motion/reduced; hero text measured
-at AA against the brightest canvas pixel over eight frames. The route swap to
-`/` waits until the page is signed off.
+a full-screen teal hero (Canvas2D "synaptic field" whose nodes lean toward
+the cursor and fire on click, title, availability line, résumé PDF from
+`public/`, contact links with a hover shimmer, a cue into the first section,
+and a pause control), an Experience timeline (`src/content/experience.ts`),
+the case-study teaser with the nakshatra wheel, "What I build" over the
+project cards, How I work with AI, "Tools I recommend"
+(`src/content/recommendedTools.ts`, drawn from the Workspace
+`docs/how-i-work-with-ai-tools.md`), then contact. Testimonials left this
+page; the landing's `Proof` still uses them. A sticky side rail at 75em and
+up and the experience timeline share one scroll tick
+(`src/components/portfolio/scrollTick/`). A dev-only tuner sets every field
+parameter live. Axe clean at 390/768/1280/1440 × light/dark ×
+motion/reduced; hero text measured at AA against the brightest canvas pixel
+over eight frames. The impeccable detector's remaining flags are deliberate
+(link color, shimmer) or false positives (screen-reader-only text). The
+route swap to `/` waits until the page is signed off.
 
 **Victoria Grace testimonial** · branch `feat/victoria-testimonial`.
 Fourth testimonial (the flagship gallery client) — every gallery site now has a
@@ -48,7 +53,6 @@ quote, from three distinct clients.
 - Product cards: tall captures of Coffee Roast Tracker and Baby Day Planner
   that pan inside their frame on scroll. Needs signed-in captures; both
   public URLs stop at a landing or sign-in page.
-- Tune the hero field (density, firing rate).
 - Route swap: `/portfolio` to `/`, landing to `/mosher-web-dev`, 301 from
   `/portfolio`.
 
