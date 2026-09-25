@@ -108,7 +108,7 @@
   display: inline-flex;
   align-items: center;
   min-height: var(--tap-target);
-  padding: 0 var(--spacing-lg);
+  padding: var(--spacing-xs) var(--spacing-lg);
   font-family: var(--font-mono);
   font-size: var(--font-size-xs);
   color: var(--color-accent);

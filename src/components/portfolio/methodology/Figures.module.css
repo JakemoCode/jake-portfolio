@@ -202,15 +202,8 @@
   color: var(--color-text-muted);
 }
 
-/* A drawn strike, painted as a background line rather than an absolute
-   ::after: an inline background is sliced across line fragments, so the line
-   still runs through the text, in reading order, when a struck phrase wraps */
 .taste s {
-  --strike-width: var(--border-width-thick);
-
-  text-decoration: none;
-  background: linear-gradient(var(--color-accent), var(--color-accent)) 0 55% / 100%
-    var(--strike-width) no-repeat;
+  text-decoration: line-through var(--color-accent) var(--border-width-thick);
 }
 
 .finding {
@@ -553,7 +546,7 @@
 
     /* Principle: the taste call is struck, the finding assembles */
     .taste s {
-      animation-name: strike;
+      animation-name: strike-text;
       animation-range: contain 10vh contain 20vh;
     }
 
@@ -680,12 +673,6 @@
 @keyframes strike-text {
   from {
     text-decoration-color: transparent;
-  }
-}
-
-@keyframes strike {
-  from {
-    background-size: 0% var(--strike-width);
   }
 }
 
