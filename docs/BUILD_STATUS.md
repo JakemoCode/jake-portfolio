@@ -68,6 +68,12 @@ quote, from three distinct clients.
   `index.html` and `Portfolio.tsx`, the landing's in both
   `scripts/emit-route-meta.mjs` and `Landing.tsx`, so editing one copy
   leaves link previews stale without failing the build (PR #43 review).
+- One `--tap-target` in `tokens.css`. Ten modules each define their own
+  (six at 44px, four at 2.75rem), and the `::after` tap-area block is
+  copied between ProjectCard and Recommendations (PR #44 review).
+- One token for the light ground. `#f6f5f3` and `color-scheme: light` are
+  repeated in the `html:has(.page)` blocks of Landing, LegalPage and
+  Playground (PR #44 review).
 - Give gallery items a numeric count. `CaseStudyTeaser` scrapes it from the
   note text with a regex, so a note without a digit renders an empty count
   (PR #41 review).
