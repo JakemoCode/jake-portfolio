@@ -52,8 +52,10 @@ export function useScrollTick({
       // A jump back up the page (a rail click) glides the bottom edge too, so
       // the tick slides instead of turning inside out. That transition has to
       // exist before the edges move, or it never starts, hence the flush.
-      // Cleared when the glide ends, so scrolling never lags.
-      if (jumpedUp) {
+      // Cleared when the glide ends or is cancelled, so scrolling never lags.
+      // A hidden tick (the rail below its breakpoint) never transitions, so
+      // it never gets the attribute, or nothing would ever clear it.
+      if (jumpedUp && tick.getClientRects().length > 0) {
         tick.dataset.glide = "jump-up";
         void getComputedStyle(tick).transitionProperty;
       }
@@ -74,11 +76,13 @@ export function useScrollTick({
     addEventListener("scroll", schedule, { passive: true });
     addEventListener("resize", schedule);
     tick.addEventListener("transitionend", settle);
+    tick.addEventListener("transitioncancel", settle);
     return () => {
       cancelAnimationFrame(frame);
       removeEventListener("scroll", schedule);
       removeEventListener("resize", schedule);
       tick.removeEventListener("transitionend", settle);
+      tick.removeEventListener("transitioncancel", settle);
     };
   }, [hold]);
 

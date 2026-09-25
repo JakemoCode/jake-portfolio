@@ -1,9 +1,9 @@
 /* The hero's generative field: a loose grid of nodes drifting on a slow flow
    field, joined to near neighbours. Every few seconds a random node fires and
-   the signal hops a link or two before it dies out. Nodes near the cursor
-   lean toward it, so the one you point at comes to meet you, and a click
-   fires the nearest node harder, spreading as a wave. The ambient firing is kept
-   sparse so a clicked wave reads as the reader's own. */
+   the signal hops a link or two before it dies out. Nodes within cursorRadius
+   lean toward the cursor, and a click fires the nearest node with more hops
+   and higher odds per link. Ambient firing stays sparse so a clicked wave is
+   distinguishable from it. */
 
 type Rgb = readonly [number, number, number];
 
@@ -166,7 +166,9 @@ export function createSynapseField(
       cursor.target = 0;
       return;
     }
-    if (cursor.presence === 0) Object.assign(cursor, at);
+    // presence only decays toward 0, so snap once it's negligible; otherwise
+    // re-entry glides the cursor over from where it last left
+    if (cursor.presence < 0.01) Object.assign(cursor, at);
     Object.assign(cursor, { tx: at.x, ty: at.y, target: 1 });
   };
 
@@ -223,19 +225,32 @@ export function createSynapseField(
       n.act *= Math.pow(params.glowFade, dt);
     }
 
+    // Unlit links share one path and one stroke; only lit ones need their own
     ctx.lineWidth = 1;
+    ctx.strokeStyle = rgba(palette.signal, 0.07);
+    ctx.beginPath();
+    const lit: Array<[Node, Node, number]> = [];
     nodes.forEach((a, i) => {
       for (const j of a.links) {
         if (j < i) continue;
         const b = nodes[j]!;
-        const lit = Math.max(a.act, b.act, nearness((a.x + b.x) / 2, (a.y + b.y) / 2) * 0.4);
-        ctx.strokeStyle = rgba(palette.signal, 0.07 + lit * 0.35);
-        ctx.beginPath();
+        const glow = Math.max(a.act, b.act, nearness((a.x + b.x) / 2, (a.y + b.y) / 2) * 0.4);
+        if (glow > 0.01) {
+          lit.push([a, b, glow]);
+          continue;
+        }
         ctx.moveTo(a.x, a.y);
         ctx.lineTo(b.x, b.y);
-        ctx.stroke();
       }
     });
+    ctx.stroke();
+    for (const [a, b, glow] of lit) {
+      ctx.strokeStyle = rgba(palette.signal, 0.07 + glow * 0.35);
+      ctx.beginPath();
+      ctx.moveTo(a.x, a.y);
+      ctx.lineTo(b.x, b.y);
+      ctx.stroke();
+    }
 
     if (t > nextFire && nodes.length > 0) {
       fire(Math.floor(random() * nodes.length), 0, colorFor(params.emberAmbient), "ambient");

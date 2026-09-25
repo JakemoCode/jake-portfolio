@@ -21,6 +21,7 @@ type Props = {
 
 const MAX_DPR = 1.5; // the field is soft; full retina resolution buys nothing but fill cost
 const WARM_UP_FRAMES = 60; // so a still frame shows signals in flight, not an idle grid
+const RESIZE_SETTLE_MS = 150;
 
 const prefersReducedMotion = () =>
   typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches === true;
@@ -33,9 +34,11 @@ export function Hero({ name, title, availability, resume, email, github, linkedi
   const fieldRef = useRef<SynapseField | null>(null);
   const paramsRef = useRef<FieldParams>({ ...FIELD_DEFAULTS });
   const rebuildRef = useRef<() => void>(() => {});
+  const wakeRef = useRef<() => void>(() => {});
 
   useEffect(() => {
     pausedRef.current = paused;
+    wakeRef.current();
   }, [paused]);
 
   useEffect(() => {
@@ -49,6 +52,9 @@ export function Hero({ name, title, availability, resume, email, github, linkedi
     let last = performance.now();
     let visible = false;
     let frame = 0;
+    let running = false;
+    let sized = false;
+    let resizeTimer = 0;
 
     const size = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
@@ -61,30 +67,62 @@ export function Hero({ name, title, availability, resume, email, github, linkedi
       fieldRef.current = field;
     };
 
+    const shouldRun = () => visible && !pausedRef.current && document.visibilityState === "visible";
+
+    // The loop stops itself when the field is paused, off screen, or in a
+    // hidden tab, and wake restarts it, so an idle hero schedules no frames
     const loop = (now: number) => {
+      if (!shouldRun()) {
+        running = false;
+        return;
+      }
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
-      if (fieldRef.current && visible && !pausedRef.current && document.visibilityState === "visible") {
+      if (fieldRef.current) {
         t += dt;
         fieldRef.current.draw(ctx, t, dt);
       }
       frame = requestAnimationFrame(loop);
     };
 
+    const wake = () => {
+      if (running || !shouldRun()) return;
+      running = true;
+      last = performance.now();
+      frame = requestAnimationFrame(loop);
+    };
+
+    // The first size is immediate. Later ones wait for the resize to settle,
+    // since each rebuild reseeds the field and runs every warm-up frame.
+    const onResize = () => {
+      if (!sized) {
+        sized = true;
+        size();
+        return;
+      }
+      clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(size, RESIZE_SETTLE_MS);
+    };
+
     rebuildRef.current = size;
+    wakeRef.current = wake;
     // Observing fires once straight away, which does the first size and draw
-    const resize = new ResizeObserver(size);
+    const resize = new ResizeObserver(onResize);
     resize.observe(host);
     const onScreen = new IntersectionObserver(([entry]) => {
       visible = entry?.isIntersecting ?? false;
+      wake();
     });
     onScreen.observe(host);
-    frame = requestAnimationFrame(loop);
+    document.addEventListener("visibilitychange", wake);
 
     return () => {
       cancelAnimationFrame(frame);
+      clearTimeout(resizeTimer);
       resize.disconnect();
       onScreen.disconnect();
+      document.removeEventListener("visibilitychange", wake);
+      wakeRef.current = () => {};
     };
   }, []);
 

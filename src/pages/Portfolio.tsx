@@ -43,6 +43,8 @@ function Stop({ id, children }: { id: SectionId; children: ReactNode }) {
 
 export function Portfolio() {
   const caseStudy = caseStudies[0];
+  // The rail lists only the stops that render, or a missing one is a dead link
+  const stops = caseStudy ? sections : sections.filter(({ id }) => id !== "case-study");
 
   return (
     <div className={styles.page}>
@@ -68,7 +70,7 @@ export function Portfolio() {
         />
 
         <div className={styles.layout}>
-          <SectionRail sections={sections} />
+          <SectionRail sections={stops} />
 
           <div className={styles.content}>
             <Stop id="experience">
