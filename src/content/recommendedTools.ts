@@ -17,18 +17,6 @@ const frontendTools = { name: "frontend-tools", href: "https://github.com/Jakemo
 
 export const toolsIUse: RecommendedTool[] = [
   {
-    name: "Claude Code",
-    by: "Anthropic",
-    href: "https://code.claude.com/docs/en/overview",
-    note: "The harness everything else runs in. Its built-in /code-review is the standing gate before every merge.",
-  },
-  {
-    name: "Cursor",
-    by: "Anysphere",
-    href: "https://cursor.com",
-    note: "An AI code editor I use regularly alongside Claude Code.",
-  },
-  {
     name: "mattpocock-skills",
     by: "Matt Pocock",
     href: "https://github.com/mattpocock/skills",
@@ -41,12 +29,6 @@ export const toolsIUse: RecommendedTool[] = [
     note: "A design skill for agents. I run it on every frontend build, including this page, and my /tokenize cleanup pass is built on its extract and polish commands.",
     aside:
       "If you run Impeccable on this site, it will flag a few things. Those were all deliberate calls on my part, and the flags show how much it catches on a real build.",
-  },
-  {
-    name: "Claude in Chrome",
-    by: "Anthropic",
-    href: "https://claude.com/chrome",
-    note: "How an agent checks the rendered page instead of trusting the source, in a browser profile kept apart from the one I work in.",
   },
   {
     name: "Greptile",
