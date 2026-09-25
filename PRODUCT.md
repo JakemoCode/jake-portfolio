@@ -11,30 +11,28 @@ with something to share (a business, an idea, a project) who need a
 website built or fixed. They arrive evaluating one question: "Can this
 person make me something great, and will it be painless?" They judge
 that almost entirely on how the site itself looks and feels, not on the
-technical detail of any case study. This is the audience for the home
-page (`/`), the primary client-facing surface.
+technical detail of any case study. This is the audience for the client
+landing (`/mosher-web-dev`).
 
-A secondary audience (hiring managers, engineering peers) is served by
-the professional/engineering portfolio, which is relocating to
-`/portfolio`. That surface has a different job and a different reader;
-it can keep speaking fluent engineer.
+Hiring managers, recruiters and engineering peers are served by the
+professional/engineering portfolio at the root (`/`). That surface has a
+different job and a different reader; it can keep speaking fluent
+engineer.
 
 ## Product Purpose
 
 Jake Mosher's site, now two distinct surfaces:
 
-- **`/` — the client-facing landing page (to build).** Its job is to
+- **`/mosher-web-dev`, the client-facing landing page.** Its job is to
   convert a non-technical visitor's first impression into confidence:
   "this person will build me a modern, fast site without the tech
   headache," and prompt them to reach out. The page's own craft is the
   proof; success is a prospective client making contact because the
   site earned their trust before they read a word of spec. This is the
   immediate work.
-- **`/portfolio` — the professional/engineering portfolio (exists,
-  relocating).** The current home page (Hero, project case studies for
-  Coffee Roast Tracker and Baby Day Planner, testimonials, contact),
-  aimed at recruiters and peers. It moves from `/` to `/portfolio`
-  largely as-is; its engineer-facing voice is appropriate there.
+- **`/`, the professional/engineering portfolio.** Aimed at recruiters,
+  hiring managers and peers; the old `/portfolio` address redirects
+  here. Its engineer-facing voice is appropriate there.
 
 Positioning, in Jake's words: *"I build and fix websites for small
 businesses and people with something to share. Modern, fast, and done
@@ -48,7 +46,7 @@ credentials. Warmth and humanity over corporate polish; taste and
 precision over flash. A little quirky and personable is welcome; loud
 and noisy is not.
 
-Sensory direction (drives the landing page, `/`):
+Sensory direction (drives the landing page, `/mosher-web-dev`):
 - **Soft, subtle motion** that highlights and guides, never performs.
 - **Vibrant color used tastefully** — color is a strength here, not a
   risk. Timid is off-brand; garish is too.
@@ -91,15 +89,15 @@ never busy.
    itself: nothing confusing, nothing that makes the visitor work.
 4. **Show, don't tell.** Real shipped products prove capability better
    than adjectives. The case studies do the arguing.
-5. **Two surfaces, one voice.** `/portfolio` keeps its committed
+5. **Two surfaces, one voice.** The portfolio (`/`) keeps its committed
    identity (terracotta accent, warm-neutral surface, established
    four-family type stack); variants there refine rather than reset it.
-   The new landing page (`/`) is greenfield and may establish a bolder,
+   The landing page (`/mosher-web-dev`) is greenfield and may establish a bolder,
    more vibrant direction. Both must read as the same person's work:
    consistency of voice over consistency of treatment. (Two of the
    portfolio's type families sit on the skill's greenfield
    reflex-reject list; identity-preservation overrides that for
-   `/portfolio`, by design.)
+   the portfolio, by design.)
 
 ## Accessibility & Inclusion
 
