@@ -51,19 +51,19 @@ export type FieldParams = {
 };
 
 export const FIELD_DEFAULTS: FieldParams = {
-  gap: 78,
+  gap: 90,
   linkReach: 1.45,
-  drift: 14,
+  drift: 40,
   ambientMin: 2,
   ambientMax: 3,
   ambientDepth: 2,
   ambientOdds: 0.45,
   ambientFalloff: 0.12,
-  clickDepth: 5,
+  clickDepth: 4,
   clickOdds: 0.9,
   clickFalloff: 0.08,
   refractory: 4,
-  emberAmbient: 0.08,
+  emberAmbient: 0.1,
   emberClick: 0.2,
   speedMin: 0.55,
   speedSpread: 0.4,
