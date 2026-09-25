@@ -1,15 +1,15 @@
 /**
- * Emits a static HTML file per case-study route with route-specific meta tags.
+ * Emits a static HTML file per shareable route with route-specific meta tags.
  *
  * Why this exists: the site is a client-rendered SPA, so every route ships the
- * same index.html. Slack, LinkedIn, iMessage, and search crawlers do not run
- * JavaScript, which means a forwarded link to /case-study/zendeb previews as the
- * landing page ("I build and fix websites for small businesses"). Since these
- * pages are meant to be shared by other people, that preview is the first thing
- * most readers ever see of them.
+ * same index.html, whose tags describe the portfolio at the root. Slack,
+ * LinkedIn, iMessage, and search crawlers do not run JavaScript, which means a
+ * forwarded link to /case-study/zendeb or /mosher-web-dev would preview as the
+ * portfolio. Since these pages are meant to be shared by other people, that
+ * preview is the first thing most readers ever see of them.
  *
- * Writing dist/case-study/<slug>/index.html means Vercel serves real HTML with
- * correct tags for that path, and the SPA takes over on hydration as usual.
+ * Writing dist/<route>/index.html means Vercel serves real HTML with correct
+ * tags for that path, and the SPA takes over on hydration as usual.
  *
  * Metadata is parsed out of the single source of truth (src/content/caseStudies.ts)
  * rather than duplicated here, so the two cannot drift. If parsing fails the build
@@ -45,6 +45,20 @@ const routes = [
     title: `${title} · Jake Mosher`,
     description: summary,
     image: `${SITE}/og-case-study-${slug}.png`,
+    imageAlt: title,
+    type: 'article',
+  },
+  {
+    // The client landing, which moved here when the portfolio took the root.
+    // Its business schema travels with it rather than describing the root.
+    path: 'mosher-web-dev',
+    title: 'Jake Mosher · Crafted websites',
+    description:
+      'I build and fix websites for small businesses and people with something to share. Modern, fast, and yours to keep.',
+    image: `${SITE}/og-card.png`,
+    imageAlt: 'Jake Mosher: crafted websites, built and fixed.',
+    type: 'website',
+    jsonLd: readFileSync(join(root, 'scripts/mosher-web-dev.jsonld'), 'utf8'),
   },
 ];
 
@@ -60,10 +74,16 @@ for (const route of routes) {
     .replace(/(<meta property="og:description" content=")[^"]*(")/, `$1${esc(route.description)}$2`)
     .replace(/(<meta property="og:url" content=")[^"]*(")/, `$1${url}$2`)
     .replace(/(<meta property="og:image" content=")[^"]*(")/, `$1${route.image}$2`)
-    .replace(/(<meta property="og:type" content=")[^"]*(")/, `$1article$2`)
+    .replace(/(<meta property="og:image:alt" content=")[^"]*(")/, `$1${esc(route.imageAlt)}$2`)
+    .replace(/(<meta property="og:type" content=")[^"]*(")/, `$1${route.type}$2`)
     .replace(/(<meta name="twitter:title" content=")[^"]*(")/, `$1${esc(route.title)}$2`)
     .replace(/(<meta name="twitter:description" content=")[^"]*(")/, `$1${esc(route.description)}$2`)
     .replace(/(<meta name="twitter:image" content=")[^"]*(")/, `$1${route.image}$2`);
+
+  if (route.jsonLd) {
+    // A function, so a "$$" in the schema (priceRange) is not read as a pattern
+    out = out.replace('</head>', () => `  <script type="application/ld+json">\n${route.jsonLd}    </script>\n  </head>`);
+  }
 
   if (/<link rel="canonical"/.test(out)) {
     out = out.replace(/(<link rel="canonical" href=")[^"]*(")/, `$1${url}$2`);
