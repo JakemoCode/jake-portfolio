@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Portfolio.module.css";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { Hero } from "../components/portfolio/hero/Hero";
 import { ProjectCard } from "../components/portfolio/ProjectCard";
 import { ExperienceStrip } from "../components/portfolio/ExperienceStrip";
@@ -43,6 +44,8 @@ function Stop({ id, children }: { id: SectionId; children: ReactNode }) {
 
 export function Portfolio() {
   const caseStudy = caseStudies[0];
+  // Matches index.html, which is what crawlers read
+  useDocumentTitle("Jake Mosher · Front-end and product engineer");
   // The rail lists only the stops that render, or a missing one is a dead link
   const stops = caseStudy ? sections : sections.filter(({ id }) => id !== "case-study");
 
@@ -52,7 +55,9 @@ export function Portfolio() {
           lives inside a landmark (a11y: axe "region"). The children are
           position:fixed, so the header itself takes no layout space. */}
       <header>
-        <Link to="/" className={styles.home} aria-label="Jake Mosher, home">
+        {/* Already on "/", so the navigation alone changes no pathname and
+            ScrollToTop never fires; scroll here or the mark does nothing */}
+        <Link to="/" className={styles.home} aria-label="Jake Mosher, home" onClick={() => window.scrollTo(0, 0)}>
           <span aria-hidden="true">&#10022;</span>
         </Link>
         <ThemeToggle />

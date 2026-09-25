@@ -4,18 +4,29 @@ Running status of the portfolio build — what's in flight, whether it's
 green, and what's queued. Update after any build activity (per the
 workspace `frontend-standards.md`).
 
-_Last updated: 2026-09-24_
+_Last updated: 2026-09-25_
 
 ## Gates
 
 | Check | Command | Status |
 |-------|---------|--------|
 | Types | `npx tsc --noEmit` | ✅ clean |
-| Unit/RTL | `npx vitest run` | ✅ 64 passing |
+| Unit/RTL | `npx vitest run` | ✅ 85 passing |
 | Build | `npx vite build` | ✅ clean |
 | Dev | `npm run dev` | serves at `localhost:5173` |
 
 ## Shipped
+
+**PRs #41 and #42, the `/portfolio` restructure** (merged 2026-09-25).
+A full-screen teal hero with the Canvas2D "synaptic field", an Experience
+timeline, the case-study teaser, "What I build", How I work with AI, "Tools I
+recommend", then contact. Testimonials left the portfolio; the landing's
+`Proof` still uses them. The side rail and the timeline share one scroll tick
+(`src/components/portfolio/scrollTick/`). Axe clean at 390/768/1280/1440 ×
+light/dark × motion/reduced; hero text at AA against the canvas over eight
+frames, excluding the brightest 0.1% of pixels. The impeccable detector's
+remaining flags are deliberate (link color, shimmer) or false positives
+(screen-reader-only text).
 
 **PR #25 — work gallery + testimonial spotlight** (merged 2026-07-07, in `main`).
 Reworked the landing's "proof" zone into two dark-surface sections: the
@@ -26,24 +37,14 @@ Reworked the landing's "proof" zone into two dark-surface sections: the
 
 ## In flight
 
-**`/portfolio` restructure** · branch `feat/portfolio-restructure`. New order:
-a full-screen teal hero (Canvas2D "synaptic field" whose nodes lean toward
-the cursor and fire on click, title, availability line, résumé PDF from
-`public/`, contact links with a hover shimmer, a cue into the first section,
-and a pause control), an Experience timeline (`src/content/experience.ts`),
-the case-study teaser with the nakshatra wheel, "What I build" over the
-project cards, How I work with AI, "Tools I recommend"
-(`src/content/recommendedTools.ts`, drawn from the Workspace
-`docs/how-i-work-with-ai-tools.md`), then contact. Testimonials left this
-page; the landing's `Proof` still uses them. A sticky side rail at 75em and
-up and the experience timeline share one scroll tick
-(`src/components/portfolio/scrollTick/`). A dev-only tuner sets every field
-parameter live. Axe clean at 390/768/1280/1440 × light/dark ×
-motion/reduced; hero text measured at AA against the canvas over eight
-frames, excluding the brightest 0.1% of pixels (a passing signal can dip one
-pixel lower for a moment). The impeccable detector's remaining flags are deliberate
-(link color, shimmer) or false positives (screen-reader-only text). The
-route swap to `/` waits until the page is signed off.
+**Route swap** · branch `feat/route-swap`. The portfolio moves to `/` and
+the client landing to `/mosher-web-dev`. Vercel answers `/portfolio` with a
+301 to `/`, and the router covers client-side visits, keeping any
+`#section`. `index.html` now carries the portfolio's link-preview tags and a
+new card (`public/og-portfolio.png`, from `og-portfolio.source.html`);
+`scripts/emit-route-meta.mjs` writes the landing's tags and its business
+schema (`scripts/mosher-web-dev.jsonld`) to `/mosher-web-dev`. A route that
+arrives with a `#section` now opens there instead of at the top.
 
 **Victoria Grace testimonial** · branch `feat/victoria-testimonial`.
 Fourth testimonial (the flagship gallery client) — every gallery site now has a
@@ -57,11 +58,13 @@ quote, from three distinct clients.
 - One shared section-heading style. The same seven declarations sit in
   `ExperienceStrip`, `Recommendations`, `DistillIndex` and
   `Portfolio.module.css` (PR #41 review).
+- One source for page titles and descriptions. The portfolio's live in both
+  `index.html` and `Portfolio.tsx`, the landing's in both
+  `scripts/emit-route-meta.mjs` and `Landing.tsx`, so editing one copy
+  leaves link previews stale without failing the build (PR #43 review).
 - Give gallery items a numeric count. `CaseStudyTeaser` scrapes it from the
   note text with a regex, so a note without a digit renders an empty count
   (PR #41 review).
-- Route swap: `/portfolio` to `/`, landing to `/mosher-web-dev`, 301 from
-  `/portfolio`.
 
 ## Reviews
 

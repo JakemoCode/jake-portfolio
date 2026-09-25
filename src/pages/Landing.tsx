@@ -12,8 +12,11 @@ import { EvasiveCta } from "../components/landing/EvasiveCta";
 import { BOUNDS_ATTRIBUTE } from "../components/landing/useEvasiveCta";
 import { CONTACT_EMAIL } from "../components/landing/contactForm";
 import styles from "./Landing.module.css";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 export function Landing() {
+  useDocumentTitle("Jake Mosher · Crafted websites");
+
   return (
     <div className={styles.page}>
       <a className={styles.skip} href="#main">

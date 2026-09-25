@@ -1,16 +1,14 @@
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import type { LegalDoc } from "../content/legal";
 import styles from "./LegalPage.module.css";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 
 export function LegalPage({ doc }: { doc: LegalDoc }) {
-  useEffect(() => {
-    document.title = `${doc.title} · Jake Mosher`;
-  }, [doc.title]);
+  useDocumentTitle(`${doc.title} · Jake Mosher`);
 
   return (
     <div className={styles.page}>
-      <Link to="/" className={styles.home}>
+      <Link to="/mosher-web-dev" className={styles.home}>
         ← Back
       </Link>
 
@@ -42,7 +40,7 @@ export function LegalPage({ doc }: { doc: LegalDoc }) {
       <footer className={styles.foot}>
         <Link to="/privacy">Privacy</Link>
         <Link to="/terms">Terms</Link>
-        <Link to="/">Home</Link>
+        <Link to="/mosher-web-dev">Home</Link>
       </footer>
     </div>
   );

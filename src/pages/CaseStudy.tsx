@@ -1,6 +1,6 @@
-import { useEffect } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import styles from "./CaseStudy.module.css";
+import { useDocumentTitle } from "../hooks/useDocumentTitle";
 import { getCaseStudy } from "../content/caseStudies";
 import { NakshatraWheel } from "../components/case-study/NakshatraWheel";
 import { JuteMount } from "../components/case-study/JuteMount";
@@ -17,23 +17,17 @@ export function CaseStudy() {
   const { slug } = useParams<{ slug: string }>();
   const study = slug ? getCaseStudy(slug) : undefined;
 
-  useEffect(() => {
-    if (!study) return;
-    const previous = document.title;
-    document.title = `${study.title} · Jake Mosher`;
-    return () => {
-      document.title = previous;
-    };
-  }, [study]);
+  // An unknown slug redirects to the portfolio, which names itself
+  useDocumentTitle(study ? `${study.title} · Jake Mosher` : "Jake Mosher");
 
-  if (!study) return <Navigate to="/portfolio" replace />;
+  if (!study) return <Navigate to="/" replace />;
 
   return (
     <div className={styles.page}>
       <div className={styles.progress} aria-hidden="true" />
 
       <header>
-        <Link to="/portfolio" className={styles.back}>
+        <Link to="/" className={styles.back}>
           <span aria-hidden="true">&#8592;</span> Back to portfolio
         </Link>
       </header>
