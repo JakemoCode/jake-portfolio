@@ -69,14 +69,20 @@
   text-wrap: pretty;
 }
 
+/* Ink with a heavy aquamarine underline, like the hero's links. The panel is
+   the link's hit area, so hovering anywhere on it sends the shimmer through. */
 .cta {
+  composes: text from "../../styles/shimmer.module.css";
+  --shimmer-base: var(--color-hero-ink);
+  --shimmer-band: var(--color-hero-signal);
+
   margin-top: var(--spacing-xs);
   font-weight: var(--font-weight-semibold);
-  color: var(--color-hero-signal);
+  color: var(--color-hero-ink);
   text-decoration: underline;
-  text-decoration-color: color-mix(in srgb, var(--color-hero-signal) 45%, transparent);
-  text-underline-offset: 0.3em;
-  transition: text-decoration-color var(--duration-fast) ease;
+  text-decoration-color: var(--color-hero-signal);
+  text-decoration-thickness: var(--border-width-thick);
+  text-underline-offset: 0.35em;
 }
 
 /* The whole panel is the click target, without making all of its text one
@@ -86,10 +92,6 @@
   position: absolute;
   inset: 0;
   z-index: var(--z-raised);
-}
-
-.feature:hover .cta {
-  text-decoration-color: var(--color-hero-signal);
 }
 
 .cta:focus-visible {
