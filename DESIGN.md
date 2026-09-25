@@ -87,8 +87,8 @@ components:
 # Design System: Jake Mosher — Client Landing
 
 > Scope: this documents the **client landing at `/mosher-web-dev`**. The engineering
-> portfolio at `/` intentionally runs a separate, pre-existing palette (warm terracotta
-> `#b8472d` on cream, with a light/dark toggle). Do not apply these tokens there.
+> portfolio at `/` intentionally runs a separate palette (terracotta `#e87856` on
+> near-black, dark only). Do not apply these tokens there.
 
 ## 1. Overview
 
@@ -256,7 +256,7 @@ Things look pressable and grounded, never glassy or flat-dead.
 ### Navigation
 - Minimal top bar: wordmark left, "Work" + "Start a project" (pill) right. No
   "Engineering" link up top (the portfolio is reached from the Work section and
-  footer instead). The portfolio's quiet ✦ home mark links to its own root.
+  footer instead).
 
 ### Signature: The Faceted-Stone Banner
 The defining component. A full-bleed band between sections: small triangular facets
