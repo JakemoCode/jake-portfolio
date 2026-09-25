@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { App } from "./App";
 
@@ -35,6 +35,24 @@ describe("routes", () => {
     expect(window.location.pathname).toBe("/");
     expect(window.location.hash).toBe("#experience");
     expect(screen.getByRole("navigation", { name: "On this page" })).toBeTruthy();
+  });
+
+  it("keeps a query string through the move, so campaign tags survive", () => {
+    visit("/portfolio?utm_source=linkedin#experience");
+    expect(window.location.search).toBe("?utm_source=linkedin");
+    expect(window.location.hash).toBe("#experience");
+  });
+
+  it("still renders when the address carries a malformed #section", () => {
+    visit("/#%E0%A4%A");
+    expect(screen.getByRole("navigation", { name: "On this page" })).toBeTruthy();
+  });
+
+  it("scrolls back to the top from the home mark", () => {
+    visit("/");
+    vi.mocked(window.scrollTo).mockClear();
+    fireEvent.click(screen.getByRole("link", { name: "Jake Mosher, home" }));
+    expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
   });
 
   it("opens a deep link at its section rather than the top of the page", () => {

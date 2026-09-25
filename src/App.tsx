@@ -7,6 +7,17 @@ import { Playground } from "./pages/Playground";
 import { CaseStudy } from "./pages/CaseStudy";
 import { privacyPolicy, termsOfUse } from "./content/legal";
 
+// A malformed escape (a hand-typed or truncated "#%") makes decodeURIComponent
+// throw, and a throw inside the effect would unmount the whole app
+function sectionFromHash(hash: string) {
+  if (!hash) return null;
+  try {
+    return document.getElementById(decodeURIComponent(hash.slice(1)));
+  } catch {
+    return null;
+  }
+}
+
 // <BrowserRouter> does not reset scroll on navigation (only the data-router
 // <ScrollRestoration> does), so a route change inherits the previous page's
 // scroll offset. A #section arriving with the route (a deep link, or the old
@@ -16,8 +27,7 @@ import { privacyPolicy, termsOfUse } from "./content/legal";
 function ScrollToTop() {
   const { pathname } = useLocation();
   useEffect(() => {
-    const { hash } = window.location;
-    const section = hash ? document.getElementById(decodeURIComponent(hash.slice(1))) : null;
+    const section = sectionFromHash(window.location.hash);
     if (section) section.scrollIntoView();
     else window.scrollTo(0, 0);
   }, [pathname]);
@@ -26,10 +36,10 @@ function ScrollToTop() {
 
 // The portfolio lived at /portfolio before it moved to the root. Vercel
 // answers that address with a 301 (vercel.json); this covers client-side
-// navigation and the dev server, and keeps any #section.
+// navigation and the dev server, and keeps any query string and #section.
 function MovedToRoot() {
-  const { hash } = useLocation();
-  return <Navigate to={{ pathname: "/", hash }} replace />;
+  const { search, hash } = useLocation();
+  return <Navigate to={{ pathname: "/", search, hash }} replace />;
 }
 
 export function App() {

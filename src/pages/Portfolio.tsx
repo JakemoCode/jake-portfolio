@@ -57,7 +57,9 @@ export function Portfolio() {
           lives inside a landmark (a11y: axe "region"). The children are
           position:fixed, so the header itself takes no layout space. */}
       <header>
-        <Link to="/" className={styles.home} aria-label="Jake Mosher, home">
+        {/* Already on "/", so the navigation alone changes no pathname and
+            ScrollToTop never fires; scroll here or the mark does nothing */}
+        <Link to="/" className={styles.home} aria-label="Jake Mosher, home" onClick={() => window.scrollTo(0, 0)}>
           <span aria-hidden="true">&#10022;</span>
         </Link>
         <ThemeToggle />
