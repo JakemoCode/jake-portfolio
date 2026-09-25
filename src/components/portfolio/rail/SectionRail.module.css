@@ -48,14 +48,11 @@
   font-weight: var(--font-weight-semibold);
 }
 
-/* Sits on the list's rule */
+/* Sits on the list's rule. Before the first section takes over it rests on
+   the first entry, so it is already there when the rail scrolls into view. */
 .tick {
   left: 0;
   width: var(--border-width-thick);
   background: var(--color-signal);
   border-radius: var(--radius-pill);
-}
-
-.track:not(:has([aria-current])) .tick {
-  visibility: hidden;
 }
