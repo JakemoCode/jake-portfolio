@@ -1,79 +1,200 @@
-.wrap {
-  max-width: 44rem;
-  margin: 0 auto 3rem;
-  padding: 0 1.5rem;
+/* Every rule outside the motion block styles the finished state: the fan
+   dealt, the wheel at rest. Motion only adds the "before". */
+
+.feature {
+  /* Component-scoped tokens */
+  --table-size: 20rem; /* the wheel and the dealt fan; grows to 26rem beside the copy */
+  --piece-width: 36%; /* of the table: three overlapping cards span most of the wheel */
+  --fan-angle: 9deg; /* the outer cards' tilt */
+  --copy-measure: 34rem;
+  --fan-reach: 58%; /* of a card's width: how far the outer cards slide out */
+
+  position: relative;
+  display: grid;
+  gap: var(--spacing-3xl);
+  padding: var(--spacing-3xl) var(--spacing-xl);
+  color: var(--color-hero-ink);
+  background:
+    radial-gradient(circle at 75% 45%, color-mix(in srgb, var(--color-hero-glow) 22%, transparent), transparent 60%),
+    var(--color-hero-bg);
+  border-radius: var(--radius-xl);
+  overflow: clip;
 }
 
-.card {
-  display: block;
-  padding: 1.75rem 1.9rem;
-  background: var(--color-bg-elevated);
-  border: 1px solid var(--color-border);
-  border-radius: 12px;
-  text-decoration: none;
-  color: inherit;
-  transition:
-    border-color 180ms ease,
-    transform 180ms ease;
+@media (min-width: 56em) {
+  .feature {
+    --table-size: 26rem;
+
+    grid-template-columns: minmax(0, 1fr) var(--table-size);
+    align-items: center;
+    gap: var(--spacing-5xl);
+    padding: var(--spacing-5xl);
+  }
 }
 
-.card:hover {
-  border-color: var(--color-border-strong);
-  transform: translateY(-2px);
+.copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  max-width: var(--copy-measure);
 }
-
-.card:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 3px;
-}
-
 
 /* Says what the card is, in the body face at sentence case. The tell the
    absolute bans name is the tiny uppercase tracked eyebrow treatment, not the
    words themselves, so this carries the same information without it. */
 .kind {
-  margin: 0 0 var(--spacing-2xs);
-  font-family: var(--font-body);
   font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
+  color: var(--color-hero-ink-muted);
 }
 
 .kind span {
-  margin: 0 0.15em;
-  color: var(--color-text-subtle);
+  margin: 0 var(--spacing-2xs);
 }
 
 .title {
-  margin: 0 0 0.6rem;
   font-family: var(--font-display);
-  font-size: var(--font-size-xl);
-  font-weight: 600;
-  line-height: 1.2;
-  letter-spacing: -0.01em;
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.025em;
+  color: var(--color-hero-ink);
   text-wrap: balance;
 }
 
 .summary {
-  margin: 0 0 1rem;
-  font-family: var(--font-body);
-  font-size: var(--font-size-base);
-  line-height: 1.6;
-  color: var(--color-text-muted);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-body);
+  color: var(--color-hero-ink-muted);
   text-wrap: pretty;
 }
 
+/* Ink with a heavy aquamarine underline, like the hero's links. The panel is
+   the link's hit area, so hovering anywhere on it sends the shimmer through. */
 .cta {
-  font-family: var(--font-sans);
-  font-size: var(--font-size-sm);
-  font-weight: 600;
-  color: var(--color-accent);
+  composes: text from "../../styles/shimmer.module.css";
+  --shimmer-base: var(--color-hero-ink);
+  --shimmer-band: var(--color-hero-signal);
+
+  margin-top: var(--spacing-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-hero-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--color-hero-signal);
+  text-decoration-thickness: var(--border-width-thick);
+  text-underline-offset: 0.35em;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .card {
-    transition: none;
+/* The whole panel is the click target, without making all of its text one
+   long link name for a screen reader */
+.cta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: var(--z-raised);
+}
+
+.cta:focus-visible {
+  outline: none;
+}
+
+.feature:has(.cta:focus-visible) {
+  outline: var(--border-width-thick) solid var(--color-hero-signal);
+  outline-offset: var(--spacing-2xs);
+}
+
+.art {
+  justify-self: center;
+  width: min(100%, var(--table-size));
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.table {
+  position: relative;
+  aspect-ratio: 1;
+}
+
+.wheel {
+  position: absolute;
+  top: 0;
+  left: 6%;
+  width: 88%;
+  height: auto;
+}
+
+.piece {
+  position: absolute;
+  bottom: 0;
+  left: calc(50% - var(--piece-width) / 2);
+  width: var(--piece-width);
+  height: auto;
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  transform-origin: 50% 120%;
+  translate: calc(var(--i) * var(--fan-reach)) 0;
+  rotate: calc(var(--i) * var(--fan-angle));
+}
+
+.counts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  text-align: center;
+  color: var(--color-hero-ink-muted);
+  text-wrap: balance;
+}
+
+.counts strong {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-hero-ink);
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-height: 40em) {
+  @supports (animation-timeline: view()) {
+    .table {
+      view-timeline: --deal block;
+    }
+
+    /* The three pieces start squared up in one pile and fan out once the
+       whole table is on screen */
+    .piece {
+      animation: deal var(--ease-out-quint) both;
+      animation-timeline: --deal;
+      animation-range: contain 10vh contain 46vh;
+    }
+
+    /* The wheel turns with the scroll, a nod to the spin the study is about */
+    .wheel {
+      animation: turn linear both;
+      animation-timeline: --deal;
+      animation-range: cover 0% cover 100%;
+    }
   }
-  .card:hover {
-    transform: none;
+}
+
+@keyframes deal {
+  from {
+    translate: 0 0;
+    rotate: 0deg;
+  }
+}
+
+@keyframes turn {
+  from {
+    rotate: -50deg;
+  }
+  to {
+    rotate: 50deg;
   }
 }

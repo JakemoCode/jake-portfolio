@@ -17,7 +17,7 @@ export type Habit = {
 };
 
 export const methodologyIntro =
-  "I mostly build solo, so the agent is the only other set of hands on the code. These habits are the checks a team would normally give me: design review, test discipline, small reviewable changes, and rules that enforce themselves. The final calls stay mine. Quotes are verbatim from my sessions.";
+  "On my own projects, the agent is the only other set of hands on the code. I build my own layer on top of it: skills, a rules architecture, and subagents that run real workflows, with accessibility and responsive layout required from the first commit. These habits are the checks a team would normally give me: design review, test discipline, small reviewable changes, and rules that enforce themselves. The final calls stay mine. Quotes are verbatim from my sessions.";
 
 export const methodologyHabits: Habit[] = [
   {
@@ -47,7 +47,7 @@ export const methodologyHabits: Habit[] = [
     slug: "small-named-units",
     title: "Small, reviewable units from a clean start",
     docHeading: "10. Work in small, named units from a clean start",
-    body: "Work moves through three commands: work package, checkpoint, milestone. Large packages split into numbered PRs at planning time, independent ones run in parallel, and each starts from a fresh main branch and a cleared session. The larger a PR is, the more likely review misses something and the harder it is to reason through, so when a change blows its test budget, the answer is to split it, not raise the budget. My current build has merged over 120 PRs this way.",
+    body: "Work moves through three commands: work package, checkpoint, milestone. Large packages split into numbered PRs at planning time, independent ones run in parallel, and each starts from a fresh main branch and a cleared session. The larger a PR is, the more likely review misses something and the harder it is to reason through, so when a change blows its test budget, the answer is to split it, not raise the budget.",
     figure: "split",
   },
   {
@@ -71,7 +71,7 @@ export const methodologyHabits: Habit[] = [
     slug: "budget-models",
     title: "Budget the agent like any other resource",
     docHeading: "11. Budget models like any other resource",
-    body: "Every task shape has an assigned model and effort level, so cost tracks the work. Search and pass/fail screening run on the smallest model, and escalating means more effort on the same model before a bigger one. When an audit of 167 subagent dispatches showed my \"default to the cheaper model\" rule was a coin flip in practice, the rule became named agents with the model fixed in their definitions.",
+    body: "Every task shape has an assigned model and effort level, so cost tracks the work. Search and pass/fail screening run on the smallest model, and escalating means more effort on the same model before a bigger one. When an audit of my subagent dispatches showed my \"default to the cheaper model\" rule was a coin flip in practice, the rule became named agents with the model fixed in their definitions.",
     figure: "budget",
   },
 ];

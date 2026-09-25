@@ -1,0 +1,126 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4xl);
+}
+
+.heading {
+  font-family: var(--font-display);
+  font-size: var(--font-size-section);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.03em;
+  color: var(--color-text);
+  text-wrap: balance;
+}
+
+.track {
+  position: relative;
+}
+
+/* Phones: one column, the line down the left edge */
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4xl);
+  border-left: var(--border-width-thin) solid var(--color-border-strong);
+}
+
+.stint {
+  display: grid;
+  gap: var(--spacing-2xs);
+}
+
+/* Phones: the dates sit above the title they follow in the markup */
+.period {
+  order: -1;
+}
+
+.tick {
+  left: 0;
+  width: var(--border-width-thick);
+  background: var(--color-signal);
+  border-radius: var(--radius-pill);
+}
+
+/* From 48em: dates on the left, the stint on the right, and the line between
+   them a third of the way across, since the dates need far less room */
+@media (min-width: 48em) {
+  .track {
+    --gap: var(--spacing-5xl);
+  }
+
+  .list {
+    padding: 0;
+    gap: var(--spacing-6xl);
+    border-left: 0;
+  }
+
+  /* Centered in the column gap, which starts a third of the way across the
+     space the two columns share */
+  .track::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc((100% - var(--gap)) / 3 + var(--gap) / 2);
+    width: var(--border-width-thin);
+    background: var(--color-border-strong);
+  }
+
+  .tick {
+    left: calc((100% - var(--gap)) / 3 + var(--gap) / 2 - var(--border-width-thick) / 2 + var(--border-width-thin) / 2);
+  }
+
+  .stint {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    column-gap: var(--gap);
+    align-items: baseline;
+  }
+
+  .stint > * {
+    grid-column: 2;
+  }
+
+  .period {
+    grid-row: 1;
+    grid-column: 1;
+    text-align: end;
+  }
+}
+
+.period {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--color-text);
+}
+
+.role {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.details {
+  list-style: none;
+  margin: var(--spacing-xs) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  max-width: 60ch;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-body);
+  color: var(--color-text);
+  text-wrap: pretty;
+}

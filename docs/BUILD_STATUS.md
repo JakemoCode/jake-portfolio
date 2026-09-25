@@ -4,14 +4,14 @@ Running status of the portfolio build — what's in flight, whether it's
 green, and what's queued. Update after any build activity (per the
 workspace `frontend-standards.md`).
 
-_Last updated: 2026-09-23_
+_Last updated: 2026-09-24_
 
 ## Gates
 
 | Check | Command | Status |
 |-------|---------|--------|
 | Types | `npx tsc --noEmit` | ✅ clean |
-| Unit/RTL | `npx vitest run` | ✅ 60 passing |
+| Unit/RTL | `npx vitest run` | ✅ 64 passing |
 | Build | `npx vite build` | ✅ clean |
 | Dev | `npm run dev` | serves at `localhost:5173` |
 
@@ -26,15 +26,24 @@ Reworked the landing's "proof" zone into two dark-surface sections: the
 
 ## In flight
 
-**"How I work with AI" section on `/portfolio`** · branch `feat/how-i-work-with-ai`,
-PR #40, in review. Seven habits from the Workspace evidence docs
-(`docs/how-i-work-with-ai*.md`, outside this repo), each with an evidence
-figure that plays as one scroll sequence once the whole figure is in view. The
-opener pins while a minimap of the 1,168-line doc distills into the habit
-index. The doc-gate project card now draws live distillation stamps in place
-of its screenshot. Axe clean at 390/768/1280/1440 × light/dark ×
-motion/reduced; no horizontal overflow from 320px up. Line data regenerates
-with `scripts/gen-methodology-minimap.mjs`.
+**`/portfolio` restructure** · branch `feat/portfolio-restructure`. New order:
+a full-screen teal hero (Canvas2D "synaptic field" whose nodes lean toward
+the cursor and fire on click, title, availability line, résumé PDF from
+`public/`, contact links with a hover shimmer, a cue into the first section,
+and a pause control), an Experience timeline (`src/content/experience.ts`),
+the case-study teaser with the nakshatra wheel, "What I build" over the
+project cards, How I work with AI, "Tools I recommend"
+(`src/content/recommendedTools.ts`, drawn from the Workspace
+`docs/how-i-work-with-ai-tools.md`), then contact. Testimonials left this
+page; the landing's `Proof` still uses them. A sticky side rail at 75em and
+up and the experience timeline share one scroll tick
+(`src/components/portfolio/scrollTick/`). A dev-only tuner sets every field
+parameter live. Axe clean at 390/768/1280/1440 × light/dark ×
+motion/reduced; hero text measured at AA against the canvas over eight
+frames, excluding the brightest 0.1% of pixels (a passing signal can dip one
+pixel lower for a moment). The impeccable detector's remaining flags are deliberate
+(link color, shimmer) or false positives (screen-reader-only text). The
+route swap to `/` waits until the page is signed off.
 
 **Victoria Grace testimonial** · branch `feat/victoria-testimonial`.
 Fourth testimonial (the flagship gallery client) — every gallery site now has a
@@ -42,8 +51,17 @@ quote, from three distinct clients.
 
 ## Follow-ups
 
-- None open. (The testimonial focus-outline clipping is fixed via
-  `overflow: clip` + `overflow-clip-margin` on `.stage`.)
+- Product cards: tall captures of Coffee Roast Tracker and Baby Day Planner
+  that pan inside their frame on scroll. Needs signed-in captures; both
+  public URLs stop at a landing or sign-in page.
+- One shared section-heading style. The same seven declarations sit in
+  `ExperienceStrip`, `Recommendations`, `DistillIndex` and
+  `Portfolio.module.css` (PR #41 review).
+- Give gallery items a numeric count. `CaseStudyTeaser` scrapes it from the
+  note text with a regex, so a note without a digit renders an empty count
+  (PR #41 review).
+- Route swap: `/portfolio` to `/`, landing to `/mosher-web-dev`, 301 from
+  `/portfolio`.
 
 ## Reviews
 
