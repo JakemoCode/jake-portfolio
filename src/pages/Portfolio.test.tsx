@@ -34,7 +34,7 @@ describe("Portfolio", () => {
     renderPage();
     const headings = screen.getAllByRole("heading", { level: 2 }).map((h) => h.textContent);
     expect(headings).toEqual(
-      expect.arrayContaining(["How I work with AI", "What I build", "Testimonials", "Tools I recommend"]),
+      expect.arrayContaining(["Experience", "How I work with AI", "What I build", "Tools I recommend"]),
     );
   });
 });

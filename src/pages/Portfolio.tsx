@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import styles from "./Portfolio.module.css";
 import { Hero } from "../components/portfolio/hero/Hero";
 import { ProjectCard } from "../components/portfolio/ProjectCard";
-import { Testimonials } from "../components/portfolio/Testimonials";
+import { ExperienceStrip } from "../components/portfolio/ExperienceStrip";
 import { Recommendations } from "../components/portfolio/Recommendations";
 import { ContactLinks } from "../components/portfolio/ContactLinks";
 import { ThemeToggle } from "../components/portfolio/ThemeToggle";
@@ -22,10 +22,10 @@ const contact = {
 };
 
 const sections = [
-  { id: "how-i-work", label: "How I work with AI" },
+  { id: "experience", label: "Experience" },
   { id: "case-study", label: "Case study" },
   { id: "what-i-build", label: "What I build" },
-  { id: "testimonials", label: "Testimonials" },
+  { id: "how-i-work", label: "How I work with AI" },
   { id: "tools", label: "Tools I recommend" },
   { id: "contact", label: "Contact" },
 ] as const satisfies readonly RailSection[];
@@ -58,12 +58,12 @@ export function Portfolio() {
       <main>
         <Hero
           name="Jake Mosher"
-          title="Front-end and product engineer. I build interfaces with AI agents, and the guardrails that keep their work honest."
+          title="Front-end and product engineer. I hold AI-written code to the standards we set for human teammates: review, tests, and rules that enforce themselves."
           availability={{
             status: "Open to front-end, product and software engineering roles",
             detail: ["Seven years on React and TypeScript", "US Mountain Time"],
           }}
-          next={{ href: "#how-i-work", label: "Start with how I work with AI" }}
+          next={{ href: "#experience", label: "Start with where I've worked" }}
           {...contact}
         />
 
@@ -71,8 +71,8 @@ export function Portfolio() {
           <SectionRail sections={sections} />
 
           <div className={styles.content}>
-            <Stop id="how-i-work">
-              <Methodology />
+            <Stop id="experience">
+              <ExperienceStrip />
             </Stop>
 
             {caseStudy && (
@@ -92,8 +92,8 @@ export function Portfolio() {
               </section>
             </Stop>
 
-            <Stop id="testimonials">
-              <Testimonials />
+            <Stop id="how-i-work">
+              <Methodology />
             </Stop>
 
             <Stop id="tools">
