@@ -90,7 +90,7 @@ never busy.
 4. **Show, don't tell.** Real shipped products prove capability better
    than adjectives. The case studies do the arguing.
 5. **Two surfaces, one voice.** The portfolio (`/`) keeps its committed
-   identity (terracotta accent, warm-neutral surface, established
+   identity (terracotta accent, dark surface, established
    four-family type stack); variants there refine rather than reset it.
    The landing page (`/mosher-web-dev`) is greenfield and may establish a bolder,
    more vibrant direction. Both must read as the same person's work:
@@ -102,7 +102,7 @@ never busy.
 ## Accessibility & Inclusion
 
 WCAG 2.2 AA is the non-negotiable bar; the site currently passes axe-core
-clean across 4 breakpoints × light/dark. One open gap to close: motion
+clean across 4 breakpoints × motion on/reduced. One open gap to close: motion
 does not yet respect `prefers-reduced-motion` (Minor M1 in
 `docs/DESIGN_AUDIT.md`). Every future animation must ship a
 reduced-motion alternative. Maintain visible focus states, semantic

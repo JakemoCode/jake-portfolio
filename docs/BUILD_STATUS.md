@@ -11,7 +11,7 @@ _Last updated: 2026-09-25_
 | Check | Command | Status |
 |-------|---------|--------|
 | Types | `npx tsc --noEmit` | ✅ clean |
-| Unit/RTL | `npx vitest run` | ✅ 85 passing |
+| Unit/RTL | `npx vitest run` | ✅ 84 passing |
 | Build | `npx vite build` | ✅ clean |
 | Dev | `npm run dev` | serves at `localhost:5173` |
 
@@ -45,6 +45,12 @@ new card (`public/og-portfolio.png`, from `og-portfolio.source.html`);
 `scripts/emit-route-meta.mjs` writes the landing's tags and its business
 schema (`scripts/mosher-web-dev.jsonld`) to `/mosher-web-dev`. A route that
 arrives with a `#section` now opens there instead of at the top.
+After a `/ux-check`, the portfolio is dark only: the theme toggle and the ✦
+home mark are gone (both were fixed to the screen and covered body text on
+13 of 24 phone screens), and the light landing and legal pages set their
+own ground on `<html>`. On phones the pause control is a pause or play
+symbol beside the cue, the cue arrow bobs three times and rests, and the
+tool links get 44px tap areas.
 
 **Victoria Grace testimonial** · branch `feat/victoria-testimonial`.
 Fourth testimonial (the flagship gallery client) — every gallery site now has a
