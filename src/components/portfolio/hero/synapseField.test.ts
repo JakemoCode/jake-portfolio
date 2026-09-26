@@ -14,11 +14,14 @@ const palette: FieldPalette = {
 // Deterministic stand-in for Math.random
 const seeded = (seed: number) => () => ((seed = (seed * 1664525 + 1013904223) % 2 ** 32) / 2 ** 32);
 
-/** A canvas context that records where each pulse starts. A fresh pulse's
-    trail begins exactly on the node that sent it. */
+/** A canvas context that records where each pulse starts, and every ring:
+    a circle that is stroked rather than filled. A fresh pulse's trail begins
+    exactly on the node that sent it. */
 function recordingContext() {
   const pulseStarts: Array<[number, number]> = [];
+  const rings: Array<[number, number]> = [];
   let stroke = "";
+  let circle: [number, number] | null = null;
   const gradient = { addColorStop: () => {} };
   const ctx = {
     set strokeStyle(value: string) {
@@ -30,16 +33,22 @@ function recordingContext() {
     createLinearGradient: () => gradient,
     createRadialGradient: () => gradient,
     fillRect: () => {},
-    beginPath: () => {},
+    beginPath: () => {
+      circle = null;
+    },
     moveTo: (x: number, y: number) => {
       if (stroke === "rgba(94,232,207,0.8)") pulseStarts.push([x, y]);
     },
     lineTo: () => {},
-    stroke: () => {},
-    arc: () => {},
+    stroke: () => {
+      if (circle) rings.push(circle);
+    },
+    arc: (x: number, y: number) => {
+      circle = [x, y];
+    },
     fill: () => {},
   };
-  return { ctx: ctx as unknown as CanvasRenderingContext2D, pulseStarts };
+  return { ctx: ctx as unknown as CanvasRenderingContext2D, pulseStarts, rings };
 }
 
 describe("createSynapseField", () => {
@@ -119,5 +128,51 @@ describe("createSynapseField", () => {
     expect(distance(still[nearest]!) - distance(drawn[nearest]!)).toBeGreaterThan(4);
     const far = still.findIndex((node) => distance(node) > 300);
     expect(drawn[far]).toEqual(still[far]);
+  });
+
+  it("rings the node a click would fire, while the cursor rests on the field", () => {
+    const ringsAt = (aimRing: number) => {
+      const field = createSynapseField(800, 600, palette, { ...FIELD_DEFAULTS, emberClick: 0, aimRing }, seeded(7));
+      const recorder = recordingContext();
+      field.pointer({ x: 400, y: 300 });
+      for (let t = 0; t < 2; t += 0.016) field.draw(recorder.ctx, t, 0.016);
+      recorder.rings.length = 0;
+      field.draw(recorder.ctx, 2, 0.016);
+      return { field, ...recorder };
+    };
+
+    expect(ringsAt(0).rings).toHaveLength(0);
+
+    const { field, ctx, rings, pulseStarts } = ringsAt(0.6);
+    expect(rings).toHaveLength(1);
+    pulseStarts.length = 0;
+    field.fireAt(400, 300);
+    field.draw(ctx, 2.016, 0.016);
+    const [rx, ry] = rings[0]!;
+    expect(pulseStarts.some(([x, y]) => Math.hypot(x - rx, y - ry) < 2)).toBe(true);
+  });
+
+  it("fires each node a drag sweeps across, and not again on the way back", () => {
+    const field = createSynapseField(800, 600, palette, { ...FIELD_DEFAULTS, emberClick: 0 }, seeded(5));
+    const { ctx, pulseStarts } = recordingContext();
+    field.draw(ctx, 0.5, 0.016); // the first ambient firing happens here
+    pulseStarts.length = 0;
+
+    for (let x = 100; x <= 700; x += 10) field.sweep({ x, y: 300 });
+    field.draw(ctx, 0.52, 0.016);
+    const origins = new Set(pulseStarts.map(([x, y]) => `${Math.round(x)},${Math.round(y)}`));
+    // 600px of drag crosses about seven nodes 90px apart
+    expect(origins.size).toBeGreaterThanOrEqual(4);
+
+    // Pulses already in flight redraw every frame, so a second pass that
+    // fired nothing leaves the count unchanged
+    pulseStarts.length = 0;
+    field.draw(ctx, 0.53, 0.016);
+    const inFlight = pulseStarts.length;
+    pulseStarts.length = 0;
+    for (let x = 700; x >= 100; x -= 10) field.sweep({ x, y: 300 });
+    field.sweep(null);
+    field.draw(ctx, 0.54, 0.016);
+    expect(pulseStarts).toHaveLength(inFlight);
   });
 });

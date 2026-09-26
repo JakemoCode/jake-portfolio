@@ -41,6 +41,9 @@ const GROUPS: Array<{ title: string; controls: Control[] }> = [
     controls: [
       { key: "cursorRadius", label: "Reach (px)", min: 0, max: 400, step: 5 },
       { key: "cursorPull", label: "Pull (px, negative pushes)", min: -40, max: 40, step: 1 },
+      { key: "cursorGlow", label: "Hover glow", min: 0, max: 1, step: 0.01 },
+      { key: "aimRing", label: "Aim ring (0 hides it)", min: 0, max: 1, step: 0.01 },
+      { key: "dragFire", label: "Drag fires nodes (0 off, 1 on)", min: 0, max: 1, step: 1 },
     ],
   },
   {
