@@ -1,9 +1,10 @@
 /* The hero's generative field: a loose grid of nodes drifting on a slow flow
    field, joined to near neighbours. Every few seconds a random node fires and
    the signal hops a link or two before it dies out. Nodes within cursorRadius
-   lean toward the cursor, and a click fires the nearest node with more hops
-   and higher odds per link. Ambient firing stays sparse so a clicked wave is
-   distinguishable from it. */
+   lean toward the cursor and brighten, a ring marks the node a click would
+   fire, and a click fires it with more hops and higher odds per link. A drag
+   fires each node it crosses. Ambient firing stays sparse so a clicked wave
+   is distinguishable from it. */
 
 type Rgb = readonly [number, number, number];
 
@@ -23,6 +24,8 @@ export type SynapseField = {
   fireAt: (x: number, y: number) => void;
   /** Where the cursor is, or null once it leaves. */
   pointer: (at: { x: number; y: number } | null) => void;
+  /** A drag across the field, point by point; null when it ends. */
+  sweep: (at: { x: number; y: number } | null) => void;
 };
 
 /** Every tunable in the field. Read live on each frame, so a change shows at
@@ -48,6 +51,9 @@ export type FieldParams = {
   glowFade: number; // share of a node's glow left after one second
   cursorRadius: number; // nodes this close to the cursor lean toward it
   cursorPull: number; // how far the closest ones move; negative pushes them away
+  cursorGlow: number; // how much the nodes under the cursor brighten, 0 to 1
+  aimRing: number; // strength of the ring on the node a click would fire; 0 hides it
+  dragFire: number; // 1 lets a mouse drag fire the nodes it crosses, 0 turns it off
 };
 
 export const FIELD_DEFAULTS: FieldParams = {
@@ -70,6 +76,9 @@ export const FIELD_DEFAULTS: FieldParams = {
   glowFade: 0.12,
   cursorRadius: 140,
   cursorPull: 12,
+  cursorGlow: 0.8,
+  aimRing: 0.2,
+  dragFire: 1,
 };
 
 type Kind = "ambient" | "click";
@@ -77,6 +86,9 @@ type Node = { bx: number; by: number; x: number; y: number; act: number; firedAt
 type Pulse = { from: number; to: number; p: number; speed: number; depth: number; color: Rgb; kind: Kind };
 
 const rgba = (c: Rgb, a: number) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
+
+const LINK_GLOW = 4 / 3; // a link near the cursor lights a little more than its nodes
+const AIM_RADIUS = 8; // the aim ring's radius, about twice a lit node's
 
 export function parseHex(hex: string): Rgb {
   const n = parseInt(hex.trim().replace("#", ""), 16);
@@ -191,14 +203,50 @@ export function createSynapseField(
 
   const colorFor = (share: number) => (random() < share ? palette.ember : palette.signal);
 
-  const fireAt = (x: number, y: number) => {
+  const nearestTo = (x: number, y: number) => {
     let nearest = -1;
     let best = Infinity;
     nodes.forEach((n, i) => {
       const d = Math.hypot(n.x - x, n.y - y);
       if (d < best) [nearest, best] = [i, d];
     });
+    return nearest;
+  };
+
+  const fireAt = (x: number, y: number) => {
+    const nearest = nearestTo(x, y);
     if (nearest >= 0) fire(nearest, 0, colorFor(params.emberClick), "click");
+  };
+
+  // A drag lights a trail rather than a wave: each node fires once as the
+  // pointer reaches it, with the ambient reach, and not again until its
+  // cooldown ends, so scrubbing back and forth can't flood the field
+  let swept = -1;
+  let last: { x: number; y: number } | null = null;
+  const sweepTo = (x: number, y: number) => {
+    // Pointer capture keeps reporting past the edge, where the nearest node
+    // is an off-screen one in the margin row
+    if (x < 0 || y < 0 || x > w || y > h) return;
+    const i = nearestTo(x, y);
+    if (i < 0 || i === swept) return;
+    swept = i;
+    if (now - nodes[i]!.firedAt < params.refractory) return;
+    fire(i, 0, colorFor(params.emberClick), "ambient");
+  };
+  const sweep: SynapseField["sweep"] = (at) => {
+    if (!at) {
+      swept = -1;
+      last = null;
+      return;
+    }
+    // A fast drag moves further than one gap between pointer events, so
+    // walk the segment in steps short enough to land on every node it crosses
+    const from = last ?? at;
+    last = at;
+    const steps = Math.max(1, Math.ceil(Math.hypot(at.x - from.x, at.y - from.y) / (gap / 3)));
+    for (let s = 1; s <= steps; s++) {
+      sweepTo(from.x + ((at.x - from.x) * s) / steps, from.y + ((at.y - from.y) * s) / steps);
+    }
   };
 
   const draw: SynapseField["draw"] = (ctx, t, dt) => {
@@ -234,7 +282,7 @@ export function createSynapseField(
       for (const j of a.links) {
         if (j < i) continue;
         const b = nodes[j]!;
-        const glow = Math.max(a.act, b.act, nearness((a.x + b.x) / 2, (a.y + b.y) / 2) * 0.4);
+        const glow = Math.max(a.act, b.act, nearness((a.x + b.x) / 2, (a.y + b.y) / 2) * params.cursorGlow * LINK_GLOW);
         if (glow > 0.01) {
           lit.push([a, b, glow]);
           continue;
@@ -283,7 +331,7 @@ export function createSynapseField(
     }
 
     for (const n of nodes) {
-      const glow = Math.max(n.act, nearness(n.x, n.y) * 0.3);
+      const glow = Math.max(n.act, nearness(n.x, n.y) * params.cursorGlow);
       ctx.fillStyle = rgba(palette.signal, 0.25 + glow * 0.75);
       ctx.beginPath();
       ctx.arc(n.x, n.y, 1.4 + glow * 2.6, 0, Math.PI * 2);
@@ -296,7 +344,18 @@ export function createSynapseField(
         ctx.fillRect(n.x - 24, n.y - 24, 48, 48);
       }
     }
+
+    // The node under the pointer, which is the one a click fires, gets a
+    // slow-breathing ring. It fades in and out with the cursor.
+    const aimed = params.aimRing > 0 && cursor.presence > 0.01 ? nodes[nearestTo(cursor.tx, cursor.ty)] : undefined;
+    if (aimed) {
+      ctx.strokeStyle = rgba(palette.spark, params.aimRing * cursor.presence);
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.arc(aimed.x, aimed.y, AIM_RADIUS + Math.sin(t * 3) * 1.5, 0, Math.PI * 2);
+      ctx.stroke();
+    }
   };
 
-  return { draw, fireAt, pointer };
+  return { draw, fireAt, pointer, sweep };
 }

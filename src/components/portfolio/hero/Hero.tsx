@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useRef, useState, type MouseEvent } from "react";
+import { lazy, Suspense, useEffect, useRef, useState, type MouseEvent, type PointerEvent } from "react";
 import styles from "./Hero.module.css";
 import { createSynapseField, FIELD_DEFAULTS, readPalette, type FieldParams, type SynapseField } from "./synapseField";
 
@@ -21,6 +21,7 @@ type Props = {
 
 const MAX_DPR = 1.5; // the field is soft; full retina resolution buys nothing but fill cost
 const WARM_UP_FRAMES = 60; // so a still frame shows signals in flight, not an idle grid
+const DRAG_SLOP = 6; // px a press can wander and still count as a click, not a drag
 const RESIZE_SETTLE_MS = 150;
 
 const prefersReducedMotion = () =>
@@ -126,18 +127,68 @@ export function Hero({ name, title, availability, resume, email, github, linkedi
     };
   }, []);
 
+  const fieldPoint = (event: MouseEvent<HTMLElement>) => {
+    const box = event.currentTarget.getBoundingClientRect();
+    return { x: event.clientX - box.left, y: event.clientY - box.top };
+  };
+
   // Pointer only, and decorative: the field answers a click near it, but
   // nothing on the page depends on it. A paused field stays still.
   const fireAtPointer = (event: MouseEvent<HTMLElement>) => {
+    // The click that ends a drag would fire the last node a second time
+    if (dragRef.current?.swept) {
+      dragRef.current = null;
+      return;
+    }
     if (pausedRef.current || (event.target as Element).closest("a, button")) return;
-    const box = event.currentTarget.getBoundingClientRect();
-    fieldRef.current?.fireAt(event.clientX - box.left, event.clientY - box.top);
+    const at = fieldPoint(event);
+    fieldRef.current?.fireAt(at.x, at.y);
   };
 
+  // A mouse drag that starts on the field, not on the text or controls over
+  // it, fires each node it crosses. Pressing on the headline still selects it.
+  // The text column's padding and the foot row's empty space count as field.
+  const dragRef = useRef<{ x: number; y: number; swept: boolean } | null>(null);
+  const canDrag = (event: MouseEvent<HTMLElement>) =>
+    event.button === 0 &&
+    !pausedRef.current &&
+    paramsRef.current.dragFire > 0 &&
+    !(event.target as Element).closest("h1, p, ul, a, button, details");
+
+  const startDrag = (event: PointerEvent<HTMLElement>) => {
+    if (event.pointerType !== "mouse" || !canDrag(event)) return;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    dragRef.current = { x: event.clientX, y: event.clientY, swept: false };
+  };
+
+  const drag = (event: PointerEvent<HTMLElement>) => {
+    const press = dragRef.current;
+    if (!press || pausedRef.current || !event.currentTarget.hasPointerCapture(event.pointerId)) return;
+    if (!press.swept && Math.hypot(event.clientX - press.x, event.clientY - press.y) < DRAG_SLOP) return;
+    press.swept = true;
+    fieldRef.current?.sweep(fieldPoint(event));
+  };
+
+  const endDrag = () => {
+    fieldRef.current?.sweep(null);
+    const press = dragRef.current;
+    if (!press?.swept) {
+      dragRef.current = null;
+      return;
+    }
+    // Kept just long enough for the click that follows the release to skip;
+    // if no click comes (released off the hero), the next one still fires
+    setTimeout(() => {
+      if (dragRef.current === press) dragRef.current = null;
+    });
+  };
+
+  // Over a link or button a click does that control's job, not the field's,
+  // so the field treats the cursor as gone: no ring promising a firing
   const follow = (event: MouseEvent<HTMLElement>) => {
     if (!matchMedia("(pointer: fine)").matches) return;
-    const box = event.currentTarget.getBoundingClientRect();
-    fieldRef.current?.pointer({ x: event.clientX - box.left, y: event.clientY - box.top });
+    const overControl = (event.target as Element).closest("a, button");
+    fieldRef.current?.pointer(overControl ? null : fieldPoint(event));
   };
 
   return (
@@ -148,6 +199,13 @@ export function Hero({ name, title, availability, resume, email, github, linkedi
       onClick={fireAtPointer}
       onMouseMove={follow}
       onMouseLeave={() => fieldRef.current?.pointer(null)}
+      // Starting a drag on the field would otherwise begin a text selection
+      onMouseDown={(event) => canDrag(event) && event.preventDefault()}
+      onPointerDown={startDrag}
+      onPointerMove={drag}
+      // Fires after pointerup and pointercancel, and also when capture is
+      // lost without either, so a drag can't be left open
+      onLostPointerCapture={endDrag}
     >
       <canvas ref={canvasRef} className={styles.field} aria-hidden="true" />
       <div className={styles.inner}>

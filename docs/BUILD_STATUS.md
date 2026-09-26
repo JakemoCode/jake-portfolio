@@ -4,18 +4,26 @@ Running status of the portfolio build — what's in flight, whether it's
 green, and what's queued. Update after any build activity (per the
 workspace `frontend-standards.md`).
 
-_Last updated: 2026-09-25_
+_Last updated: 2026-09-26_
 
 ## Gates
 
 | Check | Command | Status |
 |-------|---------|--------|
 | Types | `npx tsc --noEmit` | ✅ clean |
-| Unit/RTL | `npx vitest run` | ✅ 84 passing |
+| Unit/RTL | `npx vitest run` | ✅ 86 passing |
 | Build | `npx vite build` | ✅ clean |
 | Dev | `npm run dev` | serves at `localhost:5173` |
 
 ## Shipped
+
+**PRs #43 and #44, the route swap and dark-only portfolio** (merged
+2026-09-25). The portfolio serves at `/` and the client landing at
+`/mosher-web-dev`; `/portfolio` answers with a 301, confirmed on production.
+Root carries the portfolio's link-preview card (`public/og-portfolio.png`)
+and the landing's tags and business schema move with it. The portfolio is
+dark only, with no theme toggle or home mark; the landing and legal pages
+stay light and set their own ground on `<html>`.
 
 **PRs #41 and #42, the `/portfolio` restructure** (merged 2026-09-25).
 A full-screen teal hero with the Canvas2D "synaptic field", an Experience
@@ -37,20 +45,12 @@ Reworked the landing's "proof" zone into two dark-surface sections: the
 
 ## In flight
 
-**Route swap** · branch `feat/route-swap`. The portfolio moves to `/` and
-the client landing to `/mosher-web-dev`. Vercel answers `/portfolio` with a
-301 to `/`, and the router covers client-side visits, keeping any
-`#section`. `index.html` now carries the portfolio's link-preview tags and a
-new card (`public/og-portfolio.png`, from `og-portfolio.source.html`);
-`scripts/emit-route-meta.mjs` writes the landing's tags and its business
-schema (`scripts/mosher-web-dev.jsonld`) to `/mosher-web-dev`. A route that
-arrives with a `#section` now opens there instead of at the top.
-After a `/ux-check`, the portfolio is dark only: the theme toggle and the ✦
-home mark are gone (both were fixed to the screen and covered body text on
-13 of 24 phone screens), and the light landing and legal pages set their
-own ground on `<html>`. On phones the pause control is a pause or play
-symbol beside the cue, the cue arrow bobs three times and rests, and the
-tool links get 44px tap areas.
+**Field affordance** · branch `feat/field-affordance`. The hero field now
+shows that it can be clicked. With a mouse, a faint ring marks the node a
+click would fire, the nodes under the cursor brighten (hover glow 0.8), and
+a drag that starts on the field fires each node it crosses, once per node
+cooldown. Touch keeps tap-to-fire only, since a drag there scrolls. Headline
+contrast with the cursor resting on it: 7.3:1 at the worst pixel.
 
 **Victoria Grace testimonial** · branch `feat/victoria-testimonial`.
 Fourth testimonial (the flagship gallery client) — every gallery site now has a
