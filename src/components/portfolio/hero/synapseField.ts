@@ -222,16 +222,31 @@ export function createSynapseField(
   // pointer reaches it, with the ambient reach, and not again until its
   // cooldown ends, so scrubbing back and forth can't flood the field
   let swept = -1;
-  const sweep: SynapseField["sweep"] = (at) => {
-    if (!at) {
-      swept = -1;
-      return;
-    }
-    const i = nearestTo(at.x, at.y);
+  let last: { x: number; y: number } | null = null;
+  const sweepTo = (x: number, y: number) => {
+    // Pointer capture keeps reporting past the edge, where the nearest node
+    // is an off-screen one in the margin row
+    if (x < 0 || y < 0 || x > w || y > h) return;
+    const i = nearestTo(x, y);
     if (i < 0 || i === swept) return;
     swept = i;
     if (now - nodes[i]!.firedAt < params.refractory) return;
     fire(i, 0, colorFor(params.emberClick), "ambient");
+  };
+  const sweep: SynapseField["sweep"] = (at) => {
+    if (!at) {
+      swept = -1;
+      last = null;
+      return;
+    }
+    // A fast drag moves further than one gap between pointer events, so
+    // walk the segment in steps short enough to land on every node it crosses
+    const from = last ?? at;
+    last = at;
+    const steps = Math.max(1, Math.ceil(Math.hypot(at.x - from.x, at.y - from.y) / (gap / 3)));
+    for (let s = 1; s <= steps; s++) {
+      sweepTo(from.x + ((at.x - from.x) * s) / steps, from.y + ((at.y - from.y) * s) / steps);
+    }
   };
 
   const draw: SynapseField["draw"] = (ctx, t, dt) => {

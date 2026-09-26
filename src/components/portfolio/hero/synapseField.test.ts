@@ -175,4 +175,32 @@ describe("createSynapseField", () => {
     field.draw(ctx, 0.54, 0.016);
     expect(pulseStarts).toHaveLength(inFlight);
   });
+
+  it("fires the nodes between two far-apart points of a fast drag", () => {
+    const field = createSynapseField(800, 600, palette, { ...FIELD_DEFAULTS, emberClick: 0 }, seeded(5));
+    const { ctx, pulseStarts } = recordingContext();
+    field.draw(ctx, 0.5, 0.016);
+    pulseStarts.length = 0;
+
+    field.sweep({ x: 100, y: 300 });
+    field.sweep({ x: 700, y: 300 });
+    field.draw(ctx, 0.52, 0.016);
+    const origins = new Set(pulseStarts.map(([x, y]) => `${Math.round(x)},${Math.round(y)}`));
+    expect(origins.size).toBeGreaterThanOrEqual(4);
+  });
+
+  it("ignores drag points past the field's edge", () => {
+    const field = createSynapseField(800, 600, palette, { ...FIELD_DEFAULTS, emberClick: 0 }, seeded(5));
+    const { ctx, pulseStarts } = recordingContext();
+    field.draw(ctx, 0.5, 0.016);
+    field.draw(ctx, 0.51, 0.016);
+    pulseStarts.length = 0;
+    field.draw(ctx, 0.52, 0.016);
+    const inFlight = pulseStarts.length;
+
+    for (let x = 100; x <= 700; x += 10) field.sweep({ x, y: 700 });
+    pulseStarts.length = 0;
+    field.draw(ctx, 0.53, 0.016);
+    expect(pulseStarts).toHaveLength(inFlight);
+  });
 });
