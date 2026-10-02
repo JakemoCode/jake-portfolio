@@ -2,7 +2,6 @@ import { useState, type ComponentType, type MouseEvent } from "react";
 import { flushSync } from "react-dom";
 import { Hero, type HeroProps } from "./Hero";
 import { HeroV2 } from "./v2/HeroV2";
-import { HeroV3 } from "./v3/HeroV3";
 import styles from "./HeroSeries.module.css";
 
 /* The hero as a series of versions, stepped through with a small "MOAR!"
@@ -10,7 +9,7 @@ import styles from "./HeroSeries.module.css";
    or a shared link lands on the same one. Each step is revealed as a circle
    growing out of the button. */
 
-const versions: Array<ComponentType<HeroProps>> = [Hero, HeroV2, HeroV3];
+const versions: Array<ComponentType<HeroProps>> = [Hero, HeroV2];
 const arrived = Promise.resolve();
 
 const readVersion = () => {

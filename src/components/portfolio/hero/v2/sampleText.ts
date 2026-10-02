@@ -65,38 +65,3 @@ export function sampleName(lines: HTMLElement[], host: HTMLElement): { points: G
   });
   return { points, step };
 }
-
-/** Any word, set on one line in the name's face and fitted to the name's own block */
-export function sampleWord(
-  word: string,
-  lines: HTMLElement[],
-  host: HTMLElement,
-): { points: GlyphPoint[]; step: number } {
-  const first = lines[0];
-  if (!first || !word.trim()) return { points: [], step: 8 };
-  const origin = host.getBoundingClientRect();
-  const boxes = lines.map((line) => line.getBoundingClientRect());
-  const block = {
-    left: Math.min(...boxes.map((b) => b.left)),
-    top: Math.min(...boxes.map((b) => b.top)),
-    bottom: Math.max(...boxes.map((b) => b.bottom)),
-  };
-  const font = fontOf(getComputedStyle(first));
-  // As wide as the band allows, never taller than the name itself
-  const room = host.clientWidth - (block.left - origin.left) * 2;
-  const probe = contextFor(1, 1, font);
-  const natural = probe?.measureText(word).width ?? room;
-  const size = Math.min(font.size * 1.15, (font.size * room) / Math.max(1, natural));
-  // Computed letter-spacing comes back in px at the name's size, so it scales with the word
-  const tracking = (parseFloat(font.letterSpacing) || 0) * (size / font.size);
-  const fitted = { ...font, size, letterSpacing: `${tracking}px` };
-  const lineHeight = size * 1.05;
-  const at = {
-    x: block.left - origin.left,
-    y: (block.top + block.bottom) / 2 - origin.top - lineHeight / 2,
-    width: room,
-    height: lineHeight,
-  };
-  const step = Math.max(4, size * STEP_SHARE);
-  return { points: sampleLine(word, fitted, at, step), step };
-}

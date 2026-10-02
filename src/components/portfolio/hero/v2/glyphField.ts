@@ -16,13 +16,10 @@ export type GlyphField = {
   pointer: (at: GlyphPoint | null) => void;
   /** A shockwave from a point: nodes nearby are thrown outward and a wave lights the rest. */
   burst: (x: number, y: number) => void;
-  /** Sends the same nodes to new letterforms, left to right, optionally tinted; snap skips the flight. */
-  retarget: (points: GlyphPoint[], step: number, options?: { tint?: Tint; snap?: boolean }) => void;
   /** Starts the write-in of a field created held; until then the nodes wait where they were scattered. */
   release: () => void;
 };
 
-export type Tint = "signal" | "ember";
 
 type Node = {
   hx: number;
@@ -125,8 +122,7 @@ export function createGlyphField(
       ember: 0,
     };
   });
-  let links = linkNodes(nodes, step * 1.9);
-  let tint: Tint = "signal";
+  const links = linkNodes(nodes, step * 1.9);
 
   const waves: Wave[] = [];
   let nextWave = assembled ? 1.5 : 2.4;
@@ -172,39 +168,6 @@ export function createGlyphField(
       n.vy += ((n.y - y) / d) * force;
     }
     waves.push({ x, y, t0: now, speed: 760, power: 1, ember: random() < 0.35 });
-  };
-
-  const retarget: GlyphField["retarget"] = (targets, nextStep, { tint: nextTint = "signal", snap = false } = {}) => {
-    if (!targets.length || !nodes.length) return;
-    // Nodes and targets both in reading order, so each letter's nodes come
-    // from about the same place and the mesh flows sideways, not scrambled
-    const order = (a: GlyphPoint, b: GlyphPoint) => a.x - b.x || a.y - b.y;
-    const byPlace = [...nodes].sort((a, b) => order({ x: a.hx, y: a.hy }, { x: b.hx, y: b.hy }));
-    // A word with more points than there are nodes keeps a random subset.
-    // Thinning in reading order would drop whole columns of a letter.
-    const pool = [...targets];
-    for (let i = pool.length - 1; i > 0; i--) {
-      const j = Math.floor(random() * (i + 1));
-      [pool[i], pool[j]] = [pool[j]!, pool[i]!];
-    }
-    const sorted = pool.slice(0, Math.max(nodes.length, 1)).sort(order);
-    const from = sorted[0]!.x;
-    const width = Math.max(1, sorted[sorted.length - 1]!.x - from);
-    byPlace.forEach((n, k) => {
-      // More nodes than points doubles some up, with a nudge so they don't stack exactly
-      const target = sorted[Math.floor((k * sorted.length) / byPlace.length)]!;
-      const spare = byPlace.length > sorted.length;
-      n.hx = target.x + (spare ? (random() - 0.5) * nextStep * 0.5 : 0);
-      n.hy = target.y + (spare ? (random() - 0.5) * nextStep * 0.5 : 0);
-      n.wake = now + ((n.hx - from) / width) * 0.4;
-      n.glow = Math.max(n.glow, 0.45);
-      if (snap) Object.assign(n, { x: n.hx, y: n.hy, vx: 0, vy: 0, wake: 0 });
-    });
-    // Thinned to fit the node count, the nodes sit further apart than the step
-    const spread = Math.sqrt(Math.max(1, targets.length / nodes.length));
-    links = linkNodes(nodes, nextStep * spread * 1.9);
-    tint = nextTint;
-    if (!snap) waves.push({ x: from - 60, y: h / 2, t0: now + 0.35, speed: 1100, power: 0.7, ember: nextTint === "ember" });
   };
 
   const draw: GlyphField["draw"] = (ctx, t, dt) => {
@@ -278,8 +241,7 @@ export function createGlyphField(
     ctx.lineWidth = 1.1;
     buckets.forEach((bucket, level) => {
       if (!bucket.length) return;
-      const rest = tint === "ember" ? palette.ember : palette.signal;
-      ctx.strokeStyle = rgba(level ? palette.spark : rest, [0.42, 0.55, 0.7, 0.88][level]!);
+      ctx.strokeStyle = rgba(level ? palette.spark : palette.signal, [0.42, 0.55, 0.7, 0.88][level]!);
       ctx.beginPath();
       for (const [a, b] of bucket) {
         ctx.moveTo(a.x, a.y);
@@ -289,7 +251,7 @@ export function createGlyphField(
     });
 
     for (const n of nodes) {
-      const base = n.ember > 0.5 || tint === "ember" ? palette.ember : palette.signal;
+      const base = n.ember > 0.5 ? palette.ember : palette.signal;
       ctx.fillStyle = rgba(mix(base, palette.spark, n.ember > 0.5 ? n.glow * 0.3 : n.glow), 0.7 + n.glow * 0.3);
       ctx.beginPath();
       ctx.arc(n.x, n.y, 1.6 + n.glow * 2.2, 0, Math.PI * 2);
@@ -297,5 +259,5 @@ export function createGlyphField(
     }
   };
 
-  return { draw, pointer, burst, retarget, release };
+  return { draw, pointer, burst, release };
 }

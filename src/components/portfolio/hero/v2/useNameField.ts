@@ -35,7 +35,6 @@ export function useNameField({
   const groundRef = useRef<SynapseField | null>(null);
   const glyphsRef = useRef<GlyphField | null>(null);
   const wakeRef = useRef<() => void>(() => {});
-  const drawRef = useRef<(dt: number) => void>(() => {});
 
   useEffect(() => {
     pausedRef.current = paused;
@@ -69,7 +68,6 @@ export function useNameField({
       groundRef.current?.draw(ctx, t, dt);
       glyphsRef.current?.draw(ctx, t, dt);
     };
-    drawRef.current = draw;
 
     const build = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
@@ -145,7 +143,6 @@ export function useNameField({
       onScreen.disconnect();
       document.removeEventListener("visibilitychange", wake);
       wakeRef.current = () => {};
-      drawRef.current = () => {};
     };
   }, [hostRef, canvasRef, linesRef]);
 
@@ -156,7 +153,5 @@ export function useNameField({
     paused,
     setPaused,
     fallback,
-    /** One frame, for a change made while the loop is stopped */
-    drawOnce: () => drawRef.current(0),
   };
 }
