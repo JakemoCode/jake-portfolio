@@ -3,14 +3,15 @@
 // slug, so it is its own and never changes between visits. On a mouse the
 // glow leans toward the pointer and the nodes near it light up, the way the
 // hero's nodes brighten under the cursor.
-import type { PointerEvent, ReactNode } from "react";
+import { useMemo, type PointerEvent, type ReactNode } from "react";
+import { FIELD_DEFAULTS } from "./hero/synapseField";
 import styles from "./FieldWell.module.css";
 
 const WIDTH = 480;
 const HEIGHT = 900;
-const GAP = 90; // the hero's spacing between nodes, in CSS px at the well's usual size
+const GAP = FIELD_DEFAULTS.gap; // the hero's spacing between nodes, in CSS px at the well's usual size
 const JITTER = 0.7; // how far a node strays from its grid point, as a share of GAP
-const REACH = 1.5; // link any two nodes closer than GAP × this
+const REACH = FIELD_DEFAULTS.linkReach; // link any two nodes closer than GAP × this, as the hero does
 const LARGE_ODDS = 0.15;
 
 /** FNV-1a into mulberry32: the same seed always draws the same network */
@@ -57,7 +58,8 @@ function drawNetwork(seed: string) {
 type Props = { seed: string; className?: string; children: ReactNode };
 
 export function FieldWell({ seed, className, children }: Props) {
-  const network = drawNetwork(seed);
+  // Drawn once per seed, so a re-render doesn't redo the all-pairs link search
+  const network = useMemo(() => drawNetwork(seed), [seed]);
 
   const lean = (event: PointerEvent<HTMLDivElement>) => {
     if (event.pointerType === "touch") return;

@@ -45,7 +45,7 @@ export function useScrollTick({
         viewport: innerHeight,
         maxScroll: document.documentElement.scrollHeight - innerHeight,
         targets: (targets.current?.() ?? markers.current).map((el) => (el?.getBoundingClientRect().top ?? Infinity) + scrollY),
-        // scrollTick is axis-free: on x, a marker's top and bottom are its left and right
+        // scrollTick is axis-free, so on x a marker's top and bottom are its left and right
         markers: markers.current.map((el) => {
           const box = el?.getBoundingClientRect();
           if (!box) return { top: 0, bottom: 0 };

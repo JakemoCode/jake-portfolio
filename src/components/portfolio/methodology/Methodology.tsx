@@ -1,4 +1,4 @@
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { methodologyHabits, publicTools } from "../../../content/methodology";
 import { useScrollTick } from "../scrollTick/useScrollTick";
 import { DistillIndex } from "./DistillIndex";
@@ -7,7 +7,7 @@ import styles from "./Methodology.module.css";
 
 const habitCount = methodologyHabits.length;
 
-/* On a desktop with motion allowed, the habits become an evidence stage: the
+/* On a desktop with motion allowed, the habits become an evidence stage. The
    copy scrolls on the left while one framed plate holds still on the right and
    re-forms into each habit's figure as that habit reaches the middle of the
    viewport. The markup is the stacked layout every other reader gets; the
@@ -23,6 +23,19 @@ export function Methodology() {
   });
   // Until the first habit reaches the middle, it is already on the stage
   const active = Math.max(current, 0);
+
+  // The first plate holds its sequence until the stage scrolls into view, or
+  // it would play at page load, far below the fold
+  const [waiting, setWaiting] = useState(() => typeof IntersectionObserver !== "undefined");
+  useEffect(() => {
+    const habits = habitsRef.current;
+    if (!waiting || !habits) return;
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry?.isIntersecting) setWaiting(false);
+    });
+    observer.observe(habits);
+    return () => observer.disconnect();
+  }, [waiting]);
 
   // JavaScript because the frame glides to a height only the rendered figure knows
   useEffect(() => {
@@ -44,6 +57,7 @@ export function Methodology() {
       <div
         ref={habitsRef}
         className={styles.habits}
+        data-waiting={waiting || undefined}
         style={{ "--habit-count": habitCount } as CSSProperties}
       >
         <div className={styles.stage}>

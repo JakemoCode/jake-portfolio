@@ -3,13 +3,11 @@
    Every rule outside the motion block below styles the FINISHED state, so
    reduced motion, browsers without scroll-driven animations, and screenshots
    that never scroll all get the complete figure. The motion block only adds
-   the scroll-scrubbed "before" through animation fill.
+   the "before" through animation fill, on one of two clocks described there.
 
-   Each animated element rides its own view timeline: it starts once it is
-   10% of the viewport up from the bottom and lands by about 55%, so nothing
-   plays below the fold. Text is revealed with clip-path and transform, never
-   opacity, so an axe scan at any scroll position measures full-contrast text.
-   Wipes are linear (a constant-speed front); spatial moves use ease-out. */
+   Text is revealed with clip-path and transform, never opacity, so an axe
+   scan at any scroll position measures full-contrast text. Wipes are linear
+   (a constant-speed front); spatial moves use ease-out. */
 
 .plate {
   /* Component-scoped tokens: fixed sizes with no global rung */
@@ -494,35 +492,18 @@
    scroll can't drive it; the sequence plays on time from the moment the
    plate takes the stage, at one beat to --beat.
 
-   With neither clock (no view timelines, off the stage) each piece runs for
-   the default 0s and the figure simply shows finished.
+   The clock rules reach every element in a plate. Only the pieces below
+   name an animation, so on anything else they do nothing, and a new piece
+   needs only its own rule. With neither clock (no view timelines, off the
+   stage) each piece runs for the default 0s and shows finished.
    ========================================================================== */
 
 /* min-height: a figure only plays once it is fully in view, so on a screen
    too short to show all of one (a landscape phone) it would play off screen.
    Those screens get the finished figure, like the pinned opener does. */
 @media (prefers-reduced-motion: no-preference) and (min-height: 40em) {
-  :where(.plate) :where(
-      .pass,
-      .passTick,
-      .stamp,
-      .taste s,
-      .findingRow,
-      .run,
-      .run s,
-      .verdict,
-      .kinds li,
-      .whole,
-      .part,
-      .part code,
-      .incident,
-      .ruleHeading,
-      .ruleLines li,
-      .check,
-      .lesson
-    ),
-  /* Pseudo-elements can't sit inside :where(), so the meter fill is listed apart */
-  :where(.plate) .meterStep[data-on]::before {
+  :where(.plate) *,
+  :where(.plate) *::before {
     animation-fill-mode: both;
     animation-timing-function: linear;
   }
@@ -660,26 +641,8 @@
       view-timeline: --fig block;
     }
 
-    :where(.plate) :where(
-        .pass,
-        .passTick,
-        .stamp,
-        .taste s,
-        .findingRow,
-        .run,
-        .run s,
-        .verdict,
-        .kinds li,
-        .whole,
-        .part,
-        .part code,
-        .incident,
-        .ruleHeading,
-        .ruleLines li,
-        .check,
-        .lesson
-      ),
-    :where(.plate) .meterStep[data-on]::before {
+    :where(.plate) *,
+    :where(.plate) *::before {
       animation-timeline: --fig;
       animation-range:
         contain calc((10 + var(--at)) * 1vh)
@@ -690,8 +653,10 @@
 
 /* The evidence stage's clock. Methodology marks the habit on stage with
    data-place="active" on the wrapper around its plate. Every other plate is
-   hidden with its sequence cleared, so taking the stage again replays it
-   from the top. The stage draws one frame for all of them. */
+   transparent with its sequence cleared, so taking the stage again replays
+   it from the top. Until the stage first scrolls into view, Methodology
+   sets data-waiting and the first plate holds its "before". The stage
+   draws one frame for all of them. */
 @media (prefers-reduced-motion: no-preference) and (min-width: 56em) and (min-height: 40em) {
   .plate {
     --beat: 28ms;
@@ -701,26 +666,8 @@
     border-color: transparent;
   }
 
-  :where([data-place="active"] .plate) :where(
-      .pass,
-      .passTick,
-      .stamp,
-      .taste s,
-      .findingRow,
-      .run,
-      .run s,
-      .verdict,
-      .kinds li,
-      .whole,
-      .part,
-      .part code,
-      .incident,
-      .ruleHeading,
-      .ruleLines li,
-      .check,
-      .lesson
-    ),
-  :where([data-place="active"] .plate) .meterStep[data-on]::before {
+  :where([data-place="active"] .plate) *,
+  :where([data-place="active"] .plate) *::before {
     animation-timeline: auto;
     animation-range: normal;
     animation-delay: calc(var(--stage-lead) + var(--at) * var(--beat));
@@ -735,6 +682,11 @@
   [data-place]:not([data-place="active"]) .plate *,
   [data-place]:not([data-place="active"]) .plate *::before {
     animation-name: none;
+  }
+
+  [data-waiting] .plate *,
+  [data-waiting] .plate *::before {
+    animation-play-state: paused;
   }
 }
 

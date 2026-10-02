@@ -8,13 +8,14 @@
   --shadow-phone: 0 6px 24px rgba(0, 0, 0, 0.12); /* phone card depth */
   --phone-width: min(60%, 15rem);    /* the phone mock, near its real size beside the copy */
   --tap-target: 44px;                /* minimum touch target (Fitts's law) */
+  --underline-offset: 0.35em;        /* clears descenders under the thick accent underline */
 
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   background: var(--color-bg-elevated);
   border: var(--border-width-thin) solid var(--color-border);
   border-radius: var(--radius-xl);
-  /* clip, not hidden: hidden makes this a scroll container, and the sticky
+  /* overflow: hidden would make this a scroll container, and the sticky
      screenshot and the stamps' view() timeline both need the page's scroll */
   overflow: clip;
   transition: border-color var(--duration-base) ease;
@@ -202,7 +203,7 @@
   text-decoration: underline;
   text-decoration-color: var(--color-accent);
   text-decoration-thickness: var(--border-width-thick);
-  text-underline-offset: 0.35em;
+  text-underline-offset: var(--underline-offset);
 }
 
 .linkDisabled {

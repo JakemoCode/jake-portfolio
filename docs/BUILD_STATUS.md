@@ -89,6 +89,11 @@ quote, from three distinct clients.
 - Give gallery items a numeric count. `CaseStudyTeaser` scrapes it from the
   note text with a regex, so a note without a digit renders an empty count
   (PR #41 review).
+- One network layout for the hero and the card wells. `FieldWell` rebuilds
+  the jittered grid and link reach that `createSynapseField` lays out inside
+  its closure; it reads the hero's `FIELD_DEFAULTS`, but the algorithm is
+  copied. Extract the layout from `synapseField.ts` and draw both from it
+  (PR #46 review).
 
 ## Reviews
 

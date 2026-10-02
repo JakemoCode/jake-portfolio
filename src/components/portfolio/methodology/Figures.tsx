@@ -1,6 +1,6 @@
 // One evidence figure per habit. Each shows the artifact the habit produced,
-// and its scroll animation plays the change that habit made. The markup is the
-// finished state; Figures.module.css only adds the scroll-scrubbed "before".
+// and its animation plays the change that habit made. The markup is the
+// finished state, and Figures.module.css only adds the animated "before".
 // --i on a child is a small delay for siblings that share a row.
 import type { CSSProperties, ReactNode } from "react";
 import type { FigureKey } from "../../../content/methodology";

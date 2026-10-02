@@ -171,6 +171,7 @@
     --slot-shift: var(--spacing-md); /* how far a plate travels as it hands over */
     --slot-blur: var(--spacing-2xs);
     --slot-delay: calc(var(--duration-fast) / 2); /* the outgoing plate starts leaving first */
+    --plate-height-unmeasured: 24rem; /* the frame's height before Methodology measures the first plate */
 
     display: grid;
     grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
@@ -197,12 +198,12 @@
   .stage {
     display: block;
     top: var(--stage-top);
-    height: calc(var(--strip-height) + var(--plate-height, 24rem));
+    height: calc(var(--strip-height) + var(--plate-height, var(--plate-height-unmeasured)));
     background: var(--color-bg-elevated);
     border: var(--border-width-thin) solid var(--color-border);
     border-radius: var(--radius-lg);
-    /* height, not a scale: the frame keeps its border and corners at every
-       size. It spans rows far taller than itself, so no track resizes. */
+    /* Height rather than a scale, so the frame keeps its border and corners
+       at every size. It spans rows far taller than itself, so no track resizes. */
     transition: height var(--duration-glide) var(--ease-out-quint);
   }
 
@@ -213,17 +214,18 @@
     transition:
       opacity var(--duration-fast) ease-in,
       translate var(--duration-fast) ease-in,
-      filter var(--duration-fast) ease-in,
-      visibility 0s linear var(--duration-fast);
+      filter var(--duration-fast) ease-in;
   }
 
+  /* Transparent rather than hidden, so a screen reader still reads every
+     figure in order, whichever one is on stage */
   .slot:not([data-place="active"]) {
-    visibility: hidden;
     opacity: 0;
     filter: blur(var(--slot-blur));
+    pointer-events: none;
   }
 
-  /* Plates travel the way the page does: the outgoing one leaves upward and
+  /* Plates travel the way the page does. The outgoing one leaves upward and
      the next rises in from below, reversed on the way back up */
   .slot[data-place="past"] {
     translate: 0 calc(-1 * var(--slot-shift));
