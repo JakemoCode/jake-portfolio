@@ -51,8 +51,11 @@ as a circle growing from the button (View Transitions). Version 1 is the
 current hero. Version 2 sets the name huge and draws it as a mesh of the
 field's nodes sampled from the real letterforms: it is written in left to
 right, the cursor pushes it apart, a click blows a hole in it, and the
-springs put it back. Axe clean for both versions at 1440 and 390, and
-reduced motion gets the finished name as one still frame.
+springs put it back. Version 3 keeps all of that and lets the name
+change: pointing at review, tests or rules in the pitch turns the name
+into that word, and typing while the band is on screen rewrites it in
+terracotta until typing stops. Axe clean for all three versions at 1440
+and 390, and reduced motion gets each finished name as one still frame.
 
 **Field affordance** · branch `feat/field-affordance`. The hero field now
 shows that it can be clicked. With a mouse, a faint ring marks the node a
