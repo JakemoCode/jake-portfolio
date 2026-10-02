@@ -4,14 +4,14 @@ Running status of the portfolio build — what's in flight, whether it's
 green, and what's queued. Update after any build activity (per the
 workspace `frontend-standards.md`).
 
-_Last updated: 2026-09-26_
+_Last updated: 2026-10-02_
 
 ## Gates
 
 | Check | Command | Status |
 |-------|---------|--------|
 | Types | `npx tsc --noEmit` | ✅ clean |
-| Unit/RTL | `npx vitest run` | ✅ 86 passing |
+| Unit/RTL | `npx vitest run` | ✅ 91 passing |
 | Build | `npx vite build` | ✅ clean |
 | Dev | `npm run dev` | serves at `localhost:5173` |
 
@@ -45,6 +45,18 @@ Reworked the landing's "proof" zone into two dark-surface sections: the
 
 ## In flight
 
+**Evidence stage and bolder project cards** · branch
+`feat/evidence-stage-and-cards`. On a desktop with motion allowed, How I
+work with AI pins one framed plate beside the copy and re-forms it into each
+habit's figure as that habit reaches mid-viewport. A strip of marks across the
+frame carries the rail's tick on its side, and the figures' choreography is now
+written once in beats, scrubbed by scroll when stacked and played on time on
+the stage. Phones and reduced motion keep the stacked layout. Project cards put
+the work in a well of the hero's teal with a still of its field behind it; with
+a mouse, the glow leans toward the pointer and nearby nodes light. Names are
+set in Bricolage at h2, the live link is a filled pill under the pitch, and
+wells alternate sides. Axe clean at 1440 and 390 with each habit on stage.
+
 **Field affordance** · branch `feat/field-affordance`. The hero field now
 shows that it can be clicked. With a mouse, a faint ring marks the node a
 click would fire, the nodes under the cursor brighten (hover glow 0.8), and
@@ -77,6 +89,11 @@ quote, from three distinct clients.
 - Give gallery items a numeric count. `CaseStudyTeaser` scrapes it from the
   note text with a regex, so a note without a digit renders an empty count
   (PR #41 review).
+- One network layout for the hero and the card wells. `FieldWell` rebuilds
+  the jittered grid and link reach that `createSynapseField` lays out inside
+  its closure; it reads the hero's `FIELD_DEFAULTS`, but the algorithm is
+  copied. Extract the layout from `synapseField.ts` and draw both from it
+  (PR #46 review).
 
 ## Reviews
 

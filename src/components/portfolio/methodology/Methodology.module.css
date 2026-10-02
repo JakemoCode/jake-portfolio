@@ -22,7 +22,6 @@
 .habit {
   display: grid;
   gap: var(--spacing-2xl);
-  scroll-margin-top: var(--spacing-5xl);
 }
 
 @media (min-width: 56em) {
@@ -38,6 +37,7 @@
   flex-direction: column;
   gap: var(--spacing-md);
   max-width: 44ch;
+  scroll-margin-top: var(--spacing-5xl);
 }
 
 .title {
@@ -148,4 +148,195 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+/* =============================================================================
+   Evidence stage. The opener's own condition, less its need for scroll-driven
+   animations: the figures here play on time, so every engine gets the stage.
+   The articles dissolve into one grid, copy down the left column, and every
+   habit's plate shares a single sticky cell on the right under one frame.
+   Only the current plate is visible; the frame glides to its height.
+   ========================================================================== */
+
+.stage {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) and (min-width: 56em) and (min-height: 40em) {
+  .habits {
+    --strip-height: var(--spacing-4xl);
+    /* Centres a plate of average height in the viewport, and stays clear of
+       the top edge on a short screen */
+    --stage-top: max(var(--spacing-2xl), calc(50vh - 16rem));
+    --slot-shift: var(--spacing-md); /* how far a plate travels as it hands over */
+    --slot-blur: var(--spacing-2xs);
+    --slot-delay: calc(var(--duration-fast) / 2); /* the outgoing plate starts leaving first */
+    --plate-height-unmeasured: 24rem; /* the frame's height before Methodology measures the first plate */
+
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    column-gap: var(--spacing-5xl);
+    row-gap: var(--spacing-8xl);
+  }
+
+  .habit {
+    display: contents;
+  }
+
+  .copy {
+    grid-column: 1;
+  }
+
+  .stage,
+  .slot {
+    grid-column: 2;
+    grid-row: 1 / span var(--habit-count);
+    align-self: start;
+    position: sticky;
+  }
+
+  .stage {
+    display: block;
+    top: var(--stage-top);
+    height: calc(var(--strip-height) + var(--plate-height, var(--plate-height-unmeasured)));
+    background: var(--color-bg-elevated);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    /* Height rather than a scale, so the frame keeps its border and corners
+       at every size. It spans rows far taller than itself, so no track resizes. */
+    transition: height var(--duration-glide) var(--ease-out-quint);
+  }
+
+  /* Starts under the strip, and sticks there */
+  .slot {
+    top: calc(var(--stage-top) + var(--strip-height));
+    margin-top: var(--strip-height);
+    transition:
+      opacity var(--duration-fast) ease-in,
+      translate var(--duration-fast) ease-in,
+      filter var(--duration-fast) ease-in;
+  }
+
+  /* Transparent rather than hidden, so a screen reader still reads every
+     figure in order, whichever one is on stage */
+  .slot:not([data-place="active"]) {
+    opacity: 0;
+    filter: blur(var(--slot-blur));
+    pointer-events: none;
+  }
+
+  /* Plates travel the way the page does. The outgoing one leaves upward and
+     the next rises in from below, reversed on the way back up */
+  .slot[data-place="past"] {
+    translate: 0 calc(-1 * var(--slot-shift));
+  }
+
+  .slot[data-place="next"] {
+    translate: 0 var(--slot-shift);
+  }
+
+  .slot[data-place="active"] {
+    transition:
+      opacity var(--duration-slow) var(--ease-out-quint) var(--slot-delay),
+      translate var(--duration-glide) var(--ease-out-quint) var(--slot-delay),
+      filter var(--duration-slow) var(--ease-out-quint) var(--slot-delay);
+  }
+}
+
+/* The strip across the top of the frame: one mark per habit, the rail's tick
+   laid on its side, and a count. Hovering a mark names the habit it jumps to. */
+.strip {
+  height: var(--strip-height);
+  padding-inline: var(--spacing-2xl);
+  border-bottom: var(--border-width-thin) solid var(--color-border);
+}
+
+.track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  height: 100%;
+}
+
+.marks {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.markLink {
+  display: flex;
+  align-items: center;
+  height: var(--strip-height);
+  padding-inline: var(--spacing-2xs);
+}
+
+.mark {
+  width: var(--spacing-lg);
+  height: var(--border-width-thick);
+  background: var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  transition: background-color var(--duration-fast) ease;
+}
+
+.markLink:hover .mark {
+  background: var(--color-text-muted);
+}
+
+.tick {
+  top: 50%;
+  height: var(--border-width-thick);
+  translate: 0 -50%;
+  background: var(--color-signal);
+  border-radius: var(--radius-pill);
+}
+
+.counter,
+.markTitle {
+  font-size: var(--font-size-xs);
+  white-space: nowrap;
+  transition: opacity var(--duration-fast) ease;
+}
+
+.counter {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-subtle);
+}
+
+.counterNow {
+  color: var(--color-text);
+}
+
+/* Sits where the count does and takes its place on hover. It is also the
+   link's accessible name, so it is transparent rather than removed. */
+.markTitle {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  translate: 0 -50%;
+  max-width: 55%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--color-text);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.markLink:is(:hover, :focus-visible) .markTitle {
+  opacity: 1;
+}
+
+.track:has(.markLink:is(:hover, :focus-visible)) .counter {
+  opacity: 0;
+}
+
+@media (pointer: coarse) {
+  .markLink {
+    min-width: var(--tap-target);
+    justify-content: center;
+  }
 }

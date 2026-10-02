@@ -11,11 +11,14 @@ import { scrollTick } from "./scrollTick";
    and add tickClassName to the tick. An item becomes current when its target
    crosses the middle of the viewport; the targets are the markers themselves
    unless getTargets names others (the rail watches page sections). hold is
-   the share of each item the tick rests before it grows. */
+   the share of each item the tick rests before it grows. axis "x" runs the
+   same tick along a horizontal track, its start and end edges becoming its
+   left and right. */
 export function useScrollTick({
   targets: getTargets,
   hold = 0,
-}: { targets?: () => ReadonlyArray<Element | null>; hold?: number } = {}) {
+  axis = "y",
+}: { targets?: () => ReadonlyArray<Element | null>; hold?: number; axis?: "x" | "y" } = {}) {
   const trackRef = useRef<HTMLDivElement>(null);
   const tickRef = useRef<HTMLSpanElement>(null);
   const markers = useRef<Array<HTMLElement | null>>([]);
@@ -35,15 +38,19 @@ export function useScrollTick({
 
     const update = () => {
       frame = 0;
-      const origin = track.getBoundingClientRect().top;
+      const trackBox = track.getBoundingClientRect();
+      const origin = axis === "y" ? trackBox.top : trackBox.left;
       const { index, top, bottom } = scrollTick({
         scroll: scrollY,
         viewport: innerHeight,
         maxScroll: document.documentElement.scrollHeight - innerHeight,
         targets: (targets.current?.() ?? markers.current).map((el) => (el?.getBoundingClientRect().top ?? Infinity) + scrollY),
+        // scrollTick is axis-free, so on x a marker's top and bottom are its left and right
         markers: markers.current.map((el) => {
           const box = el?.getBoundingClientRect();
-          return box ? { top: box.top - origin, bottom: box.bottom - origin } : { top: 0, bottom: 0 };
+          if (!box) return { top: 0, bottom: 0 };
+          const [start, end] = axis === "y" ? [box.top, box.bottom] : [box.left, box.right];
+          return { top: start - origin, bottom: end - origin };
         }),
         hold,
       });
@@ -59,8 +66,8 @@ export function useScrollTick({
         tick.dataset.glide = "jump-up";
         void getComputedStyle(tick).transitionProperty;
       }
-      tick.style.setProperty("--tick-top", `${top}px`);
-      tick.style.setProperty("--tick-bottom", `${bottom}px`);
+      tick.style.setProperty("--tick-start", `${top}px`);
+      tick.style.setProperty("--tick-end", `${bottom}px`);
       if (index === last) return;
       last = index;
       setActive(index);
@@ -69,7 +76,7 @@ export function useScrollTick({
       frame ||= requestAnimationFrame(update);
     };
     const settle = (event: TransitionEvent) => {
-      if (event.propertyName === "bottom") delete tick.dataset.glide;
+      if (event.propertyName === (axis === "y" ? "bottom" : "right")) delete tick.dataset.glide;
     };
 
     update();
@@ -84,11 +91,11 @@ export function useScrollTick({
       tick.removeEventListener("transitionend", settle);
       tick.removeEventListener("transitioncancel", settle);
     };
-  }, [hold]);
+  }, [hold, axis]);
 
   const markerRef = (i: number) => (el: HTMLElement | null) => {
     markers.current[i] = el;
   };
 
-  return { active, trackRef, tickRef, markerRef, tickClassName: styles.tick };
+  return { active, trackRef, tickRef, markerRef, tickClassName: axis === "y" ? styles.tick : styles.tickX };
 }

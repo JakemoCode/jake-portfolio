@@ -61,7 +61,7 @@ describe("ExperienceStrip", () => {
     // that is halfway through the growing part: halfway from Family leave's
     // 1230 to Handshake's 1430
     const tick = document.querySelector<HTMLElement>("section span[aria-hidden]")!;
-    expect(tick.style.getPropertyValue("--tick-top")).toBe("1200px");
-    expect(tick.style.getPropertyValue("--tick-bottom")).toBe("1330px");
+    expect(tick.style.getPropertyValue("--tick-start")).toBe("1200px");
+    expect(tick.style.getPropertyValue("--tick-end")).toBe("1330px");
   });
 });

@@ -1,6 +1,7 @@
 import styles from "./ProjectCard.module.css";
 import type { Project, Screenshot } from "../../content/projects";
 import { DistillationStamps } from "./DistillationStamps";
+import { FieldWell } from "./FieldWell";
 
 type Props = {
   project: Project;
@@ -9,29 +10,23 @@ type Props = {
 function renderScreenshot(screenshot: Screenshot) {
   if (screenshot.orientation === "phone") {
     return (
-      <div className={styles.phoneFrame}>
+      <div className={`${styles.shot} ${styles.phoneFrame}`}>
         <img src={screenshot.src} alt={screenshot.alt} className={styles.phoneImage} />
       </div>
     );
   }
-  return <img src={screenshot.src} alt={screenshot.alt} className={styles.landscapeImage} />;
+  return <img src={screenshot.src} alt={screenshot.alt} className={`${styles.shot} ${styles.landscapeImage}`} />;
 }
 
 export function ProjectCard({ project }: Props) {
   const isComingSoon = project.status === "coming-soon";
   const { screenshot } = project;
   const drawsStamps = project.visual === "distillation-stamps";
-  const mediaClass = [
-    styles.media,
-    screenshot?.orientation === "phone" && styles.mediaPhone,
-    drawsStamps && styles.mediaFigure,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const mediaClass = [styles.media, drawsStamps && styles.mediaFigure].filter(Boolean).join(" ");
 
   return (
     <article className={styles.card}>
-      <div className={mediaClass}>
+      <FieldWell seed={project.slug} className={mediaClass}>
         {drawsStamps ? (
           <DistillationStamps />
         ) : screenshot ? (
@@ -41,7 +36,7 @@ export function ProjectCard({ project }: Props) {
             Screenshot
           </span>
         )}
-      </div>
+      </FieldWell>
 
       <div className={styles.body}>
         <div className={styles.header}>
@@ -50,27 +45,6 @@ export function ProjectCard({ project }: Props) {
         </div>
 
         <p className={styles.summary}>{project.summary}</p>
-
-        <div className={styles.section}>
-          <h4 className={styles.sectionHeading}>Problem</h4>
-          <p className={styles.sectionBody}>{project.problem}</p>
-        </div>
-
-        <div className={styles.section}>
-          <h4 className={styles.sectionHeading}>What I built</h4>
-          <p className={styles.sectionBody}>{project.built}</p>
-        </div>
-
-        <div className={styles.section}>
-          <h4 className={styles.sectionHeading}>Tech</h4>
-          <ul className={styles.techList}>
-            {project.tech.map((item) => (
-              <li key={item} className={styles.tech}>
-                {item}
-              </li>
-            ))}
-          </ul>
-        </div>
 
         <div className={styles.links}>
           {project.liveUrl ? (
@@ -97,6 +71,27 @@ export function ProjectCard({ project }: Props) {
             Repo
             <span aria-hidden="true"> ↗</span>
           </a>
+        </div>
+
+        <div className={styles.section}>
+          <h4 className={styles.sectionHeading}>Problem</h4>
+          <p className={styles.sectionBody}>{project.problem}</p>
+        </div>
+
+        <div className={styles.section}>
+          <h4 className={styles.sectionHeading}>What I built</h4>
+          <p className={styles.sectionBody}>{project.built}</p>
+        </div>
+
+        <div className={styles.section}>
+          <h4 className={styles.sectionHeading}>Tech</h4>
+          <ul className={styles.techList}>
+            {project.tech.map((item) => (
+              <li key={item} className={styles.tech}>
+                {item}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </article>

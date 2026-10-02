@@ -45,7 +45,7 @@ describe("SectionRail", () => {
     const tick = document.querySelector<HTMLElement>("nav span[aria-hidden]")!;
     // 57.5% of the way from 600 to 2600. The rail rests for the first 15%, so
     // that is halfway through the growing part: halfway from 24 to 60
-    expect(tick.style.getPropertyValue("--tick-top")).toBe("8px");
-    expect(tick.style.getPropertyValue("--tick-bottom")).toBe("42px");
+    expect(tick.style.getPropertyValue("--tick-start")).toBe("8px");
+    expect(tick.style.getPropertyValue("--tick-end")).toBe("42px");
   });
 });
