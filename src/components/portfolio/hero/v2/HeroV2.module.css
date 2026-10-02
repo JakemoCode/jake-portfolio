@@ -28,8 +28,16 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(0deg, var(--scrim-strong) 0%, var(--scrim-strong) 22%, var(--scrim-clear) 52%);
+  background: linear-gradient(0deg, var(--scrim-strong) 0%, var(--scrim-strong) 16%, var(--scrim-clear) 32%);
   pointer-events: none;
+}
+
+/* On phones the pitch and links stack and run taller, so the scrim rises
+   further, still stopping below the name */
+@media (max-width: 48em) {
+  .hero::after {
+    background: linear-gradient(0deg, var(--scrim-strong) 0%, var(--scrim-strong) 38%, var(--scrim-clear) 50%);
+  }
 }
 
 .field {
