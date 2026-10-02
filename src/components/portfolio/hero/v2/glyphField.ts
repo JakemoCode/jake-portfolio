@@ -18,6 +18,8 @@ export type GlyphField = {
   burst: (x: number, y: number) => void;
   /** Sends the same nodes to new letterforms, left to right, optionally tinted; snap skips the flight. */
   retarget: (points: GlyphPoint[], step: number, options?: { tint?: Tint; snap?: boolean }) => void;
+  /** Starts the write-in of a field created held; until then the nodes wait where they were scattered. */
+  release: () => void;
 };
 
 export type Tint = "signal" | "ember";
@@ -93,17 +95,24 @@ export function createGlyphField(
   points: GlyphPoint[],
   size: { w: number; h: number; step: number },
   palette: FieldPalette,
-  { assembled = false, random = Math.random }: { assembled?: boolean; random?: () => number } = {},
+  {
+    assembled = false,
+    held = false,
+    random = Math.random,
+  }: { assembled?: boolean; held?: boolean; random?: () => number } = {},
 ): GlyphField {
   const { w, h, step } = size;
   const left = Math.min(...points.map((p) => p.x));
   const right = Math.max(...points.map((p) => p.x));
   const span = Math.max(1, right - left);
 
+  // Each node's place in the write-in, kept so a held field can start it later
+  const pen: number[] = [];
   const nodes: Node[] = points.map((p) => {
     // Written left to right over about a second, with a little scatter so
     // the pen doesn't read as a straight vertical edge
     const wake = assembled ? 0 : 0.25 + ((p.x - left) / span) * 0.95 + random() * 0.2;
+    pen.push(wake);
     return {
       hx: p.x,
       hy: p.y,
@@ -121,8 +130,26 @@ export function createGlyphField(
 
   const waves: Wave[] = [];
   let nextWave = assembled ? 1.5 : 2.4;
+  const writing = !assembled && nodes.length > 0;
   // The first wave follows the pen, so the finished name lights up once
-  if (!assembled && nodes.length) waves.push({ x: left - 60, y: h / 2, t0: 1.15, speed: 900, power: 0.9, ember: false });
+  const writeIn = (start: number) => {
+    nodes.forEach((n, i) => (n.wake = start + pen[i]!));
+    waves.push({ x: left - 60, y: h / 2, t0: start + 1.15, speed: 900, power: 0.9, ember: false });
+    nextWave = start + 2.4;
+  };
+  if (writing && held) {
+    for (const n of nodes) n.wake = Infinity;
+    nextWave = Infinity;
+  } else if (writing) {
+    writeIn(0);
+  }
+  let waiting = writing && held;
+
+  const release: GlyphField["release"] = () => {
+    if (!waiting) return;
+    waiting = false;
+    writeIn(now);
+  };
 
   const cursor = { x: 0, y: 0, tx: 0, ty: 0, presence: 0, target: 0 };
   let now = 0;
@@ -270,5 +297,5 @@ export function createGlyphField(
     }
   };
 
-  return { draw, pointer, burst, retarget };
+  return { draw, pointer, burst, retarget, release };
 }

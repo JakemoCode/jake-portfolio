@@ -18,7 +18,7 @@ const STANDARDS = /\b(review|tests|rules)\b/;
 const TYPED_MAX = 14;
 const IDLE_MS = 2800;
 
-export function HeroV3({ name, title, availability, resume, email, github, linkedin, next }: HeroProps) {
+export function HeroV3({ name, title, availability, resume, email, github, linkedin, next, arrival }: HeroProps) {
   const hostRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const linesRef = useRef<Array<HTMLSpanElement | null>>([]);
@@ -26,6 +26,7 @@ export function HeroV3({ name, title, availability, resume, email, github, linke
     hostRef,
     canvasRef,
     linesRef,
+    arrival,
   });
   const [typed, setTyped] = useState(false);
 

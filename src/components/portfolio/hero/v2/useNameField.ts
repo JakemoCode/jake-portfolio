@@ -20,11 +20,15 @@ export function useNameField({
   hostRef,
   canvasRef,
   linesRef,
+  arrival,
 }: {
   hostRef: RefObject<HTMLElement | null>;
   canvasRef: RefObject<HTMLCanvasElement | null>;
   linesRef: RefObject<Array<HTMLSpanElement | null>>;
+  /** The name waits, scattered, until this settles: a MOAR! reveal would hide its write-in */
+  arrival?: Promise<unknown>;
 }) {
+  const arrivalRef = useRef(arrival);
   const [paused, setPaused] = useState(prefersReducedMotion);
   const [fallback, setFallback] = useState(false);
   const pausedRef = useRef(paused);
@@ -58,6 +62,7 @@ export function useNameField({
     let built = false;
     let resizeTimer = 0;
     let cancelled = false;
+    let builtSize = "";
 
     const draw = (dt: number) => {
       t += dt;
@@ -69,6 +74,7 @@ export function useNameField({
     const build = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, MAX_DPR);
       const { width, height } = host.getBoundingClientRect();
+      builtSize = `${width}x${height}`;
       canvas.width = Math.round(width * dpr);
       canvas.height = Math.round(height * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -77,6 +83,7 @@ export function useNameField({
       const { points, step } = sampleName(lines, host);
       glyphsRef.current = createGlyphField(points, { w: width, h: height, step }, palette, {
         assembled: built || still,
+        held: true,
       });
       if (still) for (let i = 0; i < 90; i++) groundRef.current.draw(ctx, (t += 1 / 30), 1 / 30);
       built = true;
@@ -105,14 +112,20 @@ export function useNameField({
     wakeRef.current = wake;
 
     // Sampled after the display face loads, or the mesh traces the fallback font
-    document.fonts.ready.then(() => {
+    const ready = document.fonts.ready.then(() => {
       if (cancelled) return;
       build();
       wake();
     });
+    Promise.all([ready, arrivalRef.current]).then(() => {
+      if (!cancelled) glyphsRef.current?.release();
+    });
 
-    const resize = new ResizeObserver(() => {
-      if (!built) return;
+    // Observing reports the starting size once; only a real change rebuilds,
+    // or that first report would land the name before its write-in
+    const resize = new ResizeObserver(([entry]) => {
+      const box = entry?.target.getBoundingClientRect();
+      if (!built || !box || `${box.width}x${box.height}` === builtSize) return;
       clearTimeout(resizeTimer);
       resizeTimer = window.setTimeout(build, RESIZE_SETTLE_MS);
     });

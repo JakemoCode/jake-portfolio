@@ -11,6 +11,7 @@ import styles from "./HeroSeries.module.css";
    growing out of the button. */
 
 const versions: Array<ComponentType<HeroProps>> = [Hero, HeroV2, HeroV3];
+const arrived = Promise.resolve();
 
 const readVersion = () => {
   if (typeof window === "undefined") return 0;
@@ -20,11 +21,15 @@ const readVersion = () => {
 
 export function HeroSeries(props: HeroProps) {
   const [version, setVersion] = useState(readVersion);
+  // A version brought in by MOAR! waits for the reveal to finish before its
+  // own entrance plays; one loaded directly starts at once
+  const [arrival, setArrival] = useState<Promise<unknown>>(arrived);
   const Version = versions[version]!;
   const nextVersion = (version + 1) % versions.length;
 
   const moar = (event: MouseEvent<HTMLButtonElement>) => {
-    const swap = () => {
+    const swap = (landed: Promise<unknown> = arrived) => {
+      setArrival(landed);
       setVersion(nextVersion);
       const url = new URL(window.location.href);
       url.searchParams.set("hero", String(nextVersion + 1));
@@ -40,12 +45,15 @@ export function HeroSeries(props: HeroProps) {
     const root = document.documentElement.style;
     root.setProperty("--moar-x", `${box.left + box.width / 2}px`);
     root.setProperty("--moar-y", `${box.top + box.height / 2}px`);
-    document.startViewTransition(() => flushSync(swap));
+    let landed = () => {};
+    const revealed = new Promise<void>((resolve) => (landed = resolve));
+    const transition = document.startViewTransition(() => flushSync(() => swap(revealed)));
+    transition.finished.finally(landed);
   };
 
   return (
     <div className={styles.series}>
-      <Version key={version} {...props} />
+      <Version key={version} {...props} arrival={arrival} />
       <p className={styles.control}>
         <span className={styles.version} aria-hidden="true">
           v{version + 1}

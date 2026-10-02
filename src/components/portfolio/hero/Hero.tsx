@@ -17,6 +17,8 @@ export type HeroProps = {
   linkedin: string;
   /** Where the hero hands off: the first section, which the band otherwise hides. */
   next: { href: string; label: string };
+  /** Settles when the band is fully on screen, after any transition that brought it in. */
+  arrival?: Promise<unknown>;
 };
 
 const MAX_DPR = 1.5; // the field is soft; full retina resolution buys nothing but fill cost

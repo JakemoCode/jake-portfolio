@@ -9,7 +9,7 @@ import styles from "./HeroV2.module.css";
    transparent, so the canvas is what's seen; if the canvas can't draw, the
    text shows instead. */
 
-export function HeroV2({ name, title, availability, resume, email, github, linkedin, next }: HeroProps) {
+export function HeroV2({ name, title, availability, resume, email, github, linkedin, next, arrival }: HeroProps) {
   const hostRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const linesRef = useRef<Array<HTMLSpanElement | null>>([]);
@@ -17,6 +17,7 @@ export function HeroV2({ name, title, availability, resume, email, github, linke
     hostRef,
     canvasRef,
     linesRef,
+    arrival,
   });
 
   const point = (event: MouseEvent<HTMLElement>) => {
