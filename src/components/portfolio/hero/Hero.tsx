@@ -6,7 +6,7 @@ import { createSynapseField, FIELD_DEFAULTS, readPalette, type FieldParams, type
 // false in a production build, so the panel's code never ships.
 const FieldTuner = import.meta.env.DEV ? lazy(() => import("./FieldTuner")) : null;
 
-type Props = {
+export type HeroProps = {
   name: string;
   title: string;
   /** A status line and the facts behind it, set on two lines. */
@@ -27,7 +27,7 @@ const RESIZE_SETTLE_MS = 150;
 const prefersReducedMotion = () =>
   typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches === true;
 
-export function Hero({ name, title, availability, resume, email, github, linkedin, next }: Props) {
+export function Hero({ name, title, availability, resume, email, github, linkedin, next }: HeroProps) {
   const hostRef = useRef<HTMLElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [paused, setPaused] = useState(prefersReducedMotion);

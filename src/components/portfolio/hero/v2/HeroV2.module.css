@@ -1,0 +1,200 @@
+/* Version 2. The name is the band: set huge, drawn by the canvas as a mesh of
+   the field's nodes, with the pitch and the ways in on one row beneath it.
+   Controls and links reuse version 1's classes, so both read as one site. */
+.hero {
+  /* Component-scoped tokens */
+  --font-size-name-min: 4.5rem;
+  --font-size-name-max: 15rem; /* past the usual display ceiling on purpose: the name is drawn, not read as text */
+  --font-size-pitch-max: 1.75rem;
+  --font-weight-name: 800; /* Bricolage's heaviest cut: wide strokes hold a denser mesh */
+  --pitch-measure: 34ch;
+  --line-height-name: 0.88; /* the two lines of the name nearly touch, like a stacked logotype */
+  --line-height-pitch: 1.3;
+  --scrim-strong: color-mix(in srgb, var(--color-hero-bg) 90%, transparent);
+  --scrim-clear: color-mix(in srgb, var(--color-hero-bg) 0%, transparent);
+
+  position: relative;
+  display: grid;
+  grid-template-rows: 1fr auto auto;
+  min-height: 100svh;
+  overflow: clip;
+  background: var(--color-hero-bg);
+  color: var(--color-hero-ink);
+  cursor: crosshair;
+}
+
+/* Keeps the pitch and links at AA over whatever the field draws under them */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, var(--scrim-strong) 0%, var(--scrim-strong) 22%, var(--scrim-clear) 52%);
+  pointer-events: none;
+}
+
+.field {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.name {
+  position: relative;
+  z-index: var(--z-raised);
+  align-self: end;
+  padding: var(--spacing-6xl) var(--gutter) var(--spacing-2xl);
+  font-family: var(--font-display);
+  /* Capped by height too, so a short laptop screen keeps the cue above the fold */
+  font-size: clamp(var(--font-size-name-min), min(21vw, 28vh), var(--font-size-name-max));
+  font-weight: var(--font-weight-name);
+  line-height: var(--line-height-name);
+  letter-spacing: -0.04em;
+}
+
+/* Laid out for the canvas to sample, and shown only if it can't draw */
+.nameArt {
+  display: block;
+  color: transparent;
+  user-select: none;
+}
+
+.hero[data-fallback] .nameArt {
+  color: var(--color-hero-ink);
+}
+
+.line {
+  display: block;
+  width: fit-content;
+}
+
+.lower {
+  position: relative;
+  z-index: var(--z-raised);
+  display: grid;
+  gap: var(--spacing-2xl);
+  padding: 0 var(--gutter) var(--spacing-3xl);
+  cursor: auto;
+}
+
+@media (min-width: 56em) {
+  .lower {
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    align-items: end;
+    gap: var(--spacing-5xl);
+  }
+}
+
+.title {
+  max-width: var(--pitch-measure);
+  font-family: var(--font-display);
+  font-size: clamp(var(--font-size-lg), 2.1vw, var(--font-size-pitch-max));
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-pitch);
+  letter-spacing: -0.01em;
+  color: var(--color-hero-ink);
+  text-wrap: pretty;
+}
+
+.titleList {
+  color: var(--color-hero-signal);
+}
+
+.contact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+@media (min-width: 56em) {
+  .contact {
+    justify-self: end;
+  }
+}
+
+.availability {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-body);
+}
+
+.availability::before {
+  content: "";
+  align-self: start;
+  margin-top: calc((1lh - var(--spacing-xs)) / 2);
+  width: var(--spacing-xs);
+  height: var(--spacing-xs);
+  border-radius: 50%;
+  background: var(--color-hero-signal);
+  box-shadow: 0 0 0 var(--spacing-3xs) color-mix(in srgb, var(--color-hero-signal) 25%, transparent);
+}
+
+.status {
+  color: var(--color-hero-ink);
+}
+
+.detail {
+  grid-column: 2;
+  color: var(--color-hero-ink-muted);
+}
+
+.links {
+  composes: links from "../Hero.module.css";
+  margin: 0;
+  gap: var(--spacing-xs) var(--spacing-xl);
+}
+
+.link {
+  composes: link from "../Hero.module.css";
+}
+
+.resume {
+  composes: resume from "../Hero.module.css";
+}
+
+.fileType {
+  composes: fileType from "../Hero.module.css";
+}
+
+.foot {
+  composes: foot from "../Hero.module.css";
+  cursor: auto;
+}
+
+.next {
+  composes: next from "../Hero.module.css";
+}
+
+.nudge {
+  composes: nudge from "../Hero.module.css";
+}
+
+.hero[data-paused] .nudge {
+  animation-play-state: paused;
+}
+
+.motion {
+  composes: motion from "../Hero.module.css";
+}
+
+.motionIcon {
+  composes: motionIcon from "../Hero.module.css";
+}
+
+.motionLabel {
+  composes: motionLabel from "../Hero.module.css";
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: clip;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}

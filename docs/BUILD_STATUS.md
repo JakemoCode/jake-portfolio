@@ -45,6 +45,15 @@ Reworked the landing's "proof" zone into two dark-surface sections: the
 
 ## In flight
 
+**Hero series** · branch `feat/hero-moar`. A small MOAR! button in the
+hero's top-right steps through hero versions, kept in `?hero=N` and revealed
+as a circle growing from the button (View Transitions). Version 1 is the
+current hero. Version 2 sets the name huge and draws it as a mesh of the
+field's nodes sampled from the real letterforms: it is written in left to
+right, the cursor pushes it apart, a click blows a hole in it, and the
+springs put it back. Axe clean for both versions at 1440 and 390, and
+reduced motion gets the finished name as one still frame.
+
 **Field affordance** · branch `feat/field-affordance`. The hero field now
 shows that it can be clicked. With a mouse, a faint ring marks the node a
 click would fire, the nodes under the cursor brighten (hover glow 0.8), and

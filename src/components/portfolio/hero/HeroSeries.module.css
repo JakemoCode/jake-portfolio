@@ -1,0 +1,98 @@
+.series {
+  position: relative;
+  view-transition-name: hero-series;
+}
+
+/* Small on purpose: a toy for the curious, not a call to action */
+.control {
+  --tap-target: 2.75rem; /* comfortable touch target (Fitts's law) */
+
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--gutter);
+  z-index: var(--z-sticky);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--font-size-3xs);
+  color: var(--color-hero-ink-muted);
+}
+
+.version {
+  font-variant-numeric: tabular-nums;
+}
+
+.moar {
+  position: relative;
+  padding: var(--spacing-3xs) var(--spacing-xs);
+  font: inherit;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.06em;
+  color: var(--color-hero-ink);
+  background: color-mix(in srgb, var(--color-hero-bg) 70%, transparent);
+  border: var(--border-width-thin) solid color-mix(in srgb, var(--color-hero-signal) 45%, transparent);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition:
+    color var(--duration-fast) ease,
+    border-color var(--duration-fast) ease,
+    background-color var(--duration-fast) ease;
+}
+
+.moar:hover {
+  color: var(--color-hero-bg);
+  background: var(--color-hero-signal);
+  border-color: var(--color-hero-signal);
+}
+
+.moar:focus-visible {
+  outline: var(--border-width-thick) solid var(--color-hero-signal);
+  outline-offset: var(--spacing-2xs);
+  border-radius: var(--radius-pill);
+}
+
+/* The visual stays tiny; the hit area is a full tap target */
+.moar::after {
+  content: "";
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: max(100%, var(--tap-target));
+  height: var(--tap-target);
+  translate: -50% -50%;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: clip;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* The next version is revealed as a circle growing from the button. Only the
+   hero takes part, so the rest of the page doesn't crossfade with it. The
+   circle is a sweep, not an object moving, so its timing is linear. */
+:global(::view-transition-old(root)),
+:global(::view-transition-new(root)) {
+  animation: none;
+}
+
+:global(::view-transition-old(hero-series)) {
+  animation: none;
+}
+
+:global(::view-transition-new(hero-series)) {
+  animation: moar-reveal 0.8s linear both;
+}
+
+@keyframes moar-reveal {
+  from {
+    clip-path: circle(0 at var(--moar-x, 100%) var(--moar-y, 0));
+  }
+  to {
+    clip-path: circle(150vmax at var(--moar-x, 100%) var(--moar-y, 0));
+  }
+}

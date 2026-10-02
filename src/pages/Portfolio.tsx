@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import styles from "./Portfolio.module.css";
 import { useDocumentTitle } from "../hooks/useDocumentTitle";
-import { Hero } from "../components/portfolio/hero/Hero";
+import { HeroSeries } from "../components/portfolio/hero/HeroSeries";
 import { ProjectCard } from "../components/portfolio/ProjectCard";
 import { ExperienceStrip } from "../components/portfolio/ExperienceStrip";
 import { Recommendations } from "../components/portfolio/Recommendations";
@@ -50,7 +50,7 @@ export function Portfolio() {
   return (
     <div className={styles.page}>
       <main>
-        <Hero
+        <HeroSeries
           name="Jake Mosher"
           title="Front-end and product engineer. I hold AI-written code to the standards we set for human teammates: review, tests, and rules that enforce themselves."
           availability={{
