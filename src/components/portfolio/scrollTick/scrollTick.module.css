@@ -5,8 +5,8 @@
    directly. */
 .tick {
   position: absolute;
-  top: var(--tick-top, 0);
-  bottom: calc(100% - var(--tick-bottom, 0px));
+  top: var(--tick-start, 0);
+  bottom: calc(100% - var(--tick-end, 0px));
   transition: top var(--duration-glide) var(--ease-out-quint);
 }
 
@@ -17,4 +17,21 @@
   transition:
     top var(--duration-slow) var(--ease-out-quint),
     bottom var(--duration-glide) var(--ease-out-quint);
+}
+
+/* The same tick on a horizontal track. Its left edge glides and its right
+   edge follows the scroll; a jump back toward the start stretches it the
+   way a jump up does. Each component adds its own color, height and
+   vertical position. */
+.tickX {
+  position: absolute;
+  left: var(--tick-start, 0);
+  right: calc(100% - var(--tick-end, 0px));
+  transition: left var(--duration-glide) var(--ease-out-quint);
+}
+
+.tickX[data-glide="jump-up"] {
+  transition:
+    left var(--duration-slow) var(--ease-out-quint),
+    right var(--duration-glide) var(--ease-out-quint);
 }

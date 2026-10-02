@@ -2,11 +2,19 @@ import { vi } from "vitest";
 
 /* Fakes the one thing jsdom can't do, layout, at the browser boundary: element
    boxes, the scroll position, and the page height. Boxes are looked up by an
-   element's id or its text, so a test names them the way a reader would. */
-export function fakeLayout(boxes: Record<string, { top: number; bottom: number }>, page: { height: number }) {
+   element's id or its text, so a test names them the way a reader would.
+   Vertical edges are in page coordinates; horizontal ones don't scroll. */
+type Box = { top: number; bottom: number; left?: number; right?: number };
+
+export function fakeLayout(boxes: Record<string, Box>, page: { height: number }) {
   vi.spyOn(Element.prototype, "getBoundingClientRect").mockImplementation(function (this: Element) {
-    const box = boxes[this.id] ?? boxes[this.textContent?.trim() ?? ""] ?? { top: 0, bottom: 0 };
-    return { top: box.top - window.scrollY, bottom: box.bottom - window.scrollY } as DOMRect;
+    const box: Box = boxes[this.id] ?? boxes[this.textContent?.trim() ?? ""] ?? { top: 0, bottom: 0 };
+    return {
+      top: box.top - window.scrollY,
+      bottom: box.bottom - window.scrollY,
+      left: box.left ?? 0,
+      right: box.right ?? 0,
+    } as DOMRect;
   });
   Object.defineProperty(document.documentElement, "scrollHeight", { value: page.height, configurable: true });
   Object.defineProperty(window, "innerHeight", { value: 800, configurable: true });
