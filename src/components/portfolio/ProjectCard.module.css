@@ -1,65 +1,39 @@
-/* Component-scoped tokens — intentional fixed sizes with no global rung */
+/* A project is a split panel: the work in a well of the hero's teal
+   atmosphere (FieldWell), and the copy beside it. Wells alternate sides down
+   the list so four projects don't read as one box repeated. */
 .card {
+  /* Component-scoped tokens: intentional fixed sizes with no global rung */
   --radius-phone-frame: 18px;        /* phone bezel corner; above --radius-xl (16px) */
   --pad-phone-bezel: 6px;            /* narrow bezel padding; sub-rem intentional */
   --shadow-phone: 0 6px 24px rgba(0, 0, 0, 0.12); /* phone card depth */
+  --phone-width: min(60%, 15rem);    /* the phone mock, near its real size beside the copy */
   --tap-target: 44px;                /* minimum touch target (Fitts's law) */
-  --font-size-project-name-max: 2rem; /* project name clamp max; above --font-size-xl (1.5rem) */
 
   display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--spacing-2xl);
-  padding: var(--spacing-2xl);
+  grid-template-columns: minmax(0, 1fr);
   background: var(--color-bg-elevated);
   border: var(--border-width-thin) solid var(--color-border);
-  border-radius: var(--radius-lg);
-  transition: border-color var(--duration-base) ease, transform var(--duration-base) ease;
+  border-radius: var(--radius-xl);
+  /* clip, not hidden: hidden makes this a scroll container, and the sticky
+     screenshot and the stamps' view() timeline both need the page's scroll */
+  overflow: clip;
+  transition: border-color var(--duration-base) ease;
 }
 
 .card:hover {
   border-color: var(--color-border-strong);
 }
 
-@media (min-width: 48em) {
-  .card {
-    grid-template-columns: 5fr 7fr;
-    gap: var(--spacing-4xl);
-    padding: var(--spacing-4xl);
-  }
-}
-
 .media {
-  position: relative;
-  aspect-ratio: 4 / 3;
-  background: var(--color-surface);
-  border: var(--border-width-thin) solid var(--color-border);
-  border-radius: var(--radius-md);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* clip, not hidden: hidden makes this a scroll container, and a figure
-     inside would bind its view() scroll timeline to a box that never scrolls.
-     clip doesn't zero the grid item's automatic minimum width the way hidden
-     does, so min-width: 0 keeps a large screenshot from widening the track. */
-  overflow: clip;
-  min-width: 0;
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  padding: var(--spacing-2xl) var(--spacing-xl);
 }
 
-.media:not(:has(img, figure)) {
-  border-style: dashed;
-  border-color: var(--color-border-strong);
-}
-
-/* A live figure sizes to its content and sits on the card surface */
+/* A live figure spans the well rather than floating in it */
 .mediaFigure {
-  align-self: start;
-  aspect-ratio: auto;
-  padding: var(--spacing-xl);
-}
-
-.mediaPhone {
-  aspect-ratio: 2 / 3;
-  padding: var(--spacing-xl);
+  justify-items: stretch;
 }
 
 .mediaLabel {
@@ -67,18 +41,32 @@
   font-size: var(--font-size-3xs);
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--color-text-subtle);
+  color: var(--color-hero-ink-muted);
+}
+
+/* The work rests flat on the well and lifts when the pointer comes to it */
+.shot {
+  transition:
+    translate var(--duration-base) var(--ease-out-quint),
+    box-shadow var(--duration-base) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .media:hover .shot {
+    translate: 0 calc(-1 * var(--spacing-2xs));
+    box-shadow: var(--shadow-lg);
+  }
 }
 
 .landscapeImage {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
   display: block;
+  border-radius: var(--radius-md);
 }
 
 .phoneFrame {
-  height: 100%;
+  width: var(--phone-width);
   aspect-ratio: 9 / 19.5;
   background: var(--color-text);
   border-radius: var(--radius-phone-frame);
@@ -99,6 +87,35 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xl);
+  padding: var(--spacing-2xl) var(--spacing-xl) var(--spacing-3xl);
+}
+
+@media (min-width: 48em) {
+  .card {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  }
+
+  .card:nth-of-type(even) {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  }
+
+  .card:nth-of-type(even) .media {
+    order: 1;
+  }
+
+  .media {
+    padding: var(--spacing-3xl);
+  }
+
+  .body {
+    padding: var(--spacing-4xl);
+  }
+
+  /* The copy runs long, so the work stays in view while it's read */
+  .shot {
+    position: sticky;
+    top: var(--spacing-4xl);
+  }
 }
 
 .header {
@@ -109,8 +126,13 @@
 }
 
 .name {
-  font-size: clamp(var(--font-size-xl), 2.5vw, var(--font-size-project-name-max));
-  font-weight: var(--font-weight-medium);
+  font-family: var(--font-display);
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  letter-spacing: -0.025em;
+  color: var(--color-text);
+  text-wrap: balance;
 }
 
 .badge {
@@ -126,11 +148,75 @@
 
 .summary {
   font-family: var(--font-serif);
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-lead);
   font-style: italic;
   line-height: var(--line-height-snug);
   letter-spacing: var(--letter-spacing-serif-italic);
   color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-md) var(--spacing-xl);
+}
+
+/* The one filled control on the card: where the project can be seen. Its
+   hover shimmer is the hero résumé button's, a white band across the fill. */
+.linkPrimary {
+  composes: surface from "../../styles/shimmer.module.css";
+  --shimmer-band: color-mix(in srgb, var(--color-white) 55%, transparent);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2xs);
+  min-height: var(--tap-target);
+  padding: 0 var(--spacing-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-bg);
+  background: var(--color-accent);
+  border-radius: var(--radius-pill);
+  transition: background-color var(--duration-fast) ease;
+}
+
+/* Outranks the site-wide link hover color, which would turn the label terracotta */
+.linkPrimary:hover,
+.linkPrimary:focus-visible {
+  color: var(--color-bg);
+  background: var(--color-accent-hover);
+}
+
+.linkPrimary:focus-visible {
+  border-radius: var(--radius-pill);
+}
+
+.linkSecondary {
+  composes: text from "../../styles/shimmer.module.css";
+  --shimmer-base: var(--color-text);
+  --shimmer-band: var(--color-accent-hover);
+
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent);
+  text-decoration-thickness: var(--border-width-thick);
+  text-underline-offset: 0.35em;
+}
+
+.linkDisabled {
+  font-family: var(--font-serif);
+  font-style: italic;
+  letter-spacing: var(--letter-spacing-serif-italic);
+  color: var(--color-text-muted);
+}
+
+/* The details sit below a rule, under the name, the pitch and the way in */
+.links + .section {
+  margin-top: var(--spacing-xs);
+  padding-top: var(--spacing-xl);
+  border-top: var(--border-width-thin) solid var(--color-border);
 }
 
 .section {
@@ -140,18 +226,17 @@
 }
 
 .sectionHeading {
-  font-family: var(--font-mono);
-  font-size: var(--font-size-3xs);
-  font-weight: var(--font-weight-medium);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--color-text-subtle);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text);
 }
 
 .sectionBody {
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-base);
   line-height: var(--line-height-body);
-  color: var(--color-text);
+  color: var(--color-text-muted);
+  text-wrap: pretty;
 }
 
 .techList {
@@ -160,59 +245,21 @@
   margin: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-2xs) var(--spacing-md);
 }
 
 .tech {
   font-family: var(--font-mono);
-  font-size: var(--font-size-2xs);
-  padding: var(--spacing-2xs) var(--spacing-sm);
-  background: var(--color-surface);
+  font-size: var(--font-size-xs);
   color: var(--color-text-muted);
-  border-radius: var(--radius-sm);
-  border: var(--border-width-thin) solid var(--color-border);
 }
 
-.links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-xl);
-  margin-top: var(--spacing-xs);
-  padding-top: var(--spacing-xl);
-  border-top: var(--border-width-thin) solid var(--color-border);
-}
-
-.linkPrimary {
-  font-weight: var(--font-weight-medium);
-  color: var(--color-accent);
-}
-
-.linkSecondary {
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text);
-  border-bottom: var(--border-width-thin) solid var(--color-border-strong);
-  padding-bottom: var(--spacing-3xs);
-}
-
-.linkSecondary:hover {
-  color: var(--color-accent);
-  border-bottom-color: var(--color-accent);
-}
-
-.linkDisabled {
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-subtle);
-  cursor: not-allowed;
-  font-style: italic;
-}
-
-/* Grow tap targets to 44px on touch without altering the visual (Fitts's). */
+/* Grow the text link's tap target to 44px on touch without altering the visual (Fitts's) */
 @media (pointer: coarse), (max-width: 40em) {
-  .linkPrimary,
   .linkSecondary {
     position: relative;
   }
-  .linkPrimary::after,
+
   .linkSecondary::after {
     content: "";
     position: absolute;
