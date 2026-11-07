@@ -1,10 +1,17 @@
+import type { ComponentType } from "react";
 import styles from "./ProjectCard.module.css";
 import type { Project, Screenshot } from "../../content/projects";
 import { DistillationStamps } from "./DistillationStamps";
 import { FieldWell } from "./FieldWell";
+import { GradeRounds } from "./GradeRounds";
 
 type Props = {
   project: Project;
+};
+
+const figures: Record<NonNullable<Project["visual"]>, ComponentType> = {
+  "distillation-stamps": DistillationStamps,
+  "grade-rounds": GradeRounds,
 };
 
 function renderScreenshot(screenshot: Screenshot) {
@@ -21,14 +28,14 @@ function renderScreenshot(screenshot: Screenshot) {
 export function ProjectCard({ project }: Props) {
   const isComingSoon = project.status === "coming-soon";
   const { screenshot } = project;
-  const drawsStamps = project.visual === "distillation-stamps";
-  const mediaClass = [styles.media, drawsStamps && styles.mediaFigure].filter(Boolean).join(" ");
+  const Figure = project.visual ? figures[project.visual] : undefined;
+  const mediaClass = [styles.media, Figure && styles.mediaFigure].filter(Boolean).join(" ");
 
   return (
     <article className={styles.card}>
       <FieldWell seed={project.slug} className={mediaClass}>
-        {drawsStamps ? (
-          <DistillationStamps />
+        {Figure ? (
+          <Figure />
         ) : screenshot ? (
           renderScreenshot(screenshot)
         ) : (

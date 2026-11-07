@@ -1,0 +1,150 @@
+/* Finished state outside the motion block, so reduced motion, unsupported
+   browsers and screenshots all get the complete chain. */
+
+.rounds {
+  /* Component-scoped tokens */
+  --dot: 0.75rem; /* a round's node; between the field's small and large nodes */
+  --row-gap: var(--spacing-2xl);
+
+  width: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xl);
+}
+
+.caption {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-2xs);
+  color: var(--color-hero-ink-muted);
+}
+
+/* Subgrid so the numerals and the rail line up down every round */
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: auto var(--dot) minmax(0, 1fr);
+  column-gap: var(--spacing-lg);
+  row-gap: var(--row-gap);
+}
+
+.round {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  align-items: start;
+}
+
+.score {
+  font-family: var(--font-display);
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-none);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-hero-ink-muted);
+}
+
+.outOf {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.round[data-pass] .score {
+  color: var(--color-accent);
+}
+
+/* The rail cell runs the row's full height: the node sits level with the
+   numeral, and the line carries on through the gap to the next node. */
+.rail {
+  position: relative;
+  align-self: stretch;
+  font-size: var(--font-size-h3);
+}
+
+.rail::before {
+  content: "";
+  position: absolute;
+  top: calc(0.5em - var(--dot) / 2);
+  left: 0;
+  width: var(--dot);
+  height: var(--dot);
+  border-radius: var(--radius-pill);
+  box-shadow: inset 0 0 0 var(--border-width-thick) var(--color-hero-signal);
+}
+
+.rail::after {
+  content: "";
+  position: absolute;
+  top: calc(0.5em + var(--dot) / 2);
+  bottom: calc(-1 * var(--row-gap) - 0.5em + var(--dot) / 2);
+  left: calc(var(--dot) / 2 - var(--border-width-thin));
+  width: var(--border-width-thick);
+  background: color-mix(in srgb, var(--color-hero-signal) 45%, transparent);
+  transform-origin: top;
+}
+
+.round:last-child .rail::after {
+  content: none;
+}
+
+.round[data-pass] .rail::before {
+  background: var(--color-accent);
+  box-shadow: 0 0 0 var(--spacing-2xs) var(--color-accent-tint);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xs);
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--font-size-2xs);
+  color: var(--color-hero-ink-muted);
+}
+
+.note {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-snug);
+  color: var(--color-hero-ink);
+}
+
+/* Plays once the whole figure is on screen, as the stamps do: each round
+   lights in turn and the line draws down to the next. ease-out because the
+   line is spatial. Short screens get the finished chain. */
+@media (prefers-reduced-motion: no-preference) and (min-height: 40em) {
+  @supports (animation-timeline: view()) {
+    .rounds {
+      view-timeline: --rounds block;
+    }
+
+    .score,
+    .text,
+    .rail::before {
+      animation: light-up linear both;
+      animation-timeline: --rounds;
+      animation-range: contain calc(10vh + var(--i) * 6vh) contain calc(14vh + var(--i) * 6vh);
+    }
+
+    .rail::after {
+      animation: draw-down var(--ease-out-quint) both;
+      animation-timeline: --rounds;
+      animation-range: contain calc(14vh + var(--i) * 6vh) contain calc(16vh + var(--i) * 6vh);
+    }
+  }
+}
+
+@keyframes light-up {
+  from {
+    opacity: 0.25;
+  }
+}
+
+@keyframes draw-down {
+  from {
+    transform: scaleY(0);
+  }
+}

@@ -17,10 +17,34 @@ export type Project = {
   status?: "live" | "coming-soon";
   screenshot?: Screenshot;
   /** A live figure drawn in place of a screenshot. */
-  visual?: "distillation-stamps";
+  visual?: "distillation-stamps" | "grade-rounds";
 };
 
 export const projects: Project[] = [
+  {
+    slug: "pr-grade",
+    name: "pr-grade",
+    summary:
+      "A Claude Code plugin that grades my changes the way an outside reviewer will, before I push them.",
+    problem:
+      "One pull request made it through two design proposals, two rounds of careful review and six verifiers. Then a bot reviewer found a serious bug in about a minute. Reviews tend to miss the same kinds of thing: work a timeout gave up on, a caller nobody had in mind, old data a new reader can't handle.",
+    built:
+      "I turned each of those misses into a question, fourteen so far, and pr-grade asks them about every change before I push. Riskier changes get more agents asking. A problem only counts if it comes with a failing test, so nothing gets in on a hunch. Fixes get graded too, because a fix is where the next bug likes to hide. The grade goes in the pull request, and a CI check blocks anything below 5/5.",
+    tech: [
+      "Claude Code",
+      "Claude Code plugins",
+      "Python",
+      "TypeScript compiler API",
+      "GitHub Actions",
+      "GitHub CLI",
+      "unittest",
+    ],
+    liveUrl: null,
+    liveLabel: "Runs in Claude Code and CI",
+    repoUrl: "https://github.com/JakemoCode/pr-grade",
+    status: "live",
+    visual: "grade-rounds",
+  },
   {
     slug: "coffee-roast-tracker",
     name: "Coffee Roast Tracker",
