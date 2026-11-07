@@ -39,10 +39,11 @@ Wiring lives in `src/content/projects.ts` (`screenshotOrientations`). To add a n
 
 Alt text defaults to "<project name> screenshot". That works for a product screenshot and not for anything else, so a diagram or other non-obvious image should add a `screenshotAlts` entry describing what it shows.
 
-Docs Distillation Gate has no screenshot. Its card draws a live figure
-(`src/components/portfolio/DistillationStamps.tsx`), selected by the
-project's `visual` field. The old card image and its source are in
-`_archive/docs-distillation-gate-card/`.
+Docs Distillation Gate and pr-grade have no screenshot. Each card draws a
+live figure (`DistillationStamps.tsx` and `GradeRounds.tsx` in
+`src/components/portfolio/`), selected by the project's `visual` field
+through the `figures` map in `ProjectCard.tsx`. The old Distillation Gate
+card image and its source are in `_archive/docs-distillation-gate-card/`.
 
 Frontend Tools is not a product screenshot. It is authored as HTML in
 `frontend-tools.source.html` and rendered with headless Chrome; the regeneration

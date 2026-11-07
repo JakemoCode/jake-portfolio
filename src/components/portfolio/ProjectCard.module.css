@@ -16,7 +16,7 @@
   border: var(--border-width-thin) solid var(--color-border);
   border-radius: var(--radius-xl);
   /* overflow: hidden would make this a scroll container, and the sticky
-     screenshot and the stamps' view() timeline both need the page's scroll */
+     screenshot and the live figures' view() timelines all need the page's scroll */
   overflow: clip;
   transition: border-color var(--duration-base) ease;
 }

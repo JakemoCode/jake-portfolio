@@ -45,6 +45,13 @@ Reworked the landing's "proof" zone into two dark-surface sections: the
 
 ## In flight
 
+**pr-grade card** · branch `feat/pr-grade-card` (PR #49). A fifth project
+card, listed first. Its well draws `GradeRounds`, the four grades pr-grade's
+0.16.0 release took to reach 5/5, as numerals on one rail; each round lights
+in turn on scroll once the figure is fully in view, and reduced motion or a
+screen under 40em tall gets the finished chain. `ProjectCard` now picks a
+card's figure from a `figures` map keyed by `visual`.
+
 **Evidence stage and bolder project cards** · branch
 `feat/evidence-stage-and-cards`. On a desktop with motion allowed, How I
 work with AI pins one framed plate beside the copy and re-forms it into each
