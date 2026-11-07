@@ -29,7 +29,7 @@ export const projects: Project[] = [
     problem:
       "One pull request made it through two design proposals, two rounds of careful review and six verifiers. Then a bot reviewer found a serious bug in about a minute. Reviews tend to miss the same kinds of thing: work a timeout gave up on, a caller nobody had in mind, old data a new reader can't handle.",
     built:
-      "I turned each of those misses into a question, fourteen so far, and pr-grade asks them about every change before I push. Riskier changes get more agents asking. A problem only counts if it comes with a failing test, so nothing gets in on a hunch. Fixes get graded too, because a fix is where the next bug likes to hide. The grade goes in the pull request, and a CI check blocks anything below 5/5.",
+      "I turned each of those misses into a question, fourteen so far, and pr-grade asks them about every change before I push. Riskier changes get more agents asking. A problem only counts if the grader proves it by running something, so nothing gets in on a hunch. Fixes get graded too, because a fix is where the next bug likes to hide. The grade goes in the pull request, and a CI check blocks anything below 5/5.",
     tech: [
       "Claude Code",
       "Claude Code plugins",

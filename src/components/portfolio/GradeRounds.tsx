@@ -26,7 +26,8 @@ export function GradeRounds() {
           >
             <span className={styles.score}>
               {score}
-              <span className={styles.outOf}>/5</span>
+              <span className={styles.outOf} aria-hidden="true">/5</span>
+              <span className={styles.srOnly}> out of 5</span>
             </span>
             <span className={styles.rail} aria-hidden="true" />
             <span className={styles.text}>
